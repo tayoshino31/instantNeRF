@@ -29,5 +29,4 @@ grid = torch.stack(torch.meshgrid([x_samples, x_samples, x_samples], indexing="i
 encoded_values = encoder(grid)
 print(grid.shape)
 print(encoded_values.shape)
-
 print(encoder.parameters())

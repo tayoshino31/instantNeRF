@@ -1,0 +1,56 @@
+{
+    "cpp": {
+        "options": [
+            "-DNUM_THREADS_PER_BLOCK=256",
+            "-DWARP_SIZE=32"
+        ],
+        "deps": [
+            [
+                "/home/ravilab/instantNeRF/image-model.slang",
+                1711872039.1813288
+            ],
+            [
+                "/home/ravilab/instantNeRF/inline-mlp.slang",
+                1711872039.1813288
+            ],
+            [
+                "/home/ravilab/miniconda3/envs/tinynerf/lib/python3.11/site-packages/slangpy/bin/slangc",
+                1710217382.566575
+            ],
+            [
+                "/home/ravilab/miniconda3/envs/tinynerf/lib/python3.11/site-packages/slangpy/bin/libslang.so",
+                1710217382.5305753
+            ]
+        ],
+        "version": "1.1.22",
+        "includePaths": []
+    },
+    "cuda": {
+        "options": [
+            "-DNUM_THREADS_PER_BLOCK=256",
+            "-DWARP_SIZE=32"
+        ],
+        "deps": [
+            [
+                "/home/ravilab/instantNeRF/image-model.slang",
+                1711872039.1813288
+            ],
+            [
+                "/home/ravilab/instantNeRF/inline-mlp.slang",
+                1711872039.1813288
+            ],
+            [
+                "/home/ravilab/miniconda3/envs/tinynerf/lib/python3.11/site-packages/slangpy/bin/slangc",
+                1710217382.566575
+            ],
+            [
+                "/home/ravilab/miniconda3/envs/tinynerf/lib/python3.11/site-packages/slangpy/bin/libslang.so",
+                1710217382.5305753
+            ]
+        ],
+        "version": "1.1.22",
+        "includePaths": []
+    },
+    "moduleName": "_slangpy_image_model_1426d7b0fdc875a7",
+    "moduleBinary": ".slangpy_cache/image-model/1426d7b0fdc875a7/0/_slangpy_image_model_1426d7b0fdc875a7.pyd"
+}
