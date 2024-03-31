@@ -26,7 +26,7 @@ class RenderImage(torch.autograd.Function):
         weights = args[0: 3]
         biases = args[3: 6]
         #output = torch.zeros((width, height, 3), dtype=torch.float).cuda()
-        output = torch.zeros((width, height, N_samples, 3), dtype=torch.float).cuda()
+        output = torch.zeros((width, height, N_samples, 4), dtype=torch.float).cuda()
         
         linear_layers = [m.Linear(weights=weights[i], bias=biases[i]) for i in range(3)]
         mlp = m.MLP(layers=linear_layers)

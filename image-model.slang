@@ -42,9 +42,11 @@ static const uint C = 16;
 [Differentiable]
 Feature<C> getInFeature(DiffTensorView input, uint3 idx) {
     Feature<C> output;
-    for (int i = 0; i < C; i++) {
+    for (int i = 0; i < C-1; i++) {
         output.vals[i] = input[idx.x , idx.y, idx.z,  i];
     }
+    output.vals[C-1] = input[idx.x , idx.y, idx.z,  C-1];
+    
     return output;
 }
 
@@ -71,7 +73,7 @@ void renderImage(MLP<C, 3> mlp, DiffTensorView featureGrid, DiffTensorView image
     // imageOutput.storeOnce(uint3(dispatchIdx.x, dispatchIdx.y, 0), output.vals[0]);
     // imageOutput.storeOnce(uint3(dispatchIdx.x, dispatchIdx.y, 1), output.vals[1]);
     // imageOutput.storeOnce(uint3(dispatchIdx.x, dispatchIdx.y, 2), output.vals[2]);
-    for (int i = 0; i < 3; i++) {
+    for (int i = 0; i < 4; i++) {
         //imageOutput[dispatchIdx.x, dispatchIdx.y, i] = output.vals[i];
         imageOutput.storeOnce(uint4(dispatchIdx.x, dispatchIdx.y, dispatchIdx.z, i), output.vals[i]);
     }

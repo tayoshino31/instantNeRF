@@ -2505,20 +2505,21 @@ __device__ Feature_0 getInFeature_0(DiffTensorView_0 input_0, uint3  idx_0)
     uint _S23 = idx_0.x;
     uint _S24 = idx_0.y;
     uint _S25 = idx_0.z;
+    uint4  _S26 = make_uint4 (_S23, _S24, _S25, 15U);
     int i_7 = int(0);
     for(;;)
     {
-        *(&(&output_0)->vals_1[i_7]) = DiffTensorView_load_0(input_0, make_uint4 (_S23, _S24, _S25, uint(i_7)));
-        int i_8 = i_7 + int(1);
-        if(i_8 < int(16))
+        if(i_7 < int(15))
         {
         }
         else
         {
             break;
         }
-        i_7 = i_8;
+        *(&(&output_0)->vals_1[i_7]) = DiffTensorView_load_0(input_0, make_uint4 (_S23, _S24, _S25, uint(i_7)));
+        i_7 = i_7 + int(1);
     }
+    *(&(&output_0)->vals_1[15U]) = DiffTensorView_load_0(input_0, _S26);
     return output_0;
 }
 
@@ -2530,23 +2531,23 @@ struct Linear_0
 
 __device__ void Linear_loadArray_0(Linear_0 this_9, float * memptr_0, FixedArray<float, 16>  * input_1)
 {
-    int _S26 = int(uint(int(((threadIdx)).x) % int(32))) * int(16);
-    *(&(*input_1)[int(0)]) = *(&memptr_0[_S26]);
-    *(&(*input_1)[int(1)]) = *(&memptr_0[_S26 + int(1)]);
-    *(&(*input_1)[int(2)]) = *(&memptr_0[_S26 + int(2)]);
-    *(&(*input_1)[int(3)]) = *(&memptr_0[_S26 + int(3)]);
-    *(&(*input_1)[int(4)]) = *(&memptr_0[_S26 + int(4)]);
-    *(&(*input_1)[int(5)]) = *(&memptr_0[_S26 + int(5)]);
-    *(&(*input_1)[int(6)]) = *(&memptr_0[_S26 + int(6)]);
-    *(&(*input_1)[int(7)]) = *(&memptr_0[_S26 + int(7)]);
-    *(&(*input_1)[int(8)]) = *(&memptr_0[_S26 + int(8)]);
-    *(&(*input_1)[int(9)]) = *(&memptr_0[_S26 + int(9)]);
-    *(&(*input_1)[int(10)]) = *(&memptr_0[_S26 + int(10)]);
-    *(&(*input_1)[int(11)]) = *(&memptr_0[_S26 + int(11)]);
-    *(&(*input_1)[int(12)]) = *(&memptr_0[_S26 + int(12)]);
-    *(&(*input_1)[int(13)]) = *(&memptr_0[_S26 + int(13)]);
-    *(&(*input_1)[int(14)]) = *(&memptr_0[_S26 + int(14)]);
-    *(&(*input_1)[int(15)]) = *(&memptr_0[_S26 + int(15)]);
+    int _S27 = int(uint(int(((threadIdx)).x) % int(32))) * int(16);
+    *(&(*input_1)[int(0)]) = *(&memptr_0[_S27]);
+    *(&(*input_1)[int(1)]) = *(&memptr_0[_S27 + int(1)]);
+    *(&(*input_1)[int(2)]) = *(&memptr_0[_S27 + int(2)]);
+    *(&(*input_1)[int(3)]) = *(&memptr_0[_S27 + int(3)]);
+    *(&(*input_1)[int(4)]) = *(&memptr_0[_S27 + int(4)]);
+    *(&(*input_1)[int(5)]) = *(&memptr_0[_S27 + int(5)]);
+    *(&(*input_1)[int(6)]) = *(&memptr_0[_S27 + int(6)]);
+    *(&(*input_1)[int(7)]) = *(&memptr_0[_S27 + int(7)]);
+    *(&(*input_1)[int(8)]) = *(&memptr_0[_S27 + int(8)]);
+    *(&(*input_1)[int(9)]) = *(&memptr_0[_S27 + int(9)]);
+    *(&(*input_1)[int(10)]) = *(&memptr_0[_S27 + int(10)]);
+    *(&(*input_1)[int(11)]) = *(&memptr_0[_S27 + int(11)]);
+    *(&(*input_1)[int(12)]) = *(&memptr_0[_S27 + int(12)]);
+    *(&(*input_1)[int(13)]) = *(&memptr_0[_S27 + int(13)]);
+    *(&(*input_1)[int(14)]) = *(&memptr_0[_S27 + int(14)]);
+    *(&(*input_1)[int(15)]) = *(&memptr_0[_S27 + int(15)]);
     return;
 }
 
@@ -2571,18 +2572,18 @@ __device__ void Linear_moveOutputsToLocalArray_0(Linear_0 this_13, FixedArray<fl
 {
     float * outPtr_0 = Linear_outBufferForCurrentWarp_0(this_13);
     Linear_loadArray_0(this_13, outPtr_0, outputs_0);
-    int i_9 = int(0);
+    int i_8 = int(0);
     for(;;)
     {
-        if(i_9 < int(16))
+        if(i_8 < int(16))
         {
         }
         else
         {
             break;
         }
-        *(&(*outputs_0)[i_9]) = *(&(*outputs_0)[i_9]) + *(&bias_1[i_9]);
-        i_9 = i_9 + int(1);
+        *(&(*outputs_0)[i_8]) = *(&(*outputs_0)[i_8]) + *(&bias_1[i_8]);
+        i_8 = i_8 + int(1);
     }
     return;
 }
@@ -2608,24 +2609,24 @@ __device__ float * Linear_moveWeightsToSharedMem_0(Linear_0 this_15)
 {
     float * wtPtr_0 = Linear_wtBufferForCurrentWarp_0(this_15);
     int threadIdInWarp_0 = int(((threadIdx)).x) % int(32);
-    bool _S27 = threadIdInWarp_0 >= int(16);
-    uint _S28 = uint(threadIdInWarp_0);
-    uint2  _S29 = make_uint2 (_S28, 0U);
-    uint2  _S30 = make_uint2 (_S28, 1U);
-    uint2  _S31 = make_uint2 (_S28, 2U);
-    uint2  _S32 = make_uint2 (_S28, 3U);
-    uint2  _S33 = make_uint2 (_S28, 4U);
-    uint2  _S34 = make_uint2 (_S28, 5U);
-    uint2  _S35 = make_uint2 (_S28, 6U);
-    uint2  _S36 = make_uint2 (_S28, 7U);
-    uint2  _S37 = make_uint2 (_S28, 8U);
-    uint2  _S38 = make_uint2 (_S28, 9U);
-    uint2  _S39 = make_uint2 (_S28, 10U);
-    uint2  _S40 = make_uint2 (_S28, 11U);
-    uint2  _S41 = make_uint2 (_S28, 12U);
-    uint2  _S42 = make_uint2 (_S28, 13U);
-    uint2  _S43 = make_uint2 (_S28, 14U);
-    uint2  _S44 = make_uint2 (_S28, 15U);
+    bool _S28 = threadIdInWarp_0 >= int(16);
+    uint _S29 = uint(threadIdInWarp_0);
+    uint2  _S30 = make_uint2 (_S29, 0U);
+    uint2  _S31 = make_uint2 (_S29, 1U);
+    uint2  _S32 = make_uint2 (_S29, 2U);
+    uint2  _S33 = make_uint2 (_S29, 3U);
+    uint2  _S34 = make_uint2 (_S29, 4U);
+    uint2  _S35 = make_uint2 (_S29, 5U);
+    uint2  _S36 = make_uint2 (_S29, 6U);
+    uint2  _S37 = make_uint2 (_S29, 7U);
+    uint2  _S38 = make_uint2 (_S29, 8U);
+    uint2  _S39 = make_uint2 (_S29, 9U);
+    uint2  _S40 = make_uint2 (_S29, 10U);
+    uint2  _S41 = make_uint2 (_S29, 11U);
+    uint2  _S42 = make_uint2 (_S29, 12U);
+    uint2  _S43 = make_uint2 (_S29, 13U);
+    uint2  _S44 = make_uint2 (_S29, 14U);
+    uint2  _S45 = make_uint2 (_S29, 15U);
     for(;;)
     {
         for(;;)
@@ -2638,11 +2639,11 @@ __device__ float * Linear_moveWeightsToSharedMem_0(Linear_0 this_15)
                     {
                         for(;;)
                         {
-                            if(_S27)
+                            if(_S28)
                             {
                                 break;
                             }
-                            *(&wtPtr_0[threadIdInWarp_0]) = DiffTensorView_load_1(this_15.weights_0, _S29);
+                            *(&wtPtr_0[threadIdInWarp_0]) = DiffTensorView_load_1(this_15.weights_0, _S30);
                             break;
                         }
                         break;
@@ -2651,11 +2652,11 @@ __device__ float * Linear_moveWeightsToSharedMem_0(Linear_0 this_15)
                     {
                         for(;;)
                         {
-                            if(_S27)
+                            if(_S28)
                             {
                                 break;
                             }
-                            *(&wtPtr_0[int(16) + threadIdInWarp_0]) = DiffTensorView_load_1(this_15.weights_0, _S30);
+                            *(&wtPtr_0[int(16) + threadIdInWarp_0]) = DiffTensorView_load_1(this_15.weights_0, _S31);
                             break;
                         }
                         break;
@@ -2664,11 +2665,11 @@ __device__ float * Linear_moveWeightsToSharedMem_0(Linear_0 this_15)
                     {
                         for(;;)
                         {
-                            if(_S27)
+                            if(_S28)
                             {
                                 break;
                             }
-                            *(&wtPtr_0[int(32) + threadIdInWarp_0]) = DiffTensorView_load_1(this_15.weights_0, _S31);
+                            *(&wtPtr_0[int(32) + threadIdInWarp_0]) = DiffTensorView_load_1(this_15.weights_0, _S32);
                             break;
                         }
                         break;
@@ -2677,11 +2678,11 @@ __device__ float * Linear_moveWeightsToSharedMem_0(Linear_0 this_15)
                     {
                         for(;;)
                         {
-                            if(_S27)
+                            if(_S28)
                             {
                                 break;
                             }
-                            *(&wtPtr_0[int(48) + threadIdInWarp_0]) = DiffTensorView_load_1(this_15.weights_0, _S32);
+                            *(&wtPtr_0[int(48) + threadIdInWarp_0]) = DiffTensorView_load_1(this_15.weights_0, _S33);
                             break;
                         }
                         break;
@@ -2690,11 +2691,11 @@ __device__ float * Linear_moveWeightsToSharedMem_0(Linear_0 this_15)
                     {
                         for(;;)
                         {
-                            if(_S27)
+                            if(_S28)
                             {
                                 break;
                             }
-                            *(&wtPtr_0[int(64) + threadIdInWarp_0]) = DiffTensorView_load_1(this_15.weights_0, _S33);
+                            *(&wtPtr_0[int(64) + threadIdInWarp_0]) = DiffTensorView_load_1(this_15.weights_0, _S34);
                             break;
                         }
                         break;
@@ -2703,11 +2704,11 @@ __device__ float * Linear_moveWeightsToSharedMem_0(Linear_0 this_15)
                     {
                         for(;;)
                         {
-                            if(_S27)
+                            if(_S28)
                             {
                                 break;
                             }
-                            *(&wtPtr_0[int(80) + threadIdInWarp_0]) = DiffTensorView_load_1(this_15.weights_0, _S34);
+                            *(&wtPtr_0[int(80) + threadIdInWarp_0]) = DiffTensorView_load_1(this_15.weights_0, _S35);
                             break;
                         }
                         break;
@@ -2716,11 +2717,11 @@ __device__ float * Linear_moveWeightsToSharedMem_0(Linear_0 this_15)
                     {
                         for(;;)
                         {
-                            if(_S27)
+                            if(_S28)
                             {
                                 break;
                             }
-                            *(&wtPtr_0[int(96) + threadIdInWarp_0]) = DiffTensorView_load_1(this_15.weights_0, _S35);
+                            *(&wtPtr_0[int(96) + threadIdInWarp_0]) = DiffTensorView_load_1(this_15.weights_0, _S36);
                             break;
                         }
                         break;
@@ -2729,11 +2730,11 @@ __device__ float * Linear_moveWeightsToSharedMem_0(Linear_0 this_15)
                     {
                         for(;;)
                         {
-                            if(_S27)
+                            if(_S28)
                             {
                                 break;
                             }
-                            *(&wtPtr_0[int(112) + threadIdInWarp_0]) = DiffTensorView_load_1(this_15.weights_0, _S36);
+                            *(&wtPtr_0[int(112) + threadIdInWarp_0]) = DiffTensorView_load_1(this_15.weights_0, _S37);
                             break;
                         }
                         break;
@@ -2742,11 +2743,11 @@ __device__ float * Linear_moveWeightsToSharedMem_0(Linear_0 this_15)
                     {
                         for(;;)
                         {
-                            if(_S27)
+                            if(_S28)
                             {
                                 break;
                             }
-                            *(&wtPtr_0[int(128) + threadIdInWarp_0]) = DiffTensorView_load_1(this_15.weights_0, _S37);
+                            *(&wtPtr_0[int(128) + threadIdInWarp_0]) = DiffTensorView_load_1(this_15.weights_0, _S38);
                             break;
                         }
                         break;
@@ -2755,11 +2756,11 @@ __device__ float * Linear_moveWeightsToSharedMem_0(Linear_0 this_15)
                     {
                         for(;;)
                         {
-                            if(_S27)
+                            if(_S28)
                             {
                                 break;
                             }
-                            *(&wtPtr_0[int(144) + threadIdInWarp_0]) = DiffTensorView_load_1(this_15.weights_0, _S38);
+                            *(&wtPtr_0[int(144) + threadIdInWarp_0]) = DiffTensorView_load_1(this_15.weights_0, _S39);
                             break;
                         }
                         break;
@@ -2768,11 +2769,11 @@ __device__ float * Linear_moveWeightsToSharedMem_0(Linear_0 this_15)
                     {
                         for(;;)
                         {
-                            if(_S27)
+                            if(_S28)
                             {
                                 break;
                             }
-                            *(&wtPtr_0[int(160) + threadIdInWarp_0]) = DiffTensorView_load_1(this_15.weights_0, _S39);
+                            *(&wtPtr_0[int(160) + threadIdInWarp_0]) = DiffTensorView_load_1(this_15.weights_0, _S40);
                             break;
                         }
                         break;
@@ -2781,11 +2782,11 @@ __device__ float * Linear_moveWeightsToSharedMem_0(Linear_0 this_15)
                     {
                         for(;;)
                         {
-                            if(_S27)
+                            if(_S28)
                             {
                                 break;
                             }
-                            *(&wtPtr_0[int(176) + threadIdInWarp_0]) = DiffTensorView_load_1(this_15.weights_0, _S40);
+                            *(&wtPtr_0[int(176) + threadIdInWarp_0]) = DiffTensorView_load_1(this_15.weights_0, _S41);
                             break;
                         }
                         break;
@@ -2794,11 +2795,11 @@ __device__ float * Linear_moveWeightsToSharedMem_0(Linear_0 this_15)
                     {
                         for(;;)
                         {
-                            if(_S27)
+                            if(_S28)
                             {
                                 break;
                             }
-                            *(&wtPtr_0[int(192) + threadIdInWarp_0]) = DiffTensorView_load_1(this_15.weights_0, _S41);
+                            *(&wtPtr_0[int(192) + threadIdInWarp_0]) = DiffTensorView_load_1(this_15.weights_0, _S42);
                             break;
                         }
                         break;
@@ -2807,11 +2808,11 @@ __device__ float * Linear_moveWeightsToSharedMem_0(Linear_0 this_15)
                     {
                         for(;;)
                         {
-                            if(_S27)
+                            if(_S28)
                             {
                                 break;
                             }
-                            *(&wtPtr_0[int(208) + threadIdInWarp_0]) = DiffTensorView_load_1(this_15.weights_0, _S42);
+                            *(&wtPtr_0[int(208) + threadIdInWarp_0]) = DiffTensorView_load_1(this_15.weights_0, _S43);
                             break;
                         }
                         break;
@@ -2820,11 +2821,11 @@ __device__ float * Linear_moveWeightsToSharedMem_0(Linear_0 this_15)
                     {
                         for(;;)
                         {
-                            if(_S27)
+                            if(_S28)
                             {
                                 break;
                             }
-                            *(&wtPtr_0[int(224) + threadIdInWarp_0]) = DiffTensorView_load_1(this_15.weights_0, _S43);
+                            *(&wtPtr_0[int(224) + threadIdInWarp_0]) = DiffTensorView_load_1(this_15.weights_0, _S44);
                             break;
                         }
                         break;
@@ -2833,11 +2834,11 @@ __device__ float * Linear_moveWeightsToSharedMem_0(Linear_0 this_15)
                     {
                         for(;;)
                         {
-                            if(_S27)
+                            if(_S28)
                             {
                                 break;
                             }
-                            *(&wtPtr_0[int(240) + threadIdInWarp_0]) = DiffTensorView_load_1(this_15.weights_0, _S44);
+                            *(&wtPtr_0[int(240) + threadIdInWarp_0]) = DiffTensorView_load_1(this_15.weights_0, _S45);
                             break;
                         }
                         break;
@@ -2857,25 +2858,25 @@ __device__ float * Linear_moveWeightsToSharedMem_1(Linear_0 this_16)
 {
     float * wtPtr_1 = Linear_wtBufferForCurrentWarp_0(this_16);
     int threadIdInWarp_1 = int(((threadIdx)).x) % int(32);
-    bool _S45 = threadIdInWarp_1 >= int(16);
-    int _S46 = threadIdInWarp_1 * int(16);
-    uint _S47 = uint(threadIdInWarp_1);
-    uint2  _S48 = make_uint2 (_S47, 0U);
-    uint2  _S49 = make_uint2 (_S47, 1U);
-    uint2  _S50 = make_uint2 (_S47, 2U);
-    uint2  _S51 = make_uint2 (_S47, 3U);
-    uint2  _S52 = make_uint2 (_S47, 4U);
-    uint2  _S53 = make_uint2 (_S47, 5U);
-    uint2  _S54 = make_uint2 (_S47, 6U);
-    uint2  _S55 = make_uint2 (_S47, 7U);
-    uint2  _S56 = make_uint2 (_S47, 8U);
-    uint2  _S57 = make_uint2 (_S47, 9U);
-    uint2  _S58 = make_uint2 (_S47, 10U);
-    uint2  _S59 = make_uint2 (_S47, 11U);
-    uint2  _S60 = make_uint2 (_S47, 12U);
-    uint2  _S61 = make_uint2 (_S47, 13U);
-    uint2  _S62 = make_uint2 (_S47, 14U);
-    uint2  _S63 = make_uint2 (_S47, 15U);
+    bool _S46 = threadIdInWarp_1 >= int(16);
+    int _S47 = threadIdInWarp_1 * int(16);
+    uint _S48 = uint(threadIdInWarp_1);
+    uint2  _S49 = make_uint2 (_S48, 0U);
+    uint2  _S50 = make_uint2 (_S48, 1U);
+    uint2  _S51 = make_uint2 (_S48, 2U);
+    uint2  _S52 = make_uint2 (_S48, 3U);
+    uint2  _S53 = make_uint2 (_S48, 4U);
+    uint2  _S54 = make_uint2 (_S48, 5U);
+    uint2  _S55 = make_uint2 (_S48, 6U);
+    uint2  _S56 = make_uint2 (_S48, 7U);
+    uint2  _S57 = make_uint2 (_S48, 8U);
+    uint2  _S58 = make_uint2 (_S48, 9U);
+    uint2  _S59 = make_uint2 (_S48, 10U);
+    uint2  _S60 = make_uint2 (_S48, 11U);
+    uint2  _S61 = make_uint2 (_S48, 12U);
+    uint2  _S62 = make_uint2 (_S48, 13U);
+    uint2  _S63 = make_uint2 (_S48, 14U);
+    uint2  _S64 = make_uint2 (_S48, 15U);
     for(;;)
     {
         for(;;)
@@ -2888,11 +2889,11 @@ __device__ float * Linear_moveWeightsToSharedMem_1(Linear_0 this_16)
                     {
                         for(;;)
                         {
-                            if(_S45)
+                            if(_S46)
                             {
                                 break;
                             }
-                            *(&wtPtr_1[_S46]) = DiffTensorView_load_1(this_16.weights_0, _S48);
+                            *(&wtPtr_1[_S47]) = DiffTensorView_load_1(this_16.weights_0, _S49);
                             break;
                         }
                         break;
@@ -2901,11 +2902,11 @@ __device__ float * Linear_moveWeightsToSharedMem_1(Linear_0 this_16)
                     {
                         for(;;)
                         {
-                            if(_S45)
+                            if(_S46)
                             {
                                 break;
                             }
-                            *(&wtPtr_1[_S46 + int(1)]) = DiffTensorView_load_1(this_16.weights_0, _S49);
+                            *(&wtPtr_1[_S47 + int(1)]) = DiffTensorView_load_1(this_16.weights_0, _S50);
                             break;
                         }
                         break;
@@ -2914,11 +2915,11 @@ __device__ float * Linear_moveWeightsToSharedMem_1(Linear_0 this_16)
                     {
                         for(;;)
                         {
-                            if(_S45)
+                            if(_S46)
                             {
                                 break;
                             }
-                            *(&wtPtr_1[_S46 + int(2)]) = DiffTensorView_load_1(this_16.weights_0, _S50);
+                            *(&wtPtr_1[_S47 + int(2)]) = DiffTensorView_load_1(this_16.weights_0, _S51);
                             break;
                         }
                         break;
@@ -2927,11 +2928,11 @@ __device__ float * Linear_moveWeightsToSharedMem_1(Linear_0 this_16)
                     {
                         for(;;)
                         {
-                            if(_S45)
+                            if(_S46)
                             {
                                 break;
                             }
-                            *(&wtPtr_1[_S46 + int(3)]) = DiffTensorView_load_1(this_16.weights_0, _S51);
+                            *(&wtPtr_1[_S47 + int(3)]) = DiffTensorView_load_1(this_16.weights_0, _S52);
                             break;
                         }
                         break;
@@ -2940,11 +2941,11 @@ __device__ float * Linear_moveWeightsToSharedMem_1(Linear_0 this_16)
                     {
                         for(;;)
                         {
-                            if(_S45)
+                            if(_S46)
                             {
                                 break;
                             }
-                            *(&wtPtr_1[_S46 + int(4)]) = DiffTensorView_load_1(this_16.weights_0, _S52);
+                            *(&wtPtr_1[_S47 + int(4)]) = DiffTensorView_load_1(this_16.weights_0, _S53);
                             break;
                         }
                         break;
@@ -2953,11 +2954,11 @@ __device__ float * Linear_moveWeightsToSharedMem_1(Linear_0 this_16)
                     {
                         for(;;)
                         {
-                            if(_S45)
+                            if(_S46)
                             {
                                 break;
                             }
-                            *(&wtPtr_1[_S46 + int(5)]) = DiffTensorView_load_1(this_16.weights_0, _S53);
+                            *(&wtPtr_1[_S47 + int(5)]) = DiffTensorView_load_1(this_16.weights_0, _S54);
                             break;
                         }
                         break;
@@ -2966,11 +2967,11 @@ __device__ float * Linear_moveWeightsToSharedMem_1(Linear_0 this_16)
                     {
                         for(;;)
                         {
-                            if(_S45)
+                            if(_S46)
                             {
                                 break;
                             }
-                            *(&wtPtr_1[_S46 + int(6)]) = DiffTensorView_load_1(this_16.weights_0, _S54);
+                            *(&wtPtr_1[_S47 + int(6)]) = DiffTensorView_load_1(this_16.weights_0, _S55);
                             break;
                         }
                         break;
@@ -2979,11 +2980,11 @@ __device__ float * Linear_moveWeightsToSharedMem_1(Linear_0 this_16)
                     {
                         for(;;)
                         {
-                            if(_S45)
+                            if(_S46)
                             {
                                 break;
                             }
-                            *(&wtPtr_1[_S46 + int(7)]) = DiffTensorView_load_1(this_16.weights_0, _S55);
+                            *(&wtPtr_1[_S47 + int(7)]) = DiffTensorView_load_1(this_16.weights_0, _S56);
                             break;
                         }
                         break;
@@ -2992,11 +2993,11 @@ __device__ float * Linear_moveWeightsToSharedMem_1(Linear_0 this_16)
                     {
                         for(;;)
                         {
-                            if(_S45)
+                            if(_S46)
                             {
                                 break;
                             }
-                            *(&wtPtr_1[_S46 + int(8)]) = DiffTensorView_load_1(this_16.weights_0, _S56);
+                            *(&wtPtr_1[_S47 + int(8)]) = DiffTensorView_load_1(this_16.weights_0, _S57);
                             break;
                         }
                         break;
@@ -3005,11 +3006,11 @@ __device__ float * Linear_moveWeightsToSharedMem_1(Linear_0 this_16)
                     {
                         for(;;)
                         {
-                            if(_S45)
+                            if(_S46)
                             {
                                 break;
                             }
-                            *(&wtPtr_1[_S46 + int(9)]) = DiffTensorView_load_1(this_16.weights_0, _S57);
+                            *(&wtPtr_1[_S47 + int(9)]) = DiffTensorView_load_1(this_16.weights_0, _S58);
                             break;
                         }
                         break;
@@ -3018,11 +3019,11 @@ __device__ float * Linear_moveWeightsToSharedMem_1(Linear_0 this_16)
                     {
                         for(;;)
                         {
-                            if(_S45)
+                            if(_S46)
                             {
                                 break;
                             }
-                            *(&wtPtr_1[_S46 + int(10)]) = DiffTensorView_load_1(this_16.weights_0, _S58);
+                            *(&wtPtr_1[_S47 + int(10)]) = DiffTensorView_load_1(this_16.weights_0, _S59);
                             break;
                         }
                         break;
@@ -3031,11 +3032,11 @@ __device__ float * Linear_moveWeightsToSharedMem_1(Linear_0 this_16)
                     {
                         for(;;)
                         {
-                            if(_S45)
+                            if(_S46)
                             {
                                 break;
                             }
-                            *(&wtPtr_1[_S46 + int(11)]) = DiffTensorView_load_1(this_16.weights_0, _S59);
+                            *(&wtPtr_1[_S47 + int(11)]) = DiffTensorView_load_1(this_16.weights_0, _S60);
                             break;
                         }
                         break;
@@ -3044,11 +3045,11 @@ __device__ float * Linear_moveWeightsToSharedMem_1(Linear_0 this_16)
                     {
                         for(;;)
                         {
-                            if(_S45)
+                            if(_S46)
                             {
                                 break;
                             }
-                            *(&wtPtr_1[_S46 + int(12)]) = DiffTensorView_load_1(this_16.weights_0, _S60);
+                            *(&wtPtr_1[_S47 + int(12)]) = DiffTensorView_load_1(this_16.weights_0, _S61);
                             break;
                         }
                         break;
@@ -3057,11 +3058,11 @@ __device__ float * Linear_moveWeightsToSharedMem_1(Linear_0 this_16)
                     {
                         for(;;)
                         {
-                            if(_S45)
+                            if(_S46)
                             {
                                 break;
                             }
-                            *(&wtPtr_1[_S46 + int(13)]) = DiffTensorView_load_1(this_16.weights_0, _S61);
+                            *(&wtPtr_1[_S47 + int(13)]) = DiffTensorView_load_1(this_16.weights_0, _S62);
                             break;
                         }
                         break;
@@ -3070,11 +3071,11 @@ __device__ float * Linear_moveWeightsToSharedMem_1(Linear_0 this_16)
                     {
                         for(;;)
                         {
-                            if(_S45)
+                            if(_S46)
                             {
                                 break;
                             }
-                            *(&wtPtr_1[_S46 + int(14)]) = DiffTensorView_load_1(this_16.weights_0, _S62);
+                            *(&wtPtr_1[_S47 + int(14)]) = DiffTensorView_load_1(this_16.weights_0, _S63);
                             break;
                         }
                         break;
@@ -3083,11 +3084,11 @@ __device__ float * Linear_moveWeightsToSharedMem_1(Linear_0 this_16)
                     {
                         for(;;)
                         {
-                            if(_S45)
+                            if(_S46)
                             {
                                 break;
                             }
-                            *(&wtPtr_1[_S46 + int(15)]) = DiffTensorView_load_1(this_16.weights_0, _S63);
+                            *(&wtPtr_1[_S47 + int(15)]) = DiffTensorView_load_1(this_16.weights_0, _S64);
                             break;
                         }
                         break;
@@ -3105,45 +3106,45 @@ __device__ float * Linear_moveWeightsToSharedMem_1(Linear_0 this_16)
 
 __device__ float * Linear_storeArray_0(Linear_0 this_17, float * memptr_1, FixedArray<float, 16>  input_4)
 {
-    int _S64 = int(uint(int(((threadIdx)).x) % int(32)));
-    *(&memptr_1[_S64]) = input_4[int(0)];
-    *(&memptr_1[int(32) + _S64]) = input_4[int(1)];
-    *(&memptr_1[int(64) + _S64]) = input_4[int(2)];
-    *(&memptr_1[int(96) + _S64]) = input_4[int(3)];
-    *(&memptr_1[int(128) + _S64]) = input_4[int(4)];
-    *(&memptr_1[int(160) + _S64]) = input_4[int(5)];
-    *(&memptr_1[int(192) + _S64]) = input_4[int(6)];
-    *(&memptr_1[int(224) + _S64]) = input_4[int(7)];
-    *(&memptr_1[int(256) + _S64]) = input_4[int(8)];
-    *(&memptr_1[int(288) + _S64]) = input_4[int(9)];
-    *(&memptr_1[int(320) + _S64]) = input_4[int(10)];
-    *(&memptr_1[int(352) + _S64]) = input_4[int(11)];
-    *(&memptr_1[int(384) + _S64]) = input_4[int(12)];
-    *(&memptr_1[int(416) + _S64]) = input_4[int(13)];
-    *(&memptr_1[int(448) + _S64]) = input_4[int(14)];
-    *(&memptr_1[int(480) + _S64]) = input_4[int(15)];
+    int _S65 = int(uint(int(((threadIdx)).x) % int(32)));
+    *(&memptr_1[_S65]) = input_4[int(0)];
+    *(&memptr_1[int(32) + _S65]) = input_4[int(1)];
+    *(&memptr_1[int(64) + _S65]) = input_4[int(2)];
+    *(&memptr_1[int(96) + _S65]) = input_4[int(3)];
+    *(&memptr_1[int(128) + _S65]) = input_4[int(4)];
+    *(&memptr_1[int(160) + _S65]) = input_4[int(5)];
+    *(&memptr_1[int(192) + _S65]) = input_4[int(6)];
+    *(&memptr_1[int(224) + _S65]) = input_4[int(7)];
+    *(&memptr_1[int(256) + _S65]) = input_4[int(8)];
+    *(&memptr_1[int(288) + _S65]) = input_4[int(9)];
+    *(&memptr_1[int(320) + _S65]) = input_4[int(10)];
+    *(&memptr_1[int(352) + _S65]) = input_4[int(11)];
+    *(&memptr_1[int(384) + _S65]) = input_4[int(12)];
+    *(&memptr_1[int(416) + _S65]) = input_4[int(13)];
+    *(&memptr_1[int(448) + _S65]) = input_4[int(14)];
+    *(&memptr_1[int(480) + _S65]) = input_4[int(15)];
     return memptr_1;
 }
 
 __device__ float * Linear_storeArray_1(Linear_0 this_18, float * memptr_2, FixedArray<float, 16>  input_5)
 {
-    int _S65 = int(uint(int(((threadIdx)).x) % int(32))) * int(16);
-    *(&memptr_2[_S65]) = input_5[int(0)];
-    *(&memptr_2[_S65 + int(1)]) = input_5[int(1)];
-    *(&memptr_2[_S65 + int(2)]) = input_5[int(2)];
-    *(&memptr_2[_S65 + int(3)]) = input_5[int(3)];
-    *(&memptr_2[_S65 + int(4)]) = input_5[int(4)];
-    *(&memptr_2[_S65 + int(5)]) = input_5[int(5)];
-    *(&memptr_2[_S65 + int(6)]) = input_5[int(6)];
-    *(&memptr_2[_S65 + int(7)]) = input_5[int(7)];
-    *(&memptr_2[_S65 + int(8)]) = input_5[int(8)];
-    *(&memptr_2[_S65 + int(9)]) = input_5[int(9)];
-    *(&memptr_2[_S65 + int(10)]) = input_5[int(10)];
-    *(&memptr_2[_S65 + int(11)]) = input_5[int(11)];
-    *(&memptr_2[_S65 + int(12)]) = input_5[int(12)];
-    *(&memptr_2[_S65 + int(13)]) = input_5[int(13)];
-    *(&memptr_2[_S65 + int(14)]) = input_5[int(14)];
-    *(&memptr_2[_S65 + int(15)]) = input_5[int(15)];
+    int _S66 = int(uint(int(((threadIdx)).x) % int(32))) * int(16);
+    *(&memptr_2[_S66]) = input_5[int(0)];
+    *(&memptr_2[_S66 + int(1)]) = input_5[int(1)];
+    *(&memptr_2[_S66 + int(2)]) = input_5[int(2)];
+    *(&memptr_2[_S66 + int(3)]) = input_5[int(3)];
+    *(&memptr_2[_S66 + int(4)]) = input_5[int(4)];
+    *(&memptr_2[_S66 + int(5)]) = input_5[int(5)];
+    *(&memptr_2[_S66 + int(6)]) = input_5[int(6)];
+    *(&memptr_2[_S66 + int(7)]) = input_5[int(7)];
+    *(&memptr_2[_S66 + int(8)]) = input_5[int(8)];
+    *(&memptr_2[_S66 + int(9)]) = input_5[int(9)];
+    *(&memptr_2[_S66 + int(10)]) = input_5[int(10)];
+    *(&memptr_2[_S66 + int(11)]) = input_5[int(11)];
+    *(&memptr_2[_S66 + int(12)]) = input_5[int(12)];
+    *(&memptr_2[_S66 + int(13)]) = input_5[int(13)];
+    *(&memptr_2[_S66 + int(14)]) = input_5[int(14)];
+    *(&memptr_2[_S66 + int(15)]) = input_5[int(15)];
     return memptr_2;
 }
 
@@ -3155,40 +3156,40 @@ __device__ float * Linear_inpBufferForCurrentWarp_0(Linear_0 this_19)
 __device__ float * Linear_moveInputsToSharedMem_0(Linear_0 this_20, FixedArray<float, 16>  input_6)
 {
     float * inPtr_0 = Linear_inpBufferForCurrentWarp_0(this_20);
-    float * _S66 = Linear_storeArray_1(this_20, inPtr_0, input_6);
-    return _S66;
+    float * _S67 = Linear_storeArray_1(this_20, inPtr_0, input_6);
+    return _S67;
 }
 
 __device__ float * Linear_moveDOutputsToSharedMem_0(Linear_0 this_21, FixedArray<float, 16>  d_output_0)
 {
     float * outPtr_1 = Linear_outBufferForCurrentWarp_0(this_21);
-    float * _S67 = Linear_storeArray_0(this_21, outPtr_1, d_output_0);
-    return _S67;
+    float * _S68 = Linear_storeArray_0(this_21, outPtr_1, d_output_0);
+    return _S68;
 }
 
 __device__ float * Linear_moveDInputsToSharedMem_0(Linear_0 this_22, FixedArray<float, 16>  input_7)
 {
     float * inPtr_1 = Linear_inpBufferForCurrentWarp_0(this_22);
-    float * _S68 = Linear_storeArray_0(this_22, inPtr_1, input_7);
-    return _S68;
-}
-
-__device__ uint WaveGetActiveMask_0(uint _S69)
-{
+    float * _S69 = Linear_storeArray_0(this_22, inPtr_1, input_7);
     return _S69;
 }
 
-__device__ float WaveActiveSum_0(float expr_0, uint _S70)
+__device__ uint WaveGetActiveMask_0(uint _S70)
 {
-    float _S71 = (_waveSum((WaveGetActiveMask_0(_S70)), (expr_0)));
-    return _S71;
+    return _S70;
 }
 
-__device__ bool WaveIsFirstLane_0(uint _S72)
+__device__ float WaveActiveSum_0(float expr_0, uint _S71)
 {
-    uint _S73 = WaveGetActiveMask_0(_S72);
-    bool _S74 = ((((_S73) & -(_S73)) == (WarpMask(1) << _getLaneId())));
-    return _S74;
+    float _S72 = (_waveSum((WaveGetActiveMask_0(_S71)), (expr_0)));
+    return _S72;
+}
+
+__device__ bool WaveIsFirstLane_0(uint _S73)
+{
+    uint _S74 = WaveGetActiveMask_0(_S73);
+    bool _S75 = ((((_S74) & -(_S74)) == (WarpMask(1) << _getLaneId())));
+    return _S75;
 }
 
 struct DiffPair_Feature_0
@@ -3197,702 +3198,702 @@ struct DiffPair_Feature_0
     s_diff_Feature_0 differential_0;
 };
 
-__device__ void Linear_eval_bwd_0(Linear_0 this_23, DiffPair_Feature_0 * in_feature_pair_0, s_diff_Feature_0 d_output_1, uint _S75)
+__device__ void Linear_eval_bwd_0(Linear_0 this_23, DiffPair_Feature_0 * in_feature_pair_0, s_diff_Feature_0 d_output_1, uint _S76)
 {
-    uint _S76 = 0U;
+    uint _S77 = 0U;
     float * dOutPtr_0 = Linear_moveInputsToSharedMem_0(this_23, d_output_1.vals_0);
     float * wtPtr_2 = Linear_moveWeightsToSharedMem_1(this_23);
     float * dInPtr_0 = Linear_outBufferForCurrentWarp_0(this_23);
     _inline_matmul_1(dOutPtr_0, wtPtr_2, dInPtr_0);
     s_diff_Feature_0 d_input_feature_0;
     Linear_loadArray_0(this_23, dInPtr_0, &(&d_input_feature_0)->vals_0);
-    DiffPair_Feature_0 _S77 = *in_feature_pair_0;
+    DiffPair_Feature_0 _S78 = *in_feature_pair_0;
     in_feature_pair_0->primal_1 = (*in_feature_pair_0).primal_1;
     in_feature_pair_0->differential_0 = d_input_feature_0;
-    float * inPtr_2 = Linear_moveDInputsToSharedMem_0(this_23, _S77.primal_1.vals_1);
+    float * inPtr_2 = Linear_moveDInputsToSharedMem_0(this_23, _S78.primal_1.vals_1);
     float * outPtr_2 = Linear_moveDOutputsToSharedMem_0(this_23, d_output_1.vals_0);
     float * wtPtr_3 = Linear_wtBufferForCurrentWarp_0(this_23);
     _inline_matmul_0(outPtr_2, inPtr_2, wtPtr_3);
     int threadIdInWarp_2 = int(((threadIdx)).x) % int(32);
-    bool _S78 = threadIdInWarp_2 >= int(16);
-    uint _S79 = uint(threadIdInWarp_2);
-    int _S80 = threadIdInWarp_2 * int(16);
-    uint2  _S81 = make_uint2 (0U, _S79);
-    uint2  _S82 = make_uint2 (1U, _S79);
-    uint2  _S83 = make_uint2 (2U, _S79);
-    uint2  _S84 = make_uint2 (3U, _S79);
-    uint2  _S85 = make_uint2 (4U, _S79);
-    uint2  _S86 = make_uint2 (5U, _S79);
-    uint2  _S87 = make_uint2 (6U, _S79);
-    uint2  _S88 = make_uint2 (7U, _S79);
-    uint2  _S89 = make_uint2 (8U, _S79);
-    uint2  _S90 = make_uint2 (9U, _S79);
-    uint2  _S91 = make_uint2 (10U, _S79);
-    uint2  _S92 = make_uint2 (11U, _S79);
-    uint2  _S93 = make_uint2 (12U, _S79);
-    uint2  _S94 = make_uint2 (13U, _S79);
-    uint2  _S95 = make_uint2 (14U, _S79);
-    uint2  _S96 = make_uint2 (15U, _S79);
+    bool _S79 = threadIdInWarp_2 >= int(16);
+    uint _S80 = uint(threadIdInWarp_2);
+    int _S81 = threadIdInWarp_2 * int(16);
+    uint2  _S82 = make_uint2 (0U, _S80);
+    uint2  _S83 = make_uint2 (1U, _S80);
+    uint2  _S84 = make_uint2 (2U, _S80);
+    uint2  _S85 = make_uint2 (3U, _S80);
+    uint2  _S86 = make_uint2 (4U, _S80);
+    uint2  _S87 = make_uint2 (5U, _S80);
+    uint2  _S88 = make_uint2 (6U, _S80);
+    uint2  _S89 = make_uint2 (7U, _S80);
+    uint2  _S90 = make_uint2 (8U, _S80);
+    uint2  _S91 = make_uint2 (9U, _S80);
+    uint2  _S92 = make_uint2 (10U, _S80);
+    uint2  _S93 = make_uint2 (11U, _S80);
+    uint2  _S94 = make_uint2 (12U, _S80);
+    uint2  _S95 = make_uint2 (13U, _S80);
+    uint2  _S96 = make_uint2 (14U, _S80);
+    uint2  _S97 = make_uint2 (15U, _S80);
     for(;;)
     {
-        uint _S97 = 0U;
+        uint _S98 = 0U;
         for(;;)
         {
             for(;;)
             {
                 for(;;)
                 {
-                    uint _S98 = 0U;
+                    uint _S99 = 0U;
                     for(;;)
                     {
                         for(;;)
                         {
-                            uint _S99 = __ballot_sync(_S75, _S78);
-                            if(_S78)
+                            uint _S100 = __ballot_sync(_S76, _S79);
+                            if(_S79)
                             {
-                                uint _S100 = __ballot_sync(_S75, false);
-                                uint _S101 = __ballot_sync(_S75, true);
+                                uint _S101 = __ballot_sync(_S76, false);
+                                uint _S102 = __ballot_sync(_S76, true);
                                 break;
                             }
                             else
                             {
-                                uint _S102 = __ballot_sync(_S75, true);
+                                uint _S103 = __ballot_sync(_S76, true);
                             }
                             float oldVal_1;
-                            *((&oldVal_1)) = atomicAdd((this_23.weights_0.diff_1.diff_0).data_ptr_at<float>((_S81)), (*(&wtPtr_3[_S80])));
-                            uint _S103 = __ballot_sync(_S75, true);
+                            *((&oldVal_1)) = atomicAdd((this_23.weights_0.diff_1.diff_0).data_ptr_at<float>((_S82)), (*(&wtPtr_3[_S81])));
+                            uint _S104 = __ballot_sync(_S76, true);
                             break;
                         }
-                        uint _S104 = __ballot_sync(_S75, true);
-                        _S98 = _S104;
+                        uint _S105 = __ballot_sync(_S76, true);
+                        _S99 = _S105;
                         break;
                     }
-                    uint _S105 = 0U;
+                    uint _S106 = 0U;
                     for(;;)
                     {
                         for(;;)
                         {
-                            uint _S106 = __ballot_sync(_S98, _S78);
-                            if(_S78)
+                            uint _S107 = __ballot_sync(_S99, _S79);
+                            if(_S79)
                             {
-                                uint _S107 = __ballot_sync(_S98, false);
-                                uint _S108 = __ballot_sync(_S98, true);
+                                uint _S108 = __ballot_sync(_S99, false);
+                                uint _S109 = __ballot_sync(_S99, true);
                                 break;
                             }
                             else
                             {
-                                uint _S109 = __ballot_sync(_S98, true);
+                                uint _S110 = __ballot_sync(_S99, true);
                             }
                             float oldVal_2;
-                            *((&oldVal_2)) = atomicAdd((this_23.weights_0.diff_1.diff_0).data_ptr_at<float>((_S82)), (*(&wtPtr_3[_S80 + int(1)])));
-                            uint _S110 = __ballot_sync(_S98, true);
+                            *((&oldVal_2)) = atomicAdd((this_23.weights_0.diff_1.diff_0).data_ptr_at<float>((_S83)), (*(&wtPtr_3[_S81 + int(1)])));
+                            uint _S111 = __ballot_sync(_S99, true);
                             break;
                         }
-                        uint _S111 = __ballot_sync(_S98, true);
-                        _S105 = _S111;
+                        uint _S112 = __ballot_sync(_S99, true);
+                        _S106 = _S112;
                         break;
                     }
-                    uint _S112 = 0U;
+                    uint _S113 = 0U;
                     for(;;)
                     {
                         for(;;)
                         {
-                            uint _S113 = __ballot_sync(_S105, _S78);
-                            if(_S78)
+                            uint _S114 = __ballot_sync(_S106, _S79);
+                            if(_S79)
                             {
-                                uint _S114 = __ballot_sync(_S105, false);
-                                uint _S115 = __ballot_sync(_S105, true);
+                                uint _S115 = __ballot_sync(_S106, false);
+                                uint _S116 = __ballot_sync(_S106, true);
                                 break;
                             }
                             else
                             {
-                                uint _S116 = __ballot_sync(_S105, true);
+                                uint _S117 = __ballot_sync(_S106, true);
                             }
                             float oldVal_3;
-                            *((&oldVal_3)) = atomicAdd((this_23.weights_0.diff_1.diff_0).data_ptr_at<float>((_S83)), (*(&wtPtr_3[_S80 + int(2)])));
-                            uint _S117 = __ballot_sync(_S105, true);
+                            *((&oldVal_3)) = atomicAdd((this_23.weights_0.diff_1.diff_0).data_ptr_at<float>((_S84)), (*(&wtPtr_3[_S81 + int(2)])));
+                            uint _S118 = __ballot_sync(_S106, true);
                             break;
                         }
-                        uint _S118 = __ballot_sync(_S105, true);
-                        _S112 = _S118;
+                        uint _S119 = __ballot_sync(_S106, true);
+                        _S113 = _S119;
                         break;
                     }
-                    uint _S119 = 0U;
+                    uint _S120 = 0U;
                     for(;;)
                     {
                         for(;;)
                         {
-                            uint _S120 = __ballot_sync(_S112, _S78);
-                            if(_S78)
+                            uint _S121 = __ballot_sync(_S113, _S79);
+                            if(_S79)
                             {
-                                uint _S121 = __ballot_sync(_S112, false);
-                                uint _S122 = __ballot_sync(_S112, true);
+                                uint _S122 = __ballot_sync(_S113, false);
+                                uint _S123 = __ballot_sync(_S113, true);
                                 break;
                             }
                             else
                             {
-                                uint _S123 = __ballot_sync(_S112, true);
+                                uint _S124 = __ballot_sync(_S113, true);
                             }
                             float oldVal_4;
-                            *((&oldVal_4)) = atomicAdd((this_23.weights_0.diff_1.diff_0).data_ptr_at<float>((_S84)), (*(&wtPtr_3[_S80 + int(3)])));
-                            uint _S124 = __ballot_sync(_S112, true);
+                            *((&oldVal_4)) = atomicAdd((this_23.weights_0.diff_1.diff_0).data_ptr_at<float>((_S85)), (*(&wtPtr_3[_S81 + int(3)])));
+                            uint _S125 = __ballot_sync(_S113, true);
                             break;
                         }
-                        uint _S125 = __ballot_sync(_S112, true);
-                        _S119 = _S125;
+                        uint _S126 = __ballot_sync(_S113, true);
+                        _S120 = _S126;
                         break;
                     }
-                    uint _S126 = 0U;
+                    uint _S127 = 0U;
                     for(;;)
                     {
                         for(;;)
                         {
-                            uint _S127 = __ballot_sync(_S119, _S78);
-                            if(_S78)
+                            uint _S128 = __ballot_sync(_S120, _S79);
+                            if(_S79)
                             {
-                                uint _S128 = __ballot_sync(_S119, false);
-                                uint _S129 = __ballot_sync(_S119, true);
+                                uint _S129 = __ballot_sync(_S120, false);
+                                uint _S130 = __ballot_sync(_S120, true);
                                 break;
                             }
                             else
                             {
-                                uint _S130 = __ballot_sync(_S119, true);
+                                uint _S131 = __ballot_sync(_S120, true);
                             }
                             float oldVal_5;
-                            *((&oldVal_5)) = atomicAdd((this_23.weights_0.diff_1.diff_0).data_ptr_at<float>((_S85)), (*(&wtPtr_3[_S80 + int(4)])));
-                            uint _S131 = __ballot_sync(_S119, true);
+                            *((&oldVal_5)) = atomicAdd((this_23.weights_0.diff_1.diff_0).data_ptr_at<float>((_S86)), (*(&wtPtr_3[_S81 + int(4)])));
+                            uint _S132 = __ballot_sync(_S120, true);
                             break;
                         }
-                        uint _S132 = __ballot_sync(_S119, true);
-                        _S126 = _S132;
+                        uint _S133 = __ballot_sync(_S120, true);
+                        _S127 = _S133;
                         break;
                     }
-                    uint _S133 = 0U;
+                    uint _S134 = 0U;
                     for(;;)
                     {
                         for(;;)
                         {
-                            uint _S134 = __ballot_sync(_S126, _S78);
-                            if(_S78)
+                            uint _S135 = __ballot_sync(_S127, _S79);
+                            if(_S79)
                             {
-                                uint _S135 = __ballot_sync(_S126, false);
-                                uint _S136 = __ballot_sync(_S126, true);
+                                uint _S136 = __ballot_sync(_S127, false);
+                                uint _S137 = __ballot_sync(_S127, true);
                                 break;
                             }
                             else
                             {
-                                uint _S137 = __ballot_sync(_S126, true);
+                                uint _S138 = __ballot_sync(_S127, true);
                             }
                             float oldVal_6;
-                            *((&oldVal_6)) = atomicAdd((this_23.weights_0.diff_1.diff_0).data_ptr_at<float>((_S86)), (*(&wtPtr_3[_S80 + int(5)])));
-                            uint _S138 = __ballot_sync(_S126, true);
+                            *((&oldVal_6)) = atomicAdd((this_23.weights_0.diff_1.diff_0).data_ptr_at<float>((_S87)), (*(&wtPtr_3[_S81 + int(5)])));
+                            uint _S139 = __ballot_sync(_S127, true);
                             break;
                         }
-                        uint _S139 = __ballot_sync(_S126, true);
-                        _S133 = _S139;
+                        uint _S140 = __ballot_sync(_S127, true);
+                        _S134 = _S140;
                         break;
                     }
-                    uint _S140 = 0U;
+                    uint _S141 = 0U;
                     for(;;)
                     {
                         for(;;)
                         {
-                            uint _S141 = __ballot_sync(_S133, _S78);
-                            if(_S78)
+                            uint _S142 = __ballot_sync(_S134, _S79);
+                            if(_S79)
                             {
-                                uint _S142 = __ballot_sync(_S133, false);
-                                uint _S143 = __ballot_sync(_S133, true);
+                                uint _S143 = __ballot_sync(_S134, false);
+                                uint _S144 = __ballot_sync(_S134, true);
                                 break;
                             }
                             else
                             {
-                                uint _S144 = __ballot_sync(_S133, true);
+                                uint _S145 = __ballot_sync(_S134, true);
                             }
                             float oldVal_7;
-                            *((&oldVal_7)) = atomicAdd((this_23.weights_0.diff_1.diff_0).data_ptr_at<float>((_S87)), (*(&wtPtr_3[_S80 + int(6)])));
-                            uint _S145 = __ballot_sync(_S133, true);
+                            *((&oldVal_7)) = atomicAdd((this_23.weights_0.diff_1.diff_0).data_ptr_at<float>((_S88)), (*(&wtPtr_3[_S81 + int(6)])));
+                            uint _S146 = __ballot_sync(_S134, true);
                             break;
                         }
-                        uint _S146 = __ballot_sync(_S133, true);
-                        _S140 = _S146;
+                        uint _S147 = __ballot_sync(_S134, true);
+                        _S141 = _S147;
                         break;
                     }
-                    uint _S147 = 0U;
+                    uint _S148 = 0U;
                     for(;;)
                     {
                         for(;;)
                         {
-                            uint _S148 = __ballot_sync(_S140, _S78);
-                            if(_S78)
+                            uint _S149 = __ballot_sync(_S141, _S79);
+                            if(_S79)
                             {
-                                uint _S149 = __ballot_sync(_S140, false);
-                                uint _S150 = __ballot_sync(_S140, true);
+                                uint _S150 = __ballot_sync(_S141, false);
+                                uint _S151 = __ballot_sync(_S141, true);
                                 break;
                             }
                             else
                             {
-                                uint _S151 = __ballot_sync(_S140, true);
+                                uint _S152 = __ballot_sync(_S141, true);
                             }
                             float oldVal_8;
-                            *((&oldVal_8)) = atomicAdd((this_23.weights_0.diff_1.diff_0).data_ptr_at<float>((_S88)), (*(&wtPtr_3[_S80 + int(7)])));
-                            uint _S152 = __ballot_sync(_S140, true);
+                            *((&oldVal_8)) = atomicAdd((this_23.weights_0.diff_1.diff_0).data_ptr_at<float>((_S89)), (*(&wtPtr_3[_S81 + int(7)])));
+                            uint _S153 = __ballot_sync(_S141, true);
                             break;
                         }
-                        uint _S153 = __ballot_sync(_S140, true);
-                        _S147 = _S153;
+                        uint _S154 = __ballot_sync(_S141, true);
+                        _S148 = _S154;
                         break;
                     }
-                    uint _S154 = 0U;
+                    uint _S155 = 0U;
                     for(;;)
                     {
                         for(;;)
                         {
-                            uint _S155 = __ballot_sync(_S147, _S78);
-                            if(_S78)
+                            uint _S156 = __ballot_sync(_S148, _S79);
+                            if(_S79)
                             {
-                                uint _S156 = __ballot_sync(_S147, false);
-                                uint _S157 = __ballot_sync(_S147, true);
+                                uint _S157 = __ballot_sync(_S148, false);
+                                uint _S158 = __ballot_sync(_S148, true);
                                 break;
                             }
                             else
                             {
-                                uint _S158 = __ballot_sync(_S147, true);
+                                uint _S159 = __ballot_sync(_S148, true);
                             }
                             float oldVal_9;
-                            *((&oldVal_9)) = atomicAdd((this_23.weights_0.diff_1.diff_0).data_ptr_at<float>((_S89)), (*(&wtPtr_3[_S80 + int(8)])));
-                            uint _S159 = __ballot_sync(_S147, true);
+                            *((&oldVal_9)) = atomicAdd((this_23.weights_0.diff_1.diff_0).data_ptr_at<float>((_S90)), (*(&wtPtr_3[_S81 + int(8)])));
+                            uint _S160 = __ballot_sync(_S148, true);
                             break;
                         }
-                        uint _S160 = __ballot_sync(_S147, true);
-                        _S154 = _S160;
+                        uint _S161 = __ballot_sync(_S148, true);
+                        _S155 = _S161;
                         break;
                     }
-                    uint _S161 = 0U;
+                    uint _S162 = 0U;
                     for(;;)
                     {
                         for(;;)
                         {
-                            uint _S162 = __ballot_sync(_S154, _S78);
-                            if(_S78)
+                            uint _S163 = __ballot_sync(_S155, _S79);
+                            if(_S79)
                             {
-                                uint _S163 = __ballot_sync(_S154, false);
-                                uint _S164 = __ballot_sync(_S154, true);
+                                uint _S164 = __ballot_sync(_S155, false);
+                                uint _S165 = __ballot_sync(_S155, true);
                                 break;
                             }
                             else
                             {
-                                uint _S165 = __ballot_sync(_S154, true);
+                                uint _S166 = __ballot_sync(_S155, true);
                             }
                             float oldVal_10;
-                            *((&oldVal_10)) = atomicAdd((this_23.weights_0.diff_1.diff_0).data_ptr_at<float>((_S90)), (*(&wtPtr_3[_S80 + int(9)])));
-                            uint _S166 = __ballot_sync(_S154, true);
+                            *((&oldVal_10)) = atomicAdd((this_23.weights_0.diff_1.diff_0).data_ptr_at<float>((_S91)), (*(&wtPtr_3[_S81 + int(9)])));
+                            uint _S167 = __ballot_sync(_S155, true);
                             break;
                         }
-                        uint _S167 = __ballot_sync(_S154, true);
-                        _S161 = _S167;
+                        uint _S168 = __ballot_sync(_S155, true);
+                        _S162 = _S168;
                         break;
                     }
-                    uint _S168 = 0U;
+                    uint _S169 = 0U;
                     for(;;)
                     {
                         for(;;)
                         {
-                            uint _S169 = __ballot_sync(_S161, _S78);
-                            if(_S78)
+                            uint _S170 = __ballot_sync(_S162, _S79);
+                            if(_S79)
                             {
-                                uint _S170 = __ballot_sync(_S161, false);
-                                uint _S171 = __ballot_sync(_S161, true);
+                                uint _S171 = __ballot_sync(_S162, false);
+                                uint _S172 = __ballot_sync(_S162, true);
                                 break;
                             }
                             else
                             {
-                                uint _S172 = __ballot_sync(_S161, true);
+                                uint _S173 = __ballot_sync(_S162, true);
                             }
                             float oldVal_11;
-                            *((&oldVal_11)) = atomicAdd((this_23.weights_0.diff_1.diff_0).data_ptr_at<float>((_S91)), (*(&wtPtr_3[_S80 + int(10)])));
-                            uint _S173 = __ballot_sync(_S161, true);
+                            *((&oldVal_11)) = atomicAdd((this_23.weights_0.diff_1.diff_0).data_ptr_at<float>((_S92)), (*(&wtPtr_3[_S81 + int(10)])));
+                            uint _S174 = __ballot_sync(_S162, true);
                             break;
                         }
-                        uint _S174 = __ballot_sync(_S161, true);
-                        _S168 = _S174;
+                        uint _S175 = __ballot_sync(_S162, true);
+                        _S169 = _S175;
                         break;
                     }
-                    uint _S175 = 0U;
+                    uint _S176 = 0U;
                     for(;;)
                     {
                         for(;;)
                         {
-                            uint _S176 = __ballot_sync(_S168, _S78);
-                            if(_S78)
+                            uint _S177 = __ballot_sync(_S169, _S79);
+                            if(_S79)
                             {
-                                uint _S177 = __ballot_sync(_S168, false);
-                                uint _S178 = __ballot_sync(_S168, true);
+                                uint _S178 = __ballot_sync(_S169, false);
+                                uint _S179 = __ballot_sync(_S169, true);
                                 break;
                             }
                             else
                             {
-                                uint _S179 = __ballot_sync(_S168, true);
+                                uint _S180 = __ballot_sync(_S169, true);
                             }
                             float oldVal_12;
-                            *((&oldVal_12)) = atomicAdd((this_23.weights_0.diff_1.diff_0).data_ptr_at<float>((_S92)), (*(&wtPtr_3[_S80 + int(11)])));
-                            uint _S180 = __ballot_sync(_S168, true);
+                            *((&oldVal_12)) = atomicAdd((this_23.weights_0.diff_1.diff_0).data_ptr_at<float>((_S93)), (*(&wtPtr_3[_S81 + int(11)])));
+                            uint _S181 = __ballot_sync(_S169, true);
                             break;
                         }
-                        uint _S181 = __ballot_sync(_S168, true);
-                        _S175 = _S181;
+                        uint _S182 = __ballot_sync(_S169, true);
+                        _S176 = _S182;
                         break;
                     }
-                    uint _S182 = 0U;
+                    uint _S183 = 0U;
                     for(;;)
                     {
                         for(;;)
                         {
-                            uint _S183 = __ballot_sync(_S175, _S78);
-                            if(_S78)
+                            uint _S184 = __ballot_sync(_S176, _S79);
+                            if(_S79)
                             {
-                                uint _S184 = __ballot_sync(_S175, false);
-                                uint _S185 = __ballot_sync(_S175, true);
+                                uint _S185 = __ballot_sync(_S176, false);
+                                uint _S186 = __ballot_sync(_S176, true);
                                 break;
                             }
                             else
                             {
-                                uint _S186 = __ballot_sync(_S175, true);
+                                uint _S187 = __ballot_sync(_S176, true);
                             }
                             float oldVal_13;
-                            *((&oldVal_13)) = atomicAdd((this_23.weights_0.diff_1.diff_0).data_ptr_at<float>((_S93)), (*(&wtPtr_3[_S80 + int(12)])));
-                            uint _S187 = __ballot_sync(_S175, true);
+                            *((&oldVal_13)) = atomicAdd((this_23.weights_0.diff_1.diff_0).data_ptr_at<float>((_S94)), (*(&wtPtr_3[_S81 + int(12)])));
+                            uint _S188 = __ballot_sync(_S176, true);
                             break;
                         }
-                        uint _S188 = __ballot_sync(_S175, true);
-                        _S182 = _S188;
+                        uint _S189 = __ballot_sync(_S176, true);
+                        _S183 = _S189;
                         break;
                     }
-                    uint _S189 = 0U;
+                    uint _S190 = 0U;
                     for(;;)
                     {
                         for(;;)
                         {
-                            uint _S190 = __ballot_sync(_S182, _S78);
-                            if(_S78)
+                            uint _S191 = __ballot_sync(_S183, _S79);
+                            if(_S79)
                             {
-                                uint _S191 = __ballot_sync(_S182, false);
-                                uint _S192 = __ballot_sync(_S182, true);
+                                uint _S192 = __ballot_sync(_S183, false);
+                                uint _S193 = __ballot_sync(_S183, true);
                                 break;
                             }
                             else
                             {
-                                uint _S193 = __ballot_sync(_S182, true);
+                                uint _S194 = __ballot_sync(_S183, true);
                             }
                             float oldVal_14;
-                            *((&oldVal_14)) = atomicAdd((this_23.weights_0.diff_1.diff_0).data_ptr_at<float>((_S94)), (*(&wtPtr_3[_S80 + int(13)])));
-                            uint _S194 = __ballot_sync(_S182, true);
+                            *((&oldVal_14)) = atomicAdd((this_23.weights_0.diff_1.diff_0).data_ptr_at<float>((_S95)), (*(&wtPtr_3[_S81 + int(13)])));
+                            uint _S195 = __ballot_sync(_S183, true);
                             break;
                         }
-                        uint _S195 = __ballot_sync(_S182, true);
-                        _S189 = _S195;
+                        uint _S196 = __ballot_sync(_S183, true);
+                        _S190 = _S196;
                         break;
                     }
-                    uint _S196 = 0U;
+                    uint _S197 = 0U;
                     for(;;)
                     {
                         for(;;)
                         {
-                            uint _S197 = __ballot_sync(_S189, _S78);
-                            if(_S78)
+                            uint _S198 = __ballot_sync(_S190, _S79);
+                            if(_S79)
                             {
-                                uint _S198 = __ballot_sync(_S189, false);
-                                uint _S199 = __ballot_sync(_S189, true);
+                                uint _S199 = __ballot_sync(_S190, false);
+                                uint _S200 = __ballot_sync(_S190, true);
                                 break;
                             }
                             else
                             {
-                                uint _S200 = __ballot_sync(_S189, true);
+                                uint _S201 = __ballot_sync(_S190, true);
                             }
                             float oldVal_15;
-                            *((&oldVal_15)) = atomicAdd((this_23.weights_0.diff_1.diff_0).data_ptr_at<float>((_S95)), (*(&wtPtr_3[_S80 + int(14)])));
-                            uint _S201 = __ballot_sync(_S189, true);
+                            *((&oldVal_15)) = atomicAdd((this_23.weights_0.diff_1.diff_0).data_ptr_at<float>((_S96)), (*(&wtPtr_3[_S81 + int(14)])));
+                            uint _S202 = __ballot_sync(_S190, true);
                             break;
                         }
-                        uint _S202 = __ballot_sync(_S189, true);
-                        _S196 = _S202;
+                        uint _S203 = __ballot_sync(_S190, true);
+                        _S197 = _S203;
                         break;
                     }
-                    uint _S203 = 0U;
+                    uint _S204 = 0U;
                     for(;;)
                     {
                         for(;;)
                         {
-                            uint _S204 = __ballot_sync(_S196, _S78);
-                            if(_S78)
+                            uint _S205 = __ballot_sync(_S197, _S79);
+                            if(_S79)
                             {
-                                uint _S205 = __ballot_sync(_S196, false);
-                                uint _S206 = __ballot_sync(_S196, true);
+                                uint _S206 = __ballot_sync(_S197, false);
+                                uint _S207 = __ballot_sync(_S197, true);
                                 break;
                             }
                             else
                             {
-                                uint _S207 = __ballot_sync(_S196, true);
+                                uint _S208 = __ballot_sync(_S197, true);
                             }
                             float oldVal_16;
-                            *((&oldVal_16)) = atomicAdd((this_23.weights_0.diff_1.diff_0).data_ptr_at<float>((_S96)), (*(&wtPtr_3[_S80 + int(15)])));
-                            uint _S208 = __ballot_sync(_S196, true);
+                            *((&oldVal_16)) = atomicAdd((this_23.weights_0.diff_1.diff_0).data_ptr_at<float>((_S97)), (*(&wtPtr_3[_S81 + int(15)])));
+                            uint _S209 = __ballot_sync(_S197, true);
                             break;
                         }
-                        uint _S209 = __ballot_sync(_S196, true);
-                        _S203 = _S209;
+                        uint _S210 = __ballot_sync(_S197, true);
+                        _S204 = _S210;
                         break;
                     }
-                    uint _S210 = __ballot_sync(_S203, false);
-                    uint _S211 = __ballot_sync(_S203, false);
-                    uint _S212 = __ballot_sync(_S75, true);
+                    uint _S211 = __ballot_sync(_S204, false);
+                    uint _S212 = __ballot_sync(_S204, false);
+                    uint _S213 = __ballot_sync(_S76, true);
                     break;
                 }
-                uint _S213 = __ballot_sync(_S75, true);
+                uint _S214 = __ballot_sync(_S76, true);
                 break;
             }
-            uint _S214 = __ballot_sync(_S75, true);
-            _S97 = _S214;
+            uint _S215 = __ballot_sync(_S76, true);
+            _S98 = _S215;
             break;
         }
-        uint _S215 = __ballot_sync(_S97, false);
-        uint _S216 = __ballot_sync(_S97, false);
-        uint _S217 = __ballot_sync(_S75, true);
-        _S76 = _S217;
+        uint _S216 = __ballot_sync(_S98, false);
+        uint _S217 = __ballot_sync(_S98, false);
+        uint _S218 = __ballot_sync(_S76, true);
+        _S77 = _S218;
         break;
     }
-    float _S218 = WaveActiveSum_0(d_output_1.vals_0[int(0)], _S76);
-    bool _S219 = WaveIsFirstLane_0(_S76);
-    uint _S220 = __ballot_sync(_S76, _S219);
-    uint _S221;
-    if(_S219)
+    float _S219 = WaveActiveSum_0(d_output_1.vals_0[int(0)], _S77);
+    bool _S220 = WaveIsFirstLane_0(_S77);
+    uint _S221 = __ballot_sync(_S77, _S220);
+    uint _S222;
+    if(_S220)
     {
         float oldVal_17;
-        *((&oldVal_17)) = atomicAdd((this_23.bias_0.diff_1.diff_0).data_ptr_at<float>((0U)), (_S218));
-        uint _S222 = __ballot_sync(_S76, true);
-        _S221 = _S222;
+        *((&oldVal_17)) = atomicAdd((this_23.bias_0.diff_1.diff_0).data_ptr_at<float>((0U)), (_S219));
+        uint _S223 = __ballot_sync(_S77, true);
+        _S222 = _S223;
     }
     else
     {
-        uint _S223 = __ballot_sync(_S76, true);
-        _S221 = _S223;
+        uint _S224 = __ballot_sync(_S77, true);
+        _S222 = _S224;
     }
-    float _S224 = WaveActiveSum_0(d_output_1.vals_0[int(1)], _S221);
-    bool _S225 = WaveIsFirstLane_0(_S221);
-    uint _S226 = __ballot_sync(_S221, _S225);
-    if(_S225)
+    float _S225 = WaveActiveSum_0(d_output_1.vals_0[int(1)], _S222);
+    bool _S226 = WaveIsFirstLane_0(_S222);
+    uint _S227 = __ballot_sync(_S222, _S226);
+    if(_S226)
     {
         float oldVal_18;
-        *((&oldVal_18)) = atomicAdd((this_23.bias_0.diff_1.diff_0).data_ptr_at<float>((1U)), (_S224));
-        uint _S227 = __ballot_sync(_S221, true);
-        _S221 = _S227;
+        *((&oldVal_18)) = atomicAdd((this_23.bias_0.diff_1.diff_0).data_ptr_at<float>((1U)), (_S225));
+        uint _S228 = __ballot_sync(_S222, true);
+        _S222 = _S228;
     }
     else
     {
-        uint _S228 = __ballot_sync(_S221, true);
-        _S221 = _S228;
+        uint _S229 = __ballot_sync(_S222, true);
+        _S222 = _S229;
     }
-    float _S229 = WaveActiveSum_0(d_output_1.vals_0[int(2)], _S221);
-    bool _S230 = WaveIsFirstLane_0(_S221);
-    uint _S231 = __ballot_sync(_S221, _S230);
-    if(_S230)
+    float _S230 = WaveActiveSum_0(d_output_1.vals_0[int(2)], _S222);
+    bool _S231 = WaveIsFirstLane_0(_S222);
+    uint _S232 = __ballot_sync(_S222, _S231);
+    if(_S231)
     {
         float oldVal_19;
-        *((&oldVal_19)) = atomicAdd((this_23.bias_0.diff_1.diff_0).data_ptr_at<float>((2U)), (_S229));
-        uint _S232 = __ballot_sync(_S221, true);
-        _S221 = _S232;
+        *((&oldVal_19)) = atomicAdd((this_23.bias_0.diff_1.diff_0).data_ptr_at<float>((2U)), (_S230));
+        uint _S233 = __ballot_sync(_S222, true);
+        _S222 = _S233;
     }
     else
     {
-        uint _S233 = __ballot_sync(_S221, true);
-        _S221 = _S233;
+        uint _S234 = __ballot_sync(_S222, true);
+        _S222 = _S234;
     }
-    float _S234 = WaveActiveSum_0(d_output_1.vals_0[int(3)], _S221);
-    bool _S235 = WaveIsFirstLane_0(_S221);
-    uint _S236 = __ballot_sync(_S221, _S235);
-    if(_S235)
+    float _S235 = WaveActiveSum_0(d_output_1.vals_0[int(3)], _S222);
+    bool _S236 = WaveIsFirstLane_0(_S222);
+    uint _S237 = __ballot_sync(_S222, _S236);
+    if(_S236)
     {
         float oldVal_20;
-        *((&oldVal_20)) = atomicAdd((this_23.bias_0.diff_1.diff_0).data_ptr_at<float>((3U)), (_S234));
-        uint _S237 = __ballot_sync(_S221, true);
-        _S221 = _S237;
+        *((&oldVal_20)) = atomicAdd((this_23.bias_0.diff_1.diff_0).data_ptr_at<float>((3U)), (_S235));
+        uint _S238 = __ballot_sync(_S222, true);
+        _S222 = _S238;
     }
     else
     {
-        uint _S238 = __ballot_sync(_S221, true);
-        _S221 = _S238;
+        uint _S239 = __ballot_sync(_S222, true);
+        _S222 = _S239;
     }
-    float _S239 = WaveActiveSum_0(d_output_1.vals_0[int(4)], _S221);
-    bool _S240 = WaveIsFirstLane_0(_S221);
-    uint _S241 = __ballot_sync(_S221, _S240);
-    if(_S240)
+    float _S240 = WaveActiveSum_0(d_output_1.vals_0[int(4)], _S222);
+    bool _S241 = WaveIsFirstLane_0(_S222);
+    uint _S242 = __ballot_sync(_S222, _S241);
+    if(_S241)
     {
         float oldVal_21;
-        *((&oldVal_21)) = atomicAdd((this_23.bias_0.diff_1.diff_0).data_ptr_at<float>((4U)), (_S239));
-        uint _S242 = __ballot_sync(_S221, true);
-        _S221 = _S242;
+        *((&oldVal_21)) = atomicAdd((this_23.bias_0.diff_1.diff_0).data_ptr_at<float>((4U)), (_S240));
+        uint _S243 = __ballot_sync(_S222, true);
+        _S222 = _S243;
     }
     else
     {
-        uint _S243 = __ballot_sync(_S221, true);
-        _S221 = _S243;
+        uint _S244 = __ballot_sync(_S222, true);
+        _S222 = _S244;
     }
-    float _S244 = WaveActiveSum_0(d_output_1.vals_0[int(5)], _S221);
-    bool _S245 = WaveIsFirstLane_0(_S221);
-    uint _S246 = __ballot_sync(_S221, _S245);
-    if(_S245)
+    float _S245 = WaveActiveSum_0(d_output_1.vals_0[int(5)], _S222);
+    bool _S246 = WaveIsFirstLane_0(_S222);
+    uint _S247 = __ballot_sync(_S222, _S246);
+    if(_S246)
     {
         float oldVal_22;
-        *((&oldVal_22)) = atomicAdd((this_23.bias_0.diff_1.diff_0).data_ptr_at<float>((5U)), (_S244));
-        uint _S247 = __ballot_sync(_S221, true);
-        _S221 = _S247;
+        *((&oldVal_22)) = atomicAdd((this_23.bias_0.diff_1.diff_0).data_ptr_at<float>((5U)), (_S245));
+        uint _S248 = __ballot_sync(_S222, true);
+        _S222 = _S248;
     }
     else
     {
-        uint _S248 = __ballot_sync(_S221, true);
-        _S221 = _S248;
+        uint _S249 = __ballot_sync(_S222, true);
+        _S222 = _S249;
     }
-    float _S249 = WaveActiveSum_0(d_output_1.vals_0[int(6)], _S221);
-    bool _S250 = WaveIsFirstLane_0(_S221);
-    uint _S251 = __ballot_sync(_S221, _S250);
-    if(_S250)
+    float _S250 = WaveActiveSum_0(d_output_1.vals_0[int(6)], _S222);
+    bool _S251 = WaveIsFirstLane_0(_S222);
+    uint _S252 = __ballot_sync(_S222, _S251);
+    if(_S251)
     {
         float oldVal_23;
-        *((&oldVal_23)) = atomicAdd((this_23.bias_0.diff_1.diff_0).data_ptr_at<float>((6U)), (_S249));
-        uint _S252 = __ballot_sync(_S221, true);
-        _S221 = _S252;
+        *((&oldVal_23)) = atomicAdd((this_23.bias_0.diff_1.diff_0).data_ptr_at<float>((6U)), (_S250));
+        uint _S253 = __ballot_sync(_S222, true);
+        _S222 = _S253;
     }
     else
     {
-        uint _S253 = __ballot_sync(_S221, true);
-        _S221 = _S253;
+        uint _S254 = __ballot_sync(_S222, true);
+        _S222 = _S254;
     }
-    float _S254 = WaveActiveSum_0(d_output_1.vals_0[int(7)], _S221);
-    bool _S255 = WaveIsFirstLane_0(_S221);
-    uint _S256 = __ballot_sync(_S221, _S255);
-    if(_S255)
+    float _S255 = WaveActiveSum_0(d_output_1.vals_0[int(7)], _S222);
+    bool _S256 = WaveIsFirstLane_0(_S222);
+    uint _S257 = __ballot_sync(_S222, _S256);
+    if(_S256)
     {
         float oldVal_24;
-        *((&oldVal_24)) = atomicAdd((this_23.bias_0.diff_1.diff_0).data_ptr_at<float>((7U)), (_S254));
-        uint _S257 = __ballot_sync(_S221, true);
-        _S221 = _S257;
+        *((&oldVal_24)) = atomicAdd((this_23.bias_0.diff_1.diff_0).data_ptr_at<float>((7U)), (_S255));
+        uint _S258 = __ballot_sync(_S222, true);
+        _S222 = _S258;
     }
     else
     {
-        uint _S258 = __ballot_sync(_S221, true);
-        _S221 = _S258;
+        uint _S259 = __ballot_sync(_S222, true);
+        _S222 = _S259;
     }
-    float _S259 = WaveActiveSum_0(d_output_1.vals_0[int(8)], _S221);
-    bool _S260 = WaveIsFirstLane_0(_S221);
-    uint _S261 = __ballot_sync(_S221, _S260);
-    if(_S260)
+    float _S260 = WaveActiveSum_0(d_output_1.vals_0[int(8)], _S222);
+    bool _S261 = WaveIsFirstLane_0(_S222);
+    uint _S262 = __ballot_sync(_S222, _S261);
+    if(_S261)
     {
         float oldVal_25;
-        *((&oldVal_25)) = atomicAdd((this_23.bias_0.diff_1.diff_0).data_ptr_at<float>((8U)), (_S259));
-        uint _S262 = __ballot_sync(_S221, true);
-        _S221 = _S262;
+        *((&oldVal_25)) = atomicAdd((this_23.bias_0.diff_1.diff_0).data_ptr_at<float>((8U)), (_S260));
+        uint _S263 = __ballot_sync(_S222, true);
+        _S222 = _S263;
     }
     else
     {
-        uint _S263 = __ballot_sync(_S221, true);
-        _S221 = _S263;
+        uint _S264 = __ballot_sync(_S222, true);
+        _S222 = _S264;
     }
-    float _S264 = WaveActiveSum_0(d_output_1.vals_0[int(9)], _S221);
-    bool _S265 = WaveIsFirstLane_0(_S221);
-    uint _S266 = __ballot_sync(_S221, _S265);
-    if(_S265)
+    float _S265 = WaveActiveSum_0(d_output_1.vals_0[int(9)], _S222);
+    bool _S266 = WaveIsFirstLane_0(_S222);
+    uint _S267 = __ballot_sync(_S222, _S266);
+    if(_S266)
     {
         float oldVal_26;
-        *((&oldVal_26)) = atomicAdd((this_23.bias_0.diff_1.diff_0).data_ptr_at<float>((9U)), (_S264));
-        uint _S267 = __ballot_sync(_S221, true);
-        _S221 = _S267;
+        *((&oldVal_26)) = atomicAdd((this_23.bias_0.diff_1.diff_0).data_ptr_at<float>((9U)), (_S265));
+        uint _S268 = __ballot_sync(_S222, true);
+        _S222 = _S268;
     }
     else
     {
-        uint _S268 = __ballot_sync(_S221, true);
-        _S221 = _S268;
+        uint _S269 = __ballot_sync(_S222, true);
+        _S222 = _S269;
     }
-    float _S269 = WaveActiveSum_0(d_output_1.vals_0[int(10)], _S221);
-    bool _S270 = WaveIsFirstLane_0(_S221);
-    uint _S271 = __ballot_sync(_S221, _S270);
-    if(_S270)
+    float _S270 = WaveActiveSum_0(d_output_1.vals_0[int(10)], _S222);
+    bool _S271 = WaveIsFirstLane_0(_S222);
+    uint _S272 = __ballot_sync(_S222, _S271);
+    if(_S271)
     {
         float oldVal_27;
-        *((&oldVal_27)) = atomicAdd((this_23.bias_0.diff_1.diff_0).data_ptr_at<float>((10U)), (_S269));
-        uint _S272 = __ballot_sync(_S221, true);
-        _S221 = _S272;
+        *((&oldVal_27)) = atomicAdd((this_23.bias_0.diff_1.diff_0).data_ptr_at<float>((10U)), (_S270));
+        uint _S273 = __ballot_sync(_S222, true);
+        _S222 = _S273;
     }
     else
     {
-        uint _S273 = __ballot_sync(_S221, true);
-        _S221 = _S273;
+        uint _S274 = __ballot_sync(_S222, true);
+        _S222 = _S274;
     }
-    float _S274 = WaveActiveSum_0(d_output_1.vals_0[int(11)], _S221);
-    bool _S275 = WaveIsFirstLane_0(_S221);
-    uint _S276 = __ballot_sync(_S221, _S275);
-    if(_S275)
+    float _S275 = WaveActiveSum_0(d_output_1.vals_0[int(11)], _S222);
+    bool _S276 = WaveIsFirstLane_0(_S222);
+    uint _S277 = __ballot_sync(_S222, _S276);
+    if(_S276)
     {
         float oldVal_28;
-        *((&oldVal_28)) = atomicAdd((this_23.bias_0.diff_1.diff_0).data_ptr_at<float>((11U)), (_S274));
-        uint _S277 = __ballot_sync(_S221, true);
-        _S221 = _S277;
+        *((&oldVal_28)) = atomicAdd((this_23.bias_0.diff_1.diff_0).data_ptr_at<float>((11U)), (_S275));
+        uint _S278 = __ballot_sync(_S222, true);
+        _S222 = _S278;
     }
     else
     {
-        uint _S278 = __ballot_sync(_S221, true);
-        _S221 = _S278;
+        uint _S279 = __ballot_sync(_S222, true);
+        _S222 = _S279;
     }
-    float _S279 = WaveActiveSum_0(d_output_1.vals_0[int(12)], _S221);
-    bool _S280 = WaveIsFirstLane_0(_S221);
-    uint _S281 = __ballot_sync(_S221, _S280);
-    if(_S280)
+    float _S280 = WaveActiveSum_0(d_output_1.vals_0[int(12)], _S222);
+    bool _S281 = WaveIsFirstLane_0(_S222);
+    uint _S282 = __ballot_sync(_S222, _S281);
+    if(_S281)
     {
         float oldVal_29;
-        *((&oldVal_29)) = atomicAdd((this_23.bias_0.diff_1.diff_0).data_ptr_at<float>((12U)), (_S279));
-        uint _S282 = __ballot_sync(_S221, true);
-        _S221 = _S282;
+        *((&oldVal_29)) = atomicAdd((this_23.bias_0.diff_1.diff_0).data_ptr_at<float>((12U)), (_S280));
+        uint _S283 = __ballot_sync(_S222, true);
+        _S222 = _S283;
     }
     else
     {
-        uint _S283 = __ballot_sync(_S221, true);
-        _S221 = _S283;
+        uint _S284 = __ballot_sync(_S222, true);
+        _S222 = _S284;
     }
-    float _S284 = WaveActiveSum_0(d_output_1.vals_0[int(13)], _S221);
-    bool _S285 = WaveIsFirstLane_0(_S221);
-    uint _S286 = __ballot_sync(_S221, _S285);
-    if(_S285)
+    float _S285 = WaveActiveSum_0(d_output_1.vals_0[int(13)], _S222);
+    bool _S286 = WaveIsFirstLane_0(_S222);
+    uint _S287 = __ballot_sync(_S222, _S286);
+    if(_S286)
     {
         float oldVal_30;
-        *((&oldVal_30)) = atomicAdd((this_23.bias_0.diff_1.diff_0).data_ptr_at<float>((13U)), (_S284));
-        uint _S287 = __ballot_sync(_S221, true);
-        _S221 = _S287;
+        *((&oldVal_30)) = atomicAdd((this_23.bias_0.diff_1.diff_0).data_ptr_at<float>((13U)), (_S285));
+        uint _S288 = __ballot_sync(_S222, true);
+        _S222 = _S288;
     }
     else
     {
-        uint _S288 = __ballot_sync(_S221, true);
-        _S221 = _S288;
+        uint _S289 = __ballot_sync(_S222, true);
+        _S222 = _S289;
     }
-    float _S289 = WaveActiveSum_0(d_output_1.vals_0[int(14)], _S221);
-    bool _S290 = WaveIsFirstLane_0(_S221);
-    uint _S291 = __ballot_sync(_S221, _S290);
-    if(_S290)
+    float _S290 = WaveActiveSum_0(d_output_1.vals_0[int(14)], _S222);
+    bool _S291 = WaveIsFirstLane_0(_S222);
+    uint _S292 = __ballot_sync(_S222, _S291);
+    if(_S291)
     {
         float oldVal_31;
-        *((&oldVal_31)) = atomicAdd((this_23.bias_0.diff_1.diff_0).data_ptr_at<float>((14U)), (_S289));
-        uint _S292 = __ballot_sync(_S221, true);
-        _S221 = _S292;
+        *((&oldVal_31)) = atomicAdd((this_23.bias_0.diff_1.diff_0).data_ptr_at<float>((14U)), (_S290));
+        uint _S293 = __ballot_sync(_S222, true);
+        _S222 = _S293;
     }
     else
     {
-        uint _S293 = __ballot_sync(_S221, true);
-        _S221 = _S293;
+        uint _S294 = __ballot_sync(_S222, true);
+        _S222 = _S294;
     }
-    float _S294 = WaveActiveSum_0(d_output_1.vals_0[int(15)], _S221);
-    bool _S295 = WaveIsFirstLane_0(_S221);
-    uint _S296 = __ballot_sync(_S221, _S295);
-    if(_S295)
+    float _S295 = WaveActiveSum_0(d_output_1.vals_0[int(15)], _S222);
+    bool _S296 = WaveIsFirstLane_0(_S222);
+    uint _S297 = __ballot_sync(_S222, _S296);
+    if(_S296)
     {
         float oldVal_32;
-        *((&oldVal_32)) = atomicAdd((this_23.bias_0.diff_1.diff_0).data_ptr_at<float>((15U)), (_S294));
+        *((&oldVal_32)) = atomicAdd((this_23.bias_0.diff_1.diff_0).data_ptr_at<float>((15U)), (_S295));
     }
     return;
 }
@@ -3904,63 +3905,63 @@ __device__ Feature_0 Linear_eval_0(Linear_0 this_24, Feature_0 in_feature_0)
     float * outPtr_3 = Linear_outBufferForCurrentWarp_0(this_24);
     _inline_matmul_1(inPtr_3, wtPtr_4, outPtr_3);
     Feature_0 out_feature_0;
-    float * _S297 = ((this_24.bias_0.primal_0).data_ptr<float>());
-    Linear_moveOutputsToLocalArray_0(this_24, &(&out_feature_0)->vals_1, _S297);
+    float * _S298 = ((this_24.bias_0.primal_0).data_ptr<float>());
+    Linear_moveOutputsToLocalArray_0(this_24, &(&out_feature_0)->vals_1, _S298);
     return out_feature_0;
 }
 
 __device__ void _d_max_0(DiffPair_float_0 * dpx_0, DiffPair_float_0 * dpy_0, float dOut_2)
 {
-    DiffPair_float_0 _S298 = *dpx_0;
-    float _S299;
+    DiffPair_float_0 _S299 = *dpx_0;
+    float _S300;
     if((*dpx_0).primal_1 > (*dpy_0).primal_1)
     {
-        _S299 = dOut_2;
+        _S300 = dOut_2;
     }
     else
     {
-        _S299 = 0.0f;
+        _S300 = 0.0f;
     }
-    dpx_0->primal_1 = _S298.primal_1;
-    dpx_0->differential_0 = _S299;
-    DiffPair_float_0 _S300 = *dpy_0;
-    if((*dpy_0).primal_1 > _S298.primal_1)
+    dpx_0->primal_1 = _S299.primal_1;
+    dpx_0->differential_0 = _S300;
+    DiffPair_float_0 _S301 = *dpy_0;
+    if((*dpy_0).primal_1 > _S299.primal_1)
     {
-        _S299 = dOut_2;
+        _S300 = dOut_2;
     }
     else
     {
-        _S299 = 0.0f;
+        _S300 = 0.0f;
     }
-    dpy_0->primal_1 = _S300.primal_1;
-    dpy_0->differential_0 = _S299;
+    dpy_0->primal_1 = _S301.primal_1;
+    dpy_0->differential_0 = _S300;
     return;
 }
 
 __device__ DiffPair_float_0 _d_max_1(DiffPair_float_0 dpx_1, DiffPair_float_0 dpy_1)
 {
-    float _S301 = (F32_max((dpx_1.primal_1), (dpy_1.primal_1)));
-    float _S302;
+    float _S302 = (F32_max((dpx_1.primal_1), (dpy_1.primal_1)));
+    float _S303;
     if(dpx_1.primal_1 > dpy_1.primal_1)
     {
-        _S302 = dpx_1.differential_0;
+        _S303 = dpx_1.differential_0;
     }
     else
     {
-        _S302 = dpy_1.differential_0;
+        _S303 = dpy_1.differential_0;
     }
-    DiffPair_float_0 _S303 = { _S301, _S302 };
-    return _S303;
+    DiffPair_float_0 _S304 = { _S302, _S303 };
+    return _S304;
 }
 
-__device__ float s_primal_ctx_max_0(float _S304, float _S305)
+__device__ float s_primal_ctx_max_0(float _S305, float _S306)
 {
-    return (F32_max((_S304), (_S305)));
+    return (F32_max((_S305), (_S306)));
 }
 
-__device__ void s_bwd_prop_max_0(DiffPair_float_0 * _S306, DiffPair_float_0 * _S307, float _S308)
+__device__ void s_bwd_prop_max_0(DiffPair_float_0 * _S307, DiffPair_float_0 * _S308, float _S309)
 {
-    _d_max_0(_S306, _S307, _S308);
+    _d_max_0(_S307, _S308, _S309);
     return;
 }
 
@@ -3972,25 +3973,7 @@ struct MLP_0
 __device__ Feature_0 MLP_eval_0(MLP_0 this_25, Feature_0 in_feature_1)
 {
     Feature_0 out_feature_1;
-    Feature_0 _S309 = Linear_eval_0(this_25.layers_0[int(0)], in_feature_1);
-    out_feature_1 = _S309;
-    *(&(&out_feature_1)->vals_1[int(0)]) = (F32_max((0.0f), (*(&(&out_feature_1)->vals_1[int(0)]))));
-    *(&(&out_feature_1)->vals_1[int(1)]) = (F32_max((0.0f), (*(&(&out_feature_1)->vals_1[int(1)]))));
-    *(&(&out_feature_1)->vals_1[int(2)]) = (F32_max((0.0f), (*(&(&out_feature_1)->vals_1[int(2)]))));
-    *(&(&out_feature_1)->vals_1[int(3)]) = (F32_max((0.0f), (*(&(&out_feature_1)->vals_1[int(3)]))));
-    *(&(&out_feature_1)->vals_1[int(4)]) = (F32_max((0.0f), (*(&(&out_feature_1)->vals_1[int(4)]))));
-    *(&(&out_feature_1)->vals_1[int(5)]) = (F32_max((0.0f), (*(&(&out_feature_1)->vals_1[int(5)]))));
-    *(&(&out_feature_1)->vals_1[int(6)]) = (F32_max((0.0f), (*(&(&out_feature_1)->vals_1[int(6)]))));
-    *(&(&out_feature_1)->vals_1[int(7)]) = (F32_max((0.0f), (*(&(&out_feature_1)->vals_1[int(7)]))));
-    *(&(&out_feature_1)->vals_1[int(8)]) = (F32_max((0.0f), (*(&(&out_feature_1)->vals_1[int(8)]))));
-    *(&(&out_feature_1)->vals_1[int(9)]) = (F32_max((0.0f), (*(&(&out_feature_1)->vals_1[int(9)]))));
-    *(&(&out_feature_1)->vals_1[int(10)]) = (F32_max((0.0f), (*(&(&out_feature_1)->vals_1[int(10)]))));
-    *(&(&out_feature_1)->vals_1[int(11)]) = (F32_max((0.0f), (*(&(&out_feature_1)->vals_1[int(11)]))));
-    *(&(&out_feature_1)->vals_1[int(12)]) = (F32_max((0.0f), (*(&(&out_feature_1)->vals_1[int(12)]))));
-    *(&(&out_feature_1)->vals_1[int(13)]) = (F32_max((0.0f), (*(&(&out_feature_1)->vals_1[int(13)]))));
-    *(&(&out_feature_1)->vals_1[int(14)]) = (F32_max((0.0f), (*(&(&out_feature_1)->vals_1[int(14)]))));
-    *(&(&out_feature_1)->vals_1[int(15)]) = (F32_max((0.0f), (*(&(&out_feature_1)->vals_1[int(15)]))));
-    Feature_0 _S310 = Linear_eval_0(this_25.layers_0[int(1)], out_feature_1);
+    Feature_0 _S310 = Linear_eval_0(this_25.layers_0[int(0)], in_feature_1);
     out_feature_1 = _S310;
     *(&(&out_feature_1)->vals_1[int(0)]) = (F32_max((0.0f), (*(&(&out_feature_1)->vals_1[int(0)]))));
     *(&(&out_feature_1)->vals_1[int(1)]) = (F32_max((0.0f), (*(&(&out_feature_1)->vals_1[int(1)]))));
@@ -4008,8 +3991,26 @@ __device__ Feature_0 MLP_eval_0(MLP_0 this_25, Feature_0 in_feature_1)
     *(&(&out_feature_1)->vals_1[int(13)]) = (F32_max((0.0f), (*(&(&out_feature_1)->vals_1[int(13)]))));
     *(&(&out_feature_1)->vals_1[int(14)]) = (F32_max((0.0f), (*(&(&out_feature_1)->vals_1[int(14)]))));
     *(&(&out_feature_1)->vals_1[int(15)]) = (F32_max((0.0f), (*(&(&out_feature_1)->vals_1[int(15)]))));
-    Feature_0 _S311 = Linear_eval_0(this_25.layers_0[int(2)], out_feature_1);
+    Feature_0 _S311 = Linear_eval_0(this_25.layers_0[int(1)], out_feature_1);
     out_feature_1 = _S311;
+    *(&(&out_feature_1)->vals_1[int(0)]) = (F32_max((0.0f), (*(&(&out_feature_1)->vals_1[int(0)]))));
+    *(&(&out_feature_1)->vals_1[int(1)]) = (F32_max((0.0f), (*(&(&out_feature_1)->vals_1[int(1)]))));
+    *(&(&out_feature_1)->vals_1[int(2)]) = (F32_max((0.0f), (*(&(&out_feature_1)->vals_1[int(2)]))));
+    *(&(&out_feature_1)->vals_1[int(3)]) = (F32_max((0.0f), (*(&(&out_feature_1)->vals_1[int(3)]))));
+    *(&(&out_feature_1)->vals_1[int(4)]) = (F32_max((0.0f), (*(&(&out_feature_1)->vals_1[int(4)]))));
+    *(&(&out_feature_1)->vals_1[int(5)]) = (F32_max((0.0f), (*(&(&out_feature_1)->vals_1[int(5)]))));
+    *(&(&out_feature_1)->vals_1[int(6)]) = (F32_max((0.0f), (*(&(&out_feature_1)->vals_1[int(6)]))));
+    *(&(&out_feature_1)->vals_1[int(7)]) = (F32_max((0.0f), (*(&(&out_feature_1)->vals_1[int(7)]))));
+    *(&(&out_feature_1)->vals_1[int(8)]) = (F32_max((0.0f), (*(&(&out_feature_1)->vals_1[int(8)]))));
+    *(&(&out_feature_1)->vals_1[int(9)]) = (F32_max((0.0f), (*(&(&out_feature_1)->vals_1[int(9)]))));
+    *(&(&out_feature_1)->vals_1[int(10)]) = (F32_max((0.0f), (*(&(&out_feature_1)->vals_1[int(10)]))));
+    *(&(&out_feature_1)->vals_1[int(11)]) = (F32_max((0.0f), (*(&(&out_feature_1)->vals_1[int(11)]))));
+    *(&(&out_feature_1)->vals_1[int(12)]) = (F32_max((0.0f), (*(&(&out_feature_1)->vals_1[int(12)]))));
+    *(&(&out_feature_1)->vals_1[int(13)]) = (F32_max((0.0f), (*(&(&out_feature_1)->vals_1[int(13)]))));
+    *(&(&out_feature_1)->vals_1[int(14)]) = (F32_max((0.0f), (*(&(&out_feature_1)->vals_1[int(14)]))));
+    *(&(&out_feature_1)->vals_1[int(15)]) = (F32_max((0.0f), (*(&(&out_feature_1)->vals_1[int(15)]))));
+    Feature_0 _S312 = Linear_eval_0(this_25.layers_0[int(2)], out_feature_1);
+    out_feature_1 = _S312;
     *(&(&out_feature_1)->vals_1[int(0)]) = (F32_max((0.0f), (*(&(&out_feature_1)->vals_1[int(0)]))));
     *(&(&out_feature_1)->vals_1[int(1)]) = (F32_max((0.0f), (*(&(&out_feature_1)->vals_1[int(1)]))));
     *(&(&out_feature_1)->vals_1[int(2)]) = (F32_max((0.0f), (*(&(&out_feature_1)->vals_1[int(2)]))));
@@ -4038,9 +4039,9 @@ __device__ void DiffTensorView_storeOnce_forward_0(DiffTensorView_0 this_26, uin
 
 __device__ void DiffTensorView_storeOnce_backward_0(DiffTensorView_0 this_27, uint4  x_3, DiffPair_float_0 * dpval_1)
 {
-    float _S312 = AtomicAdd_storeOnce_backward_0(this_27.diff_1, x_3);
+    float _S313 = AtomicAdd_storeOnce_backward_0(this_27.diff_1, x_3);
     dpval_1->primal_1 = (*dpval_1).primal_1;
-    dpval_1->differential_0 = _S312;
+    dpval_1->differential_0 = _S313;
     return;
 }
 
@@ -4052,50 +4053,51 @@ __device__ void DiffTensorView_storeOnce_0(DiffTensorView_0 this_28, uint4  x_4,
 
 struct s_bwd_prop_getInFeature_Intermediates_0
 {
-    int _S313;
+    int _S314;
 };
 
 struct s_bwd_prop_MLP_eval_Intermediates_0
 {
-    Feature_0 _S314;
     Feature_0 _S315;
     Feature_0 _S316;
+    Feature_0 _S317;
 };
 
 struct s_bwd_prop_renderImage_Intermediates_0
 {
-    s_bwd_prop_getInFeature_Intermediates_0 _S317;
-    Feature_0 _S318;
-    s_bwd_prop_MLP_eval_Intermediates_0 _S319;
-    Feature_0 _S320;
-    int _S321;
-    uint _S322;
+    s_bwd_prop_getInFeature_Intermediates_0 _S318;
+    Feature_0 _S319;
+    s_bwd_prop_MLP_eval_Intermediates_0 _S320;
+    Feature_0 _S321;
+    int _S322;
     uint _S323;
     uint _S324;
+    uint _S325;
 };
 
-__device__ float s_primal_ctx_DiffTensorView_load_0(DiffTensorView_0 _S325, uint4  _S326)
+__device__ float s_primal_ctx_DiffTensorView_load_0(DiffTensorView_0 _S326, uint4  _S327)
 {
-    return DiffTensorView_load_0(_S325, _S326);
+    return DiffTensorView_load_0(_S326, _S327);
 }
 
 __device__ Feature_0 s_bwd_primal_getInFeature_0(DiffTensorView_0 input_8, uint3  idx_1, s_bwd_prop_getInFeature_Intermediates_0 * _s_diff_ctx_0)
 {
-    _s_diff_ctx_0->_S313 = int(0);
-    FixedArray<float, 16>  _S327 = {
+    _s_diff_ctx_0->_S314 = int(0);
+    FixedArray<float, 16>  _S328 = {
         0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f
     };
-    uint _S328 = idx_1.x;
-    uint _S329 = idx_1.y;
-    uint _S330 = idx_1.z;
+    uint _S329 = idx_1.x;
+    uint _S330 = idx_1.y;
+    uint _S331 = idx_1.z;
+    uint4  _S332 = make_uint4 (_S329, _S330, _S331, 15U);
     bool _bflag_0 = true;
-    int i_10 = int(0);
+    int i_9 = int(0);
     Feature_0 output_3;
-    (&output_3)->vals_1 = _S327;
+    (&output_3)->vals_1 = _S328;
     int _pc_0 = int(0);
     for(;;)
     {
-        _s_diff_ctx_0->_S313 = _pc_0;
+        _s_diff_ctx_0->_S314 = _pc_0;
         if(_bflag_0)
         {
         }
@@ -4103,151 +4105,160 @@ __device__ Feature_0 s_bwd_primal_getInFeature_0(DiffTensorView_0 input_8, uint3
         {
             break;
         }
-        *(&(&output_3)->vals_1[i_10]) = s_primal_ctx_DiffTensorView_load_0(input_8, make_uint4 (_S328, _S329, _S330, uint(i_10)));
-        int i_11 = i_10 + int(1);
-        if(i_11 < int(16))
+        int _S333;
+        if(i_9 < int(15))
         {
+            float _S334 = s_primal_ctx_DiffTensorView_load_0(input_8, make_uint4 (_S329, _S330, _S331, uint(i_9)));
+            Feature_0 _S335 = output_3;
+            *(&(&_S335)->vals_1[i_9]) = _S334;
+            _S333 = int(1);
+            output_3 = _S335;
         }
         else
+        {
+            _S333 = int(0);
+        }
+        if(_S333 != int(1))
         {
             _bflag_0 = false;
         }
         if(_bflag_0)
         {
-            i_10 = i_11;
+            i_9 = i_9 + int(1);
         }
         _pc_0 = _pc_0 + int(1);
     }
+    *(&(&output_3)->vals_1[15U]) = s_primal_ctx_DiffTensorView_load_0(input_8, _S332);
     return output_3;
 }
 
-__device__ Feature_0 s_primal_ctx_Linear_eval_0(Linear_0 _S331, Feature_0 _S332)
+__device__ Feature_0 s_primal_ctx_Linear_eval_0(Linear_0 _S336, Feature_0 _S337)
 {
-    Feature_0 _S333 = Linear_eval_0(_S331, _S332);
-    return _S333;
+    Feature_0 _S338 = Linear_eval_0(_S336, _S337);
+    return _S338;
 }
 
 __device__ Feature_0 s_bwd_primal_MLP_eval_0(MLP_0 this_29, Feature_0 dpin_feature_0, s_bwd_prop_MLP_eval_Intermediates_0 * _s_diff_ctx_1)
 {
-    FixedArray<float, 16>  _S334 = {
+    FixedArray<float, 16>  _S339 = {
         0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f
     };
-    Feature_0 _S335 = { _S334 };
-    _s_diff_ctx_1->_S314 = _S335;
-    _s_diff_ctx_1->_S315 = _S335;
-    _s_diff_ctx_1->_S316 = _S335;
-    Feature_0 _S336 = s_primal_ctx_Linear_eval_0(this_29.layers_0[int(0)], dpin_feature_0);
-    _s_diff_ctx_1->_S314 = _S336;
-    float _S337 = s_primal_ctx_max_0(0.0f, _S336.vals_1[int(0)]);
-    Feature_0 _S338 = _S336;
-    *(&(&_S338)->vals_1[int(0)]) = _S337;
-    *(&(&_S338)->vals_1[int(1)]) = s_primal_ctx_max_0(0.0f, _S336.vals_1[int(1)]);
-    *(&(&_S338)->vals_1[int(2)]) = s_primal_ctx_max_0(0.0f, _S336.vals_1[int(2)]);
-    *(&(&_S338)->vals_1[int(3)]) = s_primal_ctx_max_0(0.0f, _S336.vals_1[int(3)]);
-    *(&(&_S338)->vals_1[int(4)]) = s_primal_ctx_max_0(0.0f, _S336.vals_1[int(4)]);
-    *(&(&_S338)->vals_1[int(5)]) = s_primal_ctx_max_0(0.0f, _S336.vals_1[int(5)]);
-    *(&(&_S338)->vals_1[int(6)]) = s_primal_ctx_max_0(0.0f, _S336.vals_1[int(6)]);
-    *(&(&_S338)->vals_1[int(7)]) = s_primal_ctx_max_0(0.0f, _S336.vals_1[int(7)]);
-    *(&(&_S338)->vals_1[int(8)]) = s_primal_ctx_max_0(0.0f, _S336.vals_1[int(8)]);
-    *(&(&_S338)->vals_1[int(9)]) = s_primal_ctx_max_0(0.0f, _S336.vals_1[int(9)]);
-    *(&(&_S338)->vals_1[int(10)]) = s_primal_ctx_max_0(0.0f, _S336.vals_1[int(10)]);
-    *(&(&_S338)->vals_1[int(11)]) = s_primal_ctx_max_0(0.0f, _S336.vals_1[int(11)]);
-    *(&(&_S338)->vals_1[int(12)]) = s_primal_ctx_max_0(0.0f, _S336.vals_1[int(12)]);
-    *(&(&_S338)->vals_1[int(13)]) = s_primal_ctx_max_0(0.0f, _S336.vals_1[int(13)]);
-    *(&(&_S338)->vals_1[int(14)]) = s_primal_ctx_max_0(0.0f, _S336.vals_1[int(14)]);
-    *(&(&_S338)->vals_1[int(15)]) = s_primal_ctx_max_0(0.0f, _S336.vals_1[int(15)]);
-    Feature_0 _S339 = s_primal_ctx_Linear_eval_0(this_29.layers_0[int(1)], _S338);
-    _s_diff_ctx_1->_S315 = _S339;
-    float _S340 = s_primal_ctx_max_0(0.0f, _S339.vals_1[int(0)]);
-    _S338 = _S339;
-    *(&(&_S338)->vals_1[int(0)]) = _S340;
-    *(&(&_S338)->vals_1[int(1)]) = s_primal_ctx_max_0(0.0f, _S339.vals_1[int(1)]);
-    *(&(&_S338)->vals_1[int(2)]) = s_primal_ctx_max_0(0.0f, _S339.vals_1[int(2)]);
-    *(&(&_S338)->vals_1[int(3)]) = s_primal_ctx_max_0(0.0f, _S339.vals_1[int(3)]);
-    *(&(&_S338)->vals_1[int(4)]) = s_primal_ctx_max_0(0.0f, _S339.vals_1[int(4)]);
-    *(&(&_S338)->vals_1[int(5)]) = s_primal_ctx_max_0(0.0f, _S339.vals_1[int(5)]);
-    *(&(&_S338)->vals_1[int(6)]) = s_primal_ctx_max_0(0.0f, _S339.vals_1[int(6)]);
-    *(&(&_S338)->vals_1[int(7)]) = s_primal_ctx_max_0(0.0f, _S339.vals_1[int(7)]);
-    *(&(&_S338)->vals_1[int(8)]) = s_primal_ctx_max_0(0.0f, _S339.vals_1[int(8)]);
-    *(&(&_S338)->vals_1[int(9)]) = s_primal_ctx_max_0(0.0f, _S339.vals_1[int(9)]);
-    *(&(&_S338)->vals_1[int(10)]) = s_primal_ctx_max_0(0.0f, _S339.vals_1[int(10)]);
-    *(&(&_S338)->vals_1[int(11)]) = s_primal_ctx_max_0(0.0f, _S339.vals_1[int(11)]);
-    *(&(&_S338)->vals_1[int(12)]) = s_primal_ctx_max_0(0.0f, _S339.vals_1[int(12)]);
-    *(&(&_S338)->vals_1[int(13)]) = s_primal_ctx_max_0(0.0f, _S339.vals_1[int(13)]);
-    *(&(&_S338)->vals_1[int(14)]) = s_primal_ctx_max_0(0.0f, _S339.vals_1[int(14)]);
-    *(&(&_S338)->vals_1[int(15)]) = s_primal_ctx_max_0(0.0f, _S339.vals_1[int(15)]);
-    Feature_0 _S341 = s_primal_ctx_Linear_eval_0(this_29.layers_0[int(2)], _S338);
-    _s_diff_ctx_1->_S316 = _S341;
+    Feature_0 _S340 = { _S339 };
+    _s_diff_ctx_1->_S315 = _S340;
+    _s_diff_ctx_1->_S316 = _S340;
+    _s_diff_ctx_1->_S317 = _S340;
+    Feature_0 _S341 = s_primal_ctx_Linear_eval_0(this_29.layers_0[int(0)], dpin_feature_0);
+    _s_diff_ctx_1->_S315 = _S341;
     float _S342 = s_primal_ctx_max_0(0.0f, _S341.vals_1[int(0)]);
-    _S338 = _S341;
-    *(&(&_S338)->vals_1[int(0)]) = _S342;
-    *(&(&_S338)->vals_1[int(1)]) = s_primal_ctx_max_0(0.0f, _S341.vals_1[int(1)]);
-    *(&(&_S338)->vals_1[int(2)]) = s_primal_ctx_max_0(0.0f, _S341.vals_1[int(2)]);
-    *(&(&_S338)->vals_1[int(3)]) = s_primal_ctx_max_0(0.0f, _S341.vals_1[int(3)]);
-    *(&(&_S338)->vals_1[int(4)]) = s_primal_ctx_max_0(0.0f, _S341.vals_1[int(4)]);
-    *(&(&_S338)->vals_1[int(5)]) = s_primal_ctx_max_0(0.0f, _S341.vals_1[int(5)]);
-    *(&(&_S338)->vals_1[int(6)]) = s_primal_ctx_max_0(0.0f, _S341.vals_1[int(6)]);
-    *(&(&_S338)->vals_1[int(7)]) = s_primal_ctx_max_0(0.0f, _S341.vals_1[int(7)]);
-    *(&(&_S338)->vals_1[int(8)]) = s_primal_ctx_max_0(0.0f, _S341.vals_1[int(8)]);
-    *(&(&_S338)->vals_1[int(9)]) = s_primal_ctx_max_0(0.0f, _S341.vals_1[int(9)]);
-    *(&(&_S338)->vals_1[int(10)]) = s_primal_ctx_max_0(0.0f, _S341.vals_1[int(10)]);
-    *(&(&_S338)->vals_1[int(11)]) = s_primal_ctx_max_0(0.0f, _S341.vals_1[int(11)]);
-    *(&(&_S338)->vals_1[int(12)]) = s_primal_ctx_max_0(0.0f, _S341.vals_1[int(12)]);
-    *(&(&_S338)->vals_1[int(13)]) = s_primal_ctx_max_0(0.0f, _S341.vals_1[int(13)]);
-    *(&(&_S338)->vals_1[int(14)]) = s_primal_ctx_max_0(0.0f, _S341.vals_1[int(14)]);
-    *(&(&_S338)->vals_1[int(15)]) = s_primal_ctx_max_0(0.0f, _S341.vals_1[int(15)]);
-    return _S338;
+    Feature_0 _S343 = _S341;
+    *(&(&_S343)->vals_1[int(0)]) = _S342;
+    *(&(&_S343)->vals_1[int(1)]) = s_primal_ctx_max_0(0.0f, _S341.vals_1[int(1)]);
+    *(&(&_S343)->vals_1[int(2)]) = s_primal_ctx_max_0(0.0f, _S341.vals_1[int(2)]);
+    *(&(&_S343)->vals_1[int(3)]) = s_primal_ctx_max_0(0.0f, _S341.vals_1[int(3)]);
+    *(&(&_S343)->vals_1[int(4)]) = s_primal_ctx_max_0(0.0f, _S341.vals_1[int(4)]);
+    *(&(&_S343)->vals_1[int(5)]) = s_primal_ctx_max_0(0.0f, _S341.vals_1[int(5)]);
+    *(&(&_S343)->vals_1[int(6)]) = s_primal_ctx_max_0(0.0f, _S341.vals_1[int(6)]);
+    *(&(&_S343)->vals_1[int(7)]) = s_primal_ctx_max_0(0.0f, _S341.vals_1[int(7)]);
+    *(&(&_S343)->vals_1[int(8)]) = s_primal_ctx_max_0(0.0f, _S341.vals_1[int(8)]);
+    *(&(&_S343)->vals_1[int(9)]) = s_primal_ctx_max_0(0.0f, _S341.vals_1[int(9)]);
+    *(&(&_S343)->vals_1[int(10)]) = s_primal_ctx_max_0(0.0f, _S341.vals_1[int(10)]);
+    *(&(&_S343)->vals_1[int(11)]) = s_primal_ctx_max_0(0.0f, _S341.vals_1[int(11)]);
+    *(&(&_S343)->vals_1[int(12)]) = s_primal_ctx_max_0(0.0f, _S341.vals_1[int(12)]);
+    *(&(&_S343)->vals_1[int(13)]) = s_primal_ctx_max_0(0.0f, _S341.vals_1[int(13)]);
+    *(&(&_S343)->vals_1[int(14)]) = s_primal_ctx_max_0(0.0f, _S341.vals_1[int(14)]);
+    *(&(&_S343)->vals_1[int(15)]) = s_primal_ctx_max_0(0.0f, _S341.vals_1[int(15)]);
+    Feature_0 _S344 = s_primal_ctx_Linear_eval_0(this_29.layers_0[int(1)], _S343);
+    _s_diff_ctx_1->_S316 = _S344;
+    float _S345 = s_primal_ctx_max_0(0.0f, _S344.vals_1[int(0)]);
+    _S343 = _S344;
+    *(&(&_S343)->vals_1[int(0)]) = _S345;
+    *(&(&_S343)->vals_1[int(1)]) = s_primal_ctx_max_0(0.0f, _S344.vals_1[int(1)]);
+    *(&(&_S343)->vals_1[int(2)]) = s_primal_ctx_max_0(0.0f, _S344.vals_1[int(2)]);
+    *(&(&_S343)->vals_1[int(3)]) = s_primal_ctx_max_0(0.0f, _S344.vals_1[int(3)]);
+    *(&(&_S343)->vals_1[int(4)]) = s_primal_ctx_max_0(0.0f, _S344.vals_1[int(4)]);
+    *(&(&_S343)->vals_1[int(5)]) = s_primal_ctx_max_0(0.0f, _S344.vals_1[int(5)]);
+    *(&(&_S343)->vals_1[int(6)]) = s_primal_ctx_max_0(0.0f, _S344.vals_1[int(6)]);
+    *(&(&_S343)->vals_1[int(7)]) = s_primal_ctx_max_0(0.0f, _S344.vals_1[int(7)]);
+    *(&(&_S343)->vals_1[int(8)]) = s_primal_ctx_max_0(0.0f, _S344.vals_1[int(8)]);
+    *(&(&_S343)->vals_1[int(9)]) = s_primal_ctx_max_0(0.0f, _S344.vals_1[int(9)]);
+    *(&(&_S343)->vals_1[int(10)]) = s_primal_ctx_max_0(0.0f, _S344.vals_1[int(10)]);
+    *(&(&_S343)->vals_1[int(11)]) = s_primal_ctx_max_0(0.0f, _S344.vals_1[int(11)]);
+    *(&(&_S343)->vals_1[int(12)]) = s_primal_ctx_max_0(0.0f, _S344.vals_1[int(12)]);
+    *(&(&_S343)->vals_1[int(13)]) = s_primal_ctx_max_0(0.0f, _S344.vals_1[int(13)]);
+    *(&(&_S343)->vals_1[int(14)]) = s_primal_ctx_max_0(0.0f, _S344.vals_1[int(14)]);
+    *(&(&_S343)->vals_1[int(15)]) = s_primal_ctx_max_0(0.0f, _S344.vals_1[int(15)]);
+    Feature_0 _S346 = s_primal_ctx_Linear_eval_0(this_29.layers_0[int(2)], _S343);
+    _s_diff_ctx_1->_S317 = _S346;
+    float _S347 = s_primal_ctx_max_0(0.0f, _S346.vals_1[int(0)]);
+    _S343 = _S346;
+    *(&(&_S343)->vals_1[int(0)]) = _S347;
+    *(&(&_S343)->vals_1[int(1)]) = s_primal_ctx_max_0(0.0f, _S346.vals_1[int(1)]);
+    *(&(&_S343)->vals_1[int(2)]) = s_primal_ctx_max_0(0.0f, _S346.vals_1[int(2)]);
+    *(&(&_S343)->vals_1[int(3)]) = s_primal_ctx_max_0(0.0f, _S346.vals_1[int(3)]);
+    *(&(&_S343)->vals_1[int(4)]) = s_primal_ctx_max_0(0.0f, _S346.vals_1[int(4)]);
+    *(&(&_S343)->vals_1[int(5)]) = s_primal_ctx_max_0(0.0f, _S346.vals_1[int(5)]);
+    *(&(&_S343)->vals_1[int(6)]) = s_primal_ctx_max_0(0.0f, _S346.vals_1[int(6)]);
+    *(&(&_S343)->vals_1[int(7)]) = s_primal_ctx_max_0(0.0f, _S346.vals_1[int(7)]);
+    *(&(&_S343)->vals_1[int(8)]) = s_primal_ctx_max_0(0.0f, _S346.vals_1[int(8)]);
+    *(&(&_S343)->vals_1[int(9)]) = s_primal_ctx_max_0(0.0f, _S346.vals_1[int(9)]);
+    *(&(&_S343)->vals_1[int(10)]) = s_primal_ctx_max_0(0.0f, _S346.vals_1[int(10)]);
+    *(&(&_S343)->vals_1[int(11)]) = s_primal_ctx_max_0(0.0f, _S346.vals_1[int(11)]);
+    *(&(&_S343)->vals_1[int(12)]) = s_primal_ctx_max_0(0.0f, _S346.vals_1[int(12)]);
+    *(&(&_S343)->vals_1[int(13)]) = s_primal_ctx_max_0(0.0f, _S346.vals_1[int(13)]);
+    *(&(&_S343)->vals_1[int(14)]) = s_primal_ctx_max_0(0.0f, _S346.vals_1[int(14)]);
+    *(&(&_S343)->vals_1[int(15)]) = s_primal_ctx_max_0(0.0f, _S346.vals_1[int(15)]);
+    return _S343;
 }
 
-__device__ void s_primal_ctx_DiffTensorView_storeOnce_0(DiffTensorView_0 _S343, uint4  _S344, float _S345)
+__device__ void s_primal_ctx_DiffTensorView_storeOnce_0(DiffTensorView_0 _S348, uint4  _S349, float _S350)
 {
-    DiffTensorView_storeOnce_0(_S343, _S344, _S345);
+    DiffTensorView_storeOnce_0(_S348, _S349, _S350);
     return;
 }
 
 __device__ void s_bwd_primal_renderImage_0(MLP_0 mlp_0, DiffTensorView_0 featureGrid_0, DiffTensorView_0 imageOutput_0, s_bwd_prop_renderImage_Intermediates_0 * _s_diff_ctx_2)
 {
-    s_bwd_prop_getInFeature_Intermediates_0 _S346 = { int(0) };
-    FixedArray<float, 16>  _S347 = {
+    s_bwd_prop_getInFeature_Intermediates_0 _S351 = { int(0) };
+    FixedArray<float, 16>  _S352 = {
         0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f
     };
-    Feature_0 _S348 = { _S347 };
-    s_bwd_prop_MLP_eval_Intermediates_0 _S349 = { _S348, _S348, _S348 };
-    _s_diff_ctx_2->_S317 = _S346;
-    _s_diff_ctx_2->_S318 = _S348;
-    _s_diff_ctx_2->_S319 = _S349;
-    _s_diff_ctx_2->_S320 = _S348;
-    _s_diff_ctx_2->_S321 = int(0);
-    _s_diff_ctx_2->_S322 = 0U;
+    Feature_0 _S353 = { _S352 };
+    s_bwd_prop_MLP_eval_Intermediates_0 _S354 = { _S353, _S353, _S353 };
+    _s_diff_ctx_2->_S318 = _S351;
+    _s_diff_ctx_2->_S319 = _S353;
+    _s_diff_ctx_2->_S320 = _S354;
+    _s_diff_ctx_2->_S321 = _S353;
+    _s_diff_ctx_2->_S322 = int(0);
     _s_diff_ctx_2->_S323 = 0U;
     _s_diff_ctx_2->_S324 = 0U;
-    (&_s_diff_ctx_2->_S318)->vals_1 = _S347;
-    (&_s_diff_ctx_2->_S320)->vals_1 = _S347;
-    _s_diff_ctx_2->_S321 = int(0);
+    _s_diff_ctx_2->_S325 = 0U;
+    (&_s_diff_ctx_2->_S319)->vals_1 = _S352;
+    (&_s_diff_ctx_2->_S321)->vals_1 = _S352;
+    _s_diff_ctx_2->_S322 = int(0);
     uint3  dispatchIdx_0 = ((threadIdx)) + ((blockIdx)) * ((blockDim));
-    uint _S350 = dispatchIdx_0.x;
-    uint _S351 = DiffTensorView_size_0(imageOutput_0, 0U);
-    _s_diff_ctx_2->_S322 = _S351;
-    bool _S352 = _S350 >= _S351;
-    uint _S353 = dispatchIdx_0.y;
-    uint _S354 = DiffTensorView_size_0(imageOutput_0, 1U);
-    _s_diff_ctx_2->_S323 = _S354;
-    bool _S355 = _S352 || _S353 >= _S354;
-    uint _S356 = dispatchIdx_0.z;
-    uint _S357 = DiffTensorView_size_0(imageOutput_0, 2U);
-    _s_diff_ctx_2->_S324 = _S357;
-    if(!(_S355 || _S356 >= _S357))
+    uint _S355 = dispatchIdx_0.x;
+    uint _S356 = DiffTensorView_size_0(imageOutput_0, 0U);
+    _s_diff_ctx_2->_S323 = _S356;
+    bool _S357 = _S355 >= _S356;
+    uint _S358 = dispatchIdx_0.y;
+    uint _S359 = DiffTensorView_size_0(imageOutput_0, 1U);
+    _s_diff_ctx_2->_S324 = _S359;
+    bool _S360 = _S357 || _S358 >= _S359;
+    uint _S361 = dispatchIdx_0.z;
+    uint _S362 = DiffTensorView_size_0(imageOutput_0, 2U);
+    _s_diff_ctx_2->_S325 = _S362;
+    if(!(_S360 || _S361 >= _S362))
     {
-        Feature_0 _S358 = s_bwd_primal_getInFeature_0(featureGrid_0, make_uint3 (_S350, _S353, _S356), &_s_diff_ctx_2->_S317);
-        _s_diff_ctx_2->_S318 = _S358;
-        Feature_0 _S359 = s_bwd_primal_MLP_eval_0(mlp_0, _S358, &_s_diff_ctx_2->_S319);
-        _s_diff_ctx_2->_S320 = _S359;
+        Feature_0 _S363 = s_bwd_primal_getInFeature_0(featureGrid_0, make_uint3 (_S355, _S358, _S361), &_s_diff_ctx_2->_S318);
+        _s_diff_ctx_2->_S319 = _S363;
+        Feature_0 _S364 = s_bwd_primal_MLP_eval_0(mlp_0, _S363, &_s_diff_ctx_2->_S320);
+        _s_diff_ctx_2->_S321 = _S364;
         bool _bflag_1 = true;
-        int i_12 = int(0);
+        int i_10 = int(0);
         int _pc_1 = int(0);
         for(;;)
         {
-            _s_diff_ctx_2->_S321 = _pc_1;
+            _s_diff_ctx_2->_S322 = _pc_1;
             if(_bflag_1)
             {
             }
@@ -4255,9 +4266,9 @@ __device__ void s_bwd_primal_renderImage_0(MLP_0 mlp_0, DiffTensorView_0 feature
             {
                 break;
             }
-            s_primal_ctx_DiffTensorView_storeOnce_0(imageOutput_0, make_uint4 (_S350, _S353, _S356, uint(i_12)), _S359.vals_1[i_12]);
-            int i_13 = i_12 + int(1);
-            if(i_13 < int(3))
+            s_primal_ctx_DiffTensorView_storeOnce_0(imageOutput_0, make_uint4 (_S355, _S358, _S361, uint(i_10)), _S364.vals_1[i_10]);
+            int i_11 = i_10 + int(1);
+            if(i_11 < int(4))
             {
             }
             else
@@ -4266,7 +4277,7 @@ __device__ void s_bwd_primal_renderImage_0(MLP_0 mlp_0, DiffTensorView_0 feature
             }
             if(_bflag_1)
             {
-                i_12 = i_13;
+                i_10 = i_11;
             }
             _pc_1 = _pc_1 + int(1);
         }
@@ -4274,578 +4285,584 @@ __device__ void s_bwd_primal_renderImage_0(MLP_0 mlp_0, DiffTensorView_0 feature
     return;
 }
 
-__device__ void s_bwd_prop_Linear_eval_0(Linear_0 _S360, DiffPair_Feature_0 * _S361, s_diff_Feature_0 _S362, uint _S363)
+__device__ void s_bwd_prop_Linear_eval_0(Linear_0 _S365, DiffPair_Feature_0 * _S366, s_diff_Feature_0 _S367, uint _S368)
 {
-    Linear_eval_bwd_0(_S360, _S361, _S362, _S363);
+    Linear_eval_bwd_0(_S365, _S366, _S367, _S368);
     return;
 }
 
-__device__ void s_bwd_prop_MLP_eval_0(MLP_0 this_30, DiffPair_Feature_0 * dpin_feature_1, s_diff_Feature_0 _s_dOut_0, s_bwd_prop_MLP_eval_Intermediates_0 _s_diff_ctx_3, uint _S364)
+__device__ void s_bwd_prop_MLP_eval_0(MLP_0 this_30, DiffPair_Feature_0 * dpin_feature_1, s_diff_Feature_0 _s_dOut_0, s_bwd_prop_MLP_eval_Intermediates_0 _s_diff_ctx_3, uint _S369)
 {
-    float _S365 = s_primal_ctx_max_0(0.0f, _s_diff_ctx_3._S314.vals_1[int(0)]);
-    Feature_0 _S366 = _s_diff_ctx_3._S314;
-    *(&(&_S366)->vals_1[int(0)]) = _S365;
-    *(&(&_S366)->vals_1[int(1)]) = s_primal_ctx_max_0(0.0f, _s_diff_ctx_3._S314.vals_1[int(1)]);
-    *(&(&_S366)->vals_1[int(2)]) = s_primal_ctx_max_0(0.0f, _s_diff_ctx_3._S314.vals_1[int(2)]);
-    *(&(&_S366)->vals_1[int(3)]) = s_primal_ctx_max_0(0.0f, _s_diff_ctx_3._S314.vals_1[int(3)]);
-    *(&(&_S366)->vals_1[int(4)]) = s_primal_ctx_max_0(0.0f, _s_diff_ctx_3._S314.vals_1[int(4)]);
-    *(&(&_S366)->vals_1[int(5)]) = s_primal_ctx_max_0(0.0f, _s_diff_ctx_3._S314.vals_1[int(5)]);
-    *(&(&_S366)->vals_1[int(6)]) = s_primal_ctx_max_0(0.0f, _s_diff_ctx_3._S314.vals_1[int(6)]);
-    *(&(&_S366)->vals_1[int(7)]) = s_primal_ctx_max_0(0.0f, _s_diff_ctx_3._S314.vals_1[int(7)]);
-    *(&(&_S366)->vals_1[int(8)]) = s_primal_ctx_max_0(0.0f, _s_diff_ctx_3._S314.vals_1[int(8)]);
-    *(&(&_S366)->vals_1[int(9)]) = s_primal_ctx_max_0(0.0f, _s_diff_ctx_3._S314.vals_1[int(9)]);
-    *(&(&_S366)->vals_1[int(10)]) = s_primal_ctx_max_0(0.0f, _s_diff_ctx_3._S314.vals_1[int(10)]);
-    *(&(&_S366)->vals_1[int(11)]) = s_primal_ctx_max_0(0.0f, _s_diff_ctx_3._S314.vals_1[int(11)]);
-    *(&(&_S366)->vals_1[int(12)]) = s_primal_ctx_max_0(0.0f, _s_diff_ctx_3._S314.vals_1[int(12)]);
-    *(&(&_S366)->vals_1[int(13)]) = s_primal_ctx_max_0(0.0f, _s_diff_ctx_3._S314.vals_1[int(13)]);
-    *(&(&_S366)->vals_1[int(14)]) = s_primal_ctx_max_0(0.0f, _s_diff_ctx_3._S314.vals_1[int(14)]);
-    *(&(&_S366)->vals_1[int(15)]) = s_primal_ctx_max_0(0.0f, _s_diff_ctx_3._S314.vals_1[int(15)]);
-    float _S367 = s_primal_ctx_max_0(0.0f, _s_diff_ctx_3._S315.vals_1[int(0)]);
-    Feature_0 _S368 = _s_diff_ctx_3._S315;
-    *(&(&_S368)->vals_1[int(0)]) = _S367;
-    *(&(&_S368)->vals_1[int(1)]) = s_primal_ctx_max_0(0.0f, _s_diff_ctx_3._S315.vals_1[int(1)]);
-    *(&(&_S368)->vals_1[int(2)]) = s_primal_ctx_max_0(0.0f, _s_diff_ctx_3._S315.vals_1[int(2)]);
-    *(&(&_S368)->vals_1[int(3)]) = s_primal_ctx_max_0(0.0f, _s_diff_ctx_3._S315.vals_1[int(3)]);
-    *(&(&_S368)->vals_1[int(4)]) = s_primal_ctx_max_0(0.0f, _s_diff_ctx_3._S315.vals_1[int(4)]);
-    *(&(&_S368)->vals_1[int(5)]) = s_primal_ctx_max_0(0.0f, _s_diff_ctx_3._S315.vals_1[int(5)]);
-    *(&(&_S368)->vals_1[int(6)]) = s_primal_ctx_max_0(0.0f, _s_diff_ctx_3._S315.vals_1[int(6)]);
-    *(&(&_S368)->vals_1[int(7)]) = s_primal_ctx_max_0(0.0f, _s_diff_ctx_3._S315.vals_1[int(7)]);
-    *(&(&_S368)->vals_1[int(8)]) = s_primal_ctx_max_0(0.0f, _s_diff_ctx_3._S315.vals_1[int(8)]);
-    *(&(&_S368)->vals_1[int(9)]) = s_primal_ctx_max_0(0.0f, _s_diff_ctx_3._S315.vals_1[int(9)]);
-    *(&(&_S368)->vals_1[int(10)]) = s_primal_ctx_max_0(0.0f, _s_diff_ctx_3._S315.vals_1[int(10)]);
-    *(&(&_S368)->vals_1[int(11)]) = s_primal_ctx_max_0(0.0f, _s_diff_ctx_3._S315.vals_1[int(11)]);
-    *(&(&_S368)->vals_1[int(12)]) = s_primal_ctx_max_0(0.0f, _s_diff_ctx_3._S315.vals_1[int(12)]);
-    *(&(&_S368)->vals_1[int(13)]) = s_primal_ctx_max_0(0.0f, _s_diff_ctx_3._S315.vals_1[int(13)]);
-    *(&(&_S368)->vals_1[int(14)]) = s_primal_ctx_max_0(0.0f, _s_diff_ctx_3._S315.vals_1[int(14)]);
-    *(&(&_S368)->vals_1[int(15)]) = s_primal_ctx_max_0(0.0f, _s_diff_ctx_3._S315.vals_1[int(15)]);
-    s_diff_Feature_0 _S369 = _s_dOut_0;
-    *(&(&_S369)->vals_0[int(15)]) = 0.0f;
-    DiffPair_float_0 _S370;
-    (&_S370)->primal_1 = 0.0f;
-    (&_S370)->differential_0 = 0.0f;
-    DiffPair_float_0 _S371;
-    (&_S371)->primal_1 = _s_diff_ctx_3._S316.vals_1[int(15)];
-    (&_S371)->differential_0 = 0.0f;
-    s_bwd_prop_max_0(&_S370, &_S371, _s_dOut_0.vals_0[int(15)]);
-    *(&(&_S369)->vals_0[int(14)]) = 0.0f;
-    DiffPair_float_0 _S372;
-    (&_S372)->primal_1 = 0.0f;
-    (&_S372)->differential_0 = 0.0f;
-    DiffPair_float_0 _S373;
-    (&_S373)->primal_1 = _s_diff_ctx_3._S316.vals_1[int(14)];
-    (&_S373)->differential_0 = 0.0f;
-    s_bwd_prop_max_0(&_S372, &_S373, _s_dOut_0.vals_0[int(14)]);
-    *(&(&_S369)->vals_0[int(13)]) = 0.0f;
-    DiffPair_float_0 _S374;
-    (&_S374)->primal_1 = 0.0f;
-    (&_S374)->differential_0 = 0.0f;
+    float _S370 = s_primal_ctx_max_0(0.0f, _s_diff_ctx_3._S315.vals_1[int(0)]);
+    Feature_0 _S371 = _s_diff_ctx_3._S315;
+    *(&(&_S371)->vals_1[int(0)]) = _S370;
+    *(&(&_S371)->vals_1[int(1)]) = s_primal_ctx_max_0(0.0f, _s_diff_ctx_3._S315.vals_1[int(1)]);
+    *(&(&_S371)->vals_1[int(2)]) = s_primal_ctx_max_0(0.0f, _s_diff_ctx_3._S315.vals_1[int(2)]);
+    *(&(&_S371)->vals_1[int(3)]) = s_primal_ctx_max_0(0.0f, _s_diff_ctx_3._S315.vals_1[int(3)]);
+    *(&(&_S371)->vals_1[int(4)]) = s_primal_ctx_max_0(0.0f, _s_diff_ctx_3._S315.vals_1[int(4)]);
+    *(&(&_S371)->vals_1[int(5)]) = s_primal_ctx_max_0(0.0f, _s_diff_ctx_3._S315.vals_1[int(5)]);
+    *(&(&_S371)->vals_1[int(6)]) = s_primal_ctx_max_0(0.0f, _s_diff_ctx_3._S315.vals_1[int(6)]);
+    *(&(&_S371)->vals_1[int(7)]) = s_primal_ctx_max_0(0.0f, _s_diff_ctx_3._S315.vals_1[int(7)]);
+    *(&(&_S371)->vals_1[int(8)]) = s_primal_ctx_max_0(0.0f, _s_diff_ctx_3._S315.vals_1[int(8)]);
+    *(&(&_S371)->vals_1[int(9)]) = s_primal_ctx_max_0(0.0f, _s_diff_ctx_3._S315.vals_1[int(9)]);
+    *(&(&_S371)->vals_1[int(10)]) = s_primal_ctx_max_0(0.0f, _s_diff_ctx_3._S315.vals_1[int(10)]);
+    *(&(&_S371)->vals_1[int(11)]) = s_primal_ctx_max_0(0.0f, _s_diff_ctx_3._S315.vals_1[int(11)]);
+    *(&(&_S371)->vals_1[int(12)]) = s_primal_ctx_max_0(0.0f, _s_diff_ctx_3._S315.vals_1[int(12)]);
+    *(&(&_S371)->vals_1[int(13)]) = s_primal_ctx_max_0(0.0f, _s_diff_ctx_3._S315.vals_1[int(13)]);
+    *(&(&_S371)->vals_1[int(14)]) = s_primal_ctx_max_0(0.0f, _s_diff_ctx_3._S315.vals_1[int(14)]);
+    *(&(&_S371)->vals_1[int(15)]) = s_primal_ctx_max_0(0.0f, _s_diff_ctx_3._S315.vals_1[int(15)]);
+    float _S372 = s_primal_ctx_max_0(0.0f, _s_diff_ctx_3._S316.vals_1[int(0)]);
+    Feature_0 _S373 = _s_diff_ctx_3._S316;
+    *(&(&_S373)->vals_1[int(0)]) = _S372;
+    *(&(&_S373)->vals_1[int(1)]) = s_primal_ctx_max_0(0.0f, _s_diff_ctx_3._S316.vals_1[int(1)]);
+    *(&(&_S373)->vals_1[int(2)]) = s_primal_ctx_max_0(0.0f, _s_diff_ctx_3._S316.vals_1[int(2)]);
+    *(&(&_S373)->vals_1[int(3)]) = s_primal_ctx_max_0(0.0f, _s_diff_ctx_3._S316.vals_1[int(3)]);
+    *(&(&_S373)->vals_1[int(4)]) = s_primal_ctx_max_0(0.0f, _s_diff_ctx_3._S316.vals_1[int(4)]);
+    *(&(&_S373)->vals_1[int(5)]) = s_primal_ctx_max_0(0.0f, _s_diff_ctx_3._S316.vals_1[int(5)]);
+    *(&(&_S373)->vals_1[int(6)]) = s_primal_ctx_max_0(0.0f, _s_diff_ctx_3._S316.vals_1[int(6)]);
+    *(&(&_S373)->vals_1[int(7)]) = s_primal_ctx_max_0(0.0f, _s_diff_ctx_3._S316.vals_1[int(7)]);
+    *(&(&_S373)->vals_1[int(8)]) = s_primal_ctx_max_0(0.0f, _s_diff_ctx_3._S316.vals_1[int(8)]);
+    *(&(&_S373)->vals_1[int(9)]) = s_primal_ctx_max_0(0.0f, _s_diff_ctx_3._S316.vals_1[int(9)]);
+    *(&(&_S373)->vals_1[int(10)]) = s_primal_ctx_max_0(0.0f, _s_diff_ctx_3._S316.vals_1[int(10)]);
+    *(&(&_S373)->vals_1[int(11)]) = s_primal_ctx_max_0(0.0f, _s_diff_ctx_3._S316.vals_1[int(11)]);
+    *(&(&_S373)->vals_1[int(12)]) = s_primal_ctx_max_0(0.0f, _s_diff_ctx_3._S316.vals_1[int(12)]);
+    *(&(&_S373)->vals_1[int(13)]) = s_primal_ctx_max_0(0.0f, _s_diff_ctx_3._S316.vals_1[int(13)]);
+    *(&(&_S373)->vals_1[int(14)]) = s_primal_ctx_max_0(0.0f, _s_diff_ctx_3._S316.vals_1[int(14)]);
+    *(&(&_S373)->vals_1[int(15)]) = s_primal_ctx_max_0(0.0f, _s_diff_ctx_3._S316.vals_1[int(15)]);
+    s_diff_Feature_0 _S374 = _s_dOut_0;
+    *(&(&_S374)->vals_0[int(15)]) = 0.0f;
     DiffPair_float_0 _S375;
-    (&_S375)->primal_1 = _s_diff_ctx_3._S316.vals_1[int(13)];
+    (&_S375)->primal_1 = 0.0f;
     (&_S375)->differential_0 = 0.0f;
-    s_bwd_prop_max_0(&_S374, &_S375, _s_dOut_0.vals_0[int(13)]);
-    *(&(&_S369)->vals_0[int(12)]) = 0.0f;
     DiffPair_float_0 _S376;
-    (&_S376)->primal_1 = 0.0f;
+    (&_S376)->primal_1 = _s_diff_ctx_3._S317.vals_1[int(15)];
     (&_S376)->differential_0 = 0.0f;
+    s_bwd_prop_max_0(&_S375, &_S376, _s_dOut_0.vals_0[int(15)]);
+    *(&(&_S374)->vals_0[int(14)]) = 0.0f;
     DiffPair_float_0 _S377;
-    (&_S377)->primal_1 = _s_diff_ctx_3._S316.vals_1[int(12)];
+    (&_S377)->primal_1 = 0.0f;
     (&_S377)->differential_0 = 0.0f;
-    s_bwd_prop_max_0(&_S376, &_S377, _s_dOut_0.vals_0[int(12)]);
-    *(&(&_S369)->vals_0[int(11)]) = 0.0f;
     DiffPair_float_0 _S378;
-    (&_S378)->primal_1 = 0.0f;
+    (&_S378)->primal_1 = _s_diff_ctx_3._S317.vals_1[int(14)];
     (&_S378)->differential_0 = 0.0f;
+    s_bwd_prop_max_0(&_S377, &_S378, _s_dOut_0.vals_0[int(14)]);
+    *(&(&_S374)->vals_0[int(13)]) = 0.0f;
     DiffPair_float_0 _S379;
-    (&_S379)->primal_1 = _s_diff_ctx_3._S316.vals_1[int(11)];
+    (&_S379)->primal_1 = 0.0f;
     (&_S379)->differential_0 = 0.0f;
-    s_bwd_prop_max_0(&_S378, &_S379, _s_dOut_0.vals_0[int(11)]);
-    *(&(&_S369)->vals_0[int(10)]) = 0.0f;
     DiffPair_float_0 _S380;
-    (&_S380)->primal_1 = 0.0f;
+    (&_S380)->primal_1 = _s_diff_ctx_3._S317.vals_1[int(13)];
     (&_S380)->differential_0 = 0.0f;
+    s_bwd_prop_max_0(&_S379, &_S380, _s_dOut_0.vals_0[int(13)]);
+    *(&(&_S374)->vals_0[int(12)]) = 0.0f;
     DiffPair_float_0 _S381;
-    (&_S381)->primal_1 = _s_diff_ctx_3._S316.vals_1[int(10)];
+    (&_S381)->primal_1 = 0.0f;
     (&_S381)->differential_0 = 0.0f;
-    s_bwd_prop_max_0(&_S380, &_S381, _s_dOut_0.vals_0[int(10)]);
-    *(&(&_S369)->vals_0[int(9)]) = 0.0f;
     DiffPair_float_0 _S382;
-    (&_S382)->primal_1 = 0.0f;
+    (&_S382)->primal_1 = _s_diff_ctx_3._S317.vals_1[int(12)];
     (&_S382)->differential_0 = 0.0f;
+    s_bwd_prop_max_0(&_S381, &_S382, _s_dOut_0.vals_0[int(12)]);
+    *(&(&_S374)->vals_0[int(11)]) = 0.0f;
     DiffPair_float_0 _S383;
-    (&_S383)->primal_1 = _s_diff_ctx_3._S316.vals_1[int(9)];
+    (&_S383)->primal_1 = 0.0f;
     (&_S383)->differential_0 = 0.0f;
-    s_bwd_prop_max_0(&_S382, &_S383, _s_dOut_0.vals_0[int(9)]);
-    *(&(&_S369)->vals_0[int(8)]) = 0.0f;
     DiffPair_float_0 _S384;
-    (&_S384)->primal_1 = 0.0f;
+    (&_S384)->primal_1 = _s_diff_ctx_3._S317.vals_1[int(11)];
     (&_S384)->differential_0 = 0.0f;
+    s_bwd_prop_max_0(&_S383, &_S384, _s_dOut_0.vals_0[int(11)]);
+    *(&(&_S374)->vals_0[int(10)]) = 0.0f;
     DiffPair_float_0 _S385;
-    (&_S385)->primal_1 = _s_diff_ctx_3._S316.vals_1[int(8)];
+    (&_S385)->primal_1 = 0.0f;
     (&_S385)->differential_0 = 0.0f;
-    s_bwd_prop_max_0(&_S384, &_S385, _s_dOut_0.vals_0[int(8)]);
-    *(&(&_S369)->vals_0[int(7)]) = 0.0f;
     DiffPair_float_0 _S386;
-    (&_S386)->primal_1 = 0.0f;
+    (&_S386)->primal_1 = _s_diff_ctx_3._S317.vals_1[int(10)];
     (&_S386)->differential_0 = 0.0f;
+    s_bwd_prop_max_0(&_S385, &_S386, _s_dOut_0.vals_0[int(10)]);
+    *(&(&_S374)->vals_0[int(9)]) = 0.0f;
     DiffPair_float_0 _S387;
-    (&_S387)->primal_1 = _s_diff_ctx_3._S316.vals_1[int(7)];
+    (&_S387)->primal_1 = 0.0f;
     (&_S387)->differential_0 = 0.0f;
-    s_bwd_prop_max_0(&_S386, &_S387, _s_dOut_0.vals_0[int(7)]);
-    *(&(&_S369)->vals_0[int(6)]) = 0.0f;
     DiffPair_float_0 _S388;
-    (&_S388)->primal_1 = 0.0f;
+    (&_S388)->primal_1 = _s_diff_ctx_3._S317.vals_1[int(9)];
     (&_S388)->differential_0 = 0.0f;
+    s_bwd_prop_max_0(&_S387, &_S388, _s_dOut_0.vals_0[int(9)]);
+    *(&(&_S374)->vals_0[int(8)]) = 0.0f;
     DiffPair_float_0 _S389;
-    (&_S389)->primal_1 = _s_diff_ctx_3._S316.vals_1[int(6)];
+    (&_S389)->primal_1 = 0.0f;
     (&_S389)->differential_0 = 0.0f;
-    s_bwd_prop_max_0(&_S388, &_S389, _s_dOut_0.vals_0[int(6)]);
-    *(&(&_S369)->vals_0[int(5)]) = 0.0f;
     DiffPair_float_0 _S390;
-    (&_S390)->primal_1 = 0.0f;
+    (&_S390)->primal_1 = _s_diff_ctx_3._S317.vals_1[int(8)];
     (&_S390)->differential_0 = 0.0f;
+    s_bwd_prop_max_0(&_S389, &_S390, _s_dOut_0.vals_0[int(8)]);
+    *(&(&_S374)->vals_0[int(7)]) = 0.0f;
     DiffPair_float_0 _S391;
-    (&_S391)->primal_1 = _s_diff_ctx_3._S316.vals_1[int(5)];
+    (&_S391)->primal_1 = 0.0f;
     (&_S391)->differential_0 = 0.0f;
-    s_bwd_prop_max_0(&_S390, &_S391, _s_dOut_0.vals_0[int(5)]);
-    *(&(&_S369)->vals_0[int(4)]) = 0.0f;
     DiffPair_float_0 _S392;
-    (&_S392)->primal_1 = 0.0f;
+    (&_S392)->primal_1 = _s_diff_ctx_3._S317.vals_1[int(7)];
     (&_S392)->differential_0 = 0.0f;
+    s_bwd_prop_max_0(&_S391, &_S392, _s_dOut_0.vals_0[int(7)]);
+    *(&(&_S374)->vals_0[int(6)]) = 0.0f;
     DiffPair_float_0 _S393;
-    (&_S393)->primal_1 = _s_diff_ctx_3._S316.vals_1[int(4)];
+    (&_S393)->primal_1 = 0.0f;
     (&_S393)->differential_0 = 0.0f;
-    s_bwd_prop_max_0(&_S392, &_S393, _s_dOut_0.vals_0[int(4)]);
-    *(&(&_S369)->vals_0[int(3)]) = 0.0f;
     DiffPair_float_0 _S394;
-    (&_S394)->primal_1 = 0.0f;
+    (&_S394)->primal_1 = _s_diff_ctx_3._S317.vals_1[int(6)];
     (&_S394)->differential_0 = 0.0f;
+    s_bwd_prop_max_0(&_S393, &_S394, _s_dOut_0.vals_0[int(6)]);
+    *(&(&_S374)->vals_0[int(5)]) = 0.0f;
     DiffPair_float_0 _S395;
-    (&_S395)->primal_1 = _s_diff_ctx_3._S316.vals_1[int(3)];
+    (&_S395)->primal_1 = 0.0f;
     (&_S395)->differential_0 = 0.0f;
-    s_bwd_prop_max_0(&_S394, &_S395, _s_dOut_0.vals_0[int(3)]);
-    *(&(&_S369)->vals_0[int(2)]) = 0.0f;
     DiffPair_float_0 _S396;
-    (&_S396)->primal_1 = 0.0f;
+    (&_S396)->primal_1 = _s_diff_ctx_3._S317.vals_1[int(5)];
     (&_S396)->differential_0 = 0.0f;
+    s_bwd_prop_max_0(&_S395, &_S396, _s_dOut_0.vals_0[int(5)]);
+    *(&(&_S374)->vals_0[int(4)]) = 0.0f;
     DiffPair_float_0 _S397;
-    (&_S397)->primal_1 = _s_diff_ctx_3._S316.vals_1[int(2)];
+    (&_S397)->primal_1 = 0.0f;
     (&_S397)->differential_0 = 0.0f;
-    s_bwd_prop_max_0(&_S396, &_S397, _s_dOut_0.vals_0[int(2)]);
-    *(&(&_S369)->vals_0[int(1)]) = 0.0f;
     DiffPair_float_0 _S398;
-    (&_S398)->primal_1 = 0.0f;
+    (&_S398)->primal_1 = _s_diff_ctx_3._S317.vals_1[int(4)];
     (&_S398)->differential_0 = 0.0f;
+    s_bwd_prop_max_0(&_S397, &_S398, _s_dOut_0.vals_0[int(4)]);
+    *(&(&_S374)->vals_0[int(3)]) = 0.0f;
     DiffPair_float_0 _S399;
-    (&_S399)->primal_1 = _s_diff_ctx_3._S316.vals_1[int(1)];
+    (&_S399)->primal_1 = 0.0f;
     (&_S399)->differential_0 = 0.0f;
-    s_bwd_prop_max_0(&_S398, &_S399, _s_dOut_0.vals_0[int(1)]);
-    *(&(&_S369)->vals_0[int(0)]) = 0.0f;
     DiffPair_float_0 _S400;
-    (&_S400)->primal_1 = 0.0f;
+    (&_S400)->primal_1 = _s_diff_ctx_3._S317.vals_1[int(3)];
     (&_S400)->differential_0 = 0.0f;
+    s_bwd_prop_max_0(&_S399, &_S400, _s_dOut_0.vals_0[int(3)]);
+    *(&(&_S374)->vals_0[int(2)]) = 0.0f;
     DiffPair_float_0 _S401;
-    (&_S401)->primal_1 = _s_diff_ctx_3._S316.vals_1[int(0)];
+    (&_S401)->primal_1 = 0.0f;
     (&_S401)->differential_0 = 0.0f;
-    s_bwd_prop_max_0(&_S400, &_S401, _s_dOut_0.vals_0[int(0)]);
-    FixedArray<float, 16>  _S402;
-    *(&_S402[int(0)]) = 0.0f;
-    *(&_S402[int(1)]) = 0.0f;
-    *(&_S402[int(2)]) = 0.0f;
-    *(&_S402[int(3)]) = 0.0f;
-    *(&_S402[int(4)]) = 0.0f;
-    *(&_S402[int(5)]) = 0.0f;
-    *(&_S402[int(6)]) = 0.0f;
-    *(&_S402[int(7)]) = 0.0f;
-    *(&_S402[int(8)]) = 0.0f;
-    *(&_S402[int(9)]) = 0.0f;
-    *(&_S402[int(10)]) = 0.0f;
-    *(&_S402[int(11)]) = 0.0f;
-    *(&_S402[int(12)]) = 0.0f;
-    *(&_S402[int(13)]) = 0.0f;
-    *(&_S402[int(14)]) = 0.0f;
-    *(&_S402[int(15)]) = 0.0f;
-    *(&_S402[int(15)]) = _S371.differential_0;
-    *(&_S402[int(14)]) = _S373.differential_0;
-    *(&_S402[int(13)]) = _S375.differential_0;
-    *(&_S402[int(12)]) = _S377.differential_0;
-    *(&_S402[int(11)]) = _S379.differential_0;
-    *(&_S402[int(10)]) = _S381.differential_0;
-    *(&_S402[int(9)]) = _S383.differential_0;
-    *(&_S402[int(8)]) = _S385.differential_0;
-    *(&_S402[int(7)]) = _S387.differential_0;
-    *(&_S402[int(6)]) = _S389.differential_0;
-    *(&_S402[int(5)]) = _S391.differential_0;
-    *(&_S402[int(4)]) = _S393.differential_0;
-    *(&_S402[int(3)]) = _S395.differential_0;
-    *(&_S402[int(2)]) = _S397.differential_0;
-    *(&_S402[int(1)]) = _S399.differential_0;
-    *(&_S402[int(0)]) = _S401.differential_0;
-    s_diff_Feature_0 _S403 = Feature_x24_syn_dzero_0();
-    s_diff_Feature_0 _S404 = _S403;
-    (&_S404)->vals_0 = _S402;
-    s_diff_Feature_0 _S405 = Feature_x24_syn_dadd_0(_S369, _S404);
-    DiffPair_Feature_0 _S406;
-    (&_S406)->primal_1 = _S368;
-    (&_S406)->differential_0 = _S403;
-    s_bwd_prop_Linear_eval_0(this_30.layers_0[int(2)], &_S406, _S405, _S364);
-    _S369 = _S406.differential_0;
-    *(&(&_S369)->vals_0[int(15)]) = 0.0f;
-    DiffPair_float_0 _S407;
-    (&_S407)->primal_1 = 0.0f;
-    (&_S407)->differential_0 = 0.0f;
-    DiffPair_float_0 _S408;
-    (&_S408)->primal_1 = _s_diff_ctx_3._S315.vals_1[int(15)];
-    (&_S408)->differential_0 = 0.0f;
-    s_bwd_prop_max_0(&_S407, &_S408, _S406.differential_0.vals_0[int(15)]);
-    *(&(&_S369)->vals_0[int(14)]) = 0.0f;
-    DiffPair_float_0 _S409;
-    (&_S409)->primal_1 = 0.0f;
-    (&_S409)->differential_0 = 0.0f;
-    DiffPair_float_0 _S410;
-    (&_S410)->primal_1 = _s_diff_ctx_3._S315.vals_1[int(14)];
-    (&_S410)->differential_0 = 0.0f;
-    s_bwd_prop_max_0(&_S409, &_S410, _S406.differential_0.vals_0[int(14)]);
-    *(&(&_S369)->vals_0[int(13)]) = 0.0f;
-    DiffPair_float_0 _S411;
-    (&_S411)->primal_1 = 0.0f;
-    (&_S411)->differential_0 = 0.0f;
+    DiffPair_float_0 _S402;
+    (&_S402)->primal_1 = _s_diff_ctx_3._S317.vals_1[int(2)];
+    (&_S402)->differential_0 = 0.0f;
+    s_bwd_prop_max_0(&_S401, &_S402, _s_dOut_0.vals_0[int(2)]);
+    *(&(&_S374)->vals_0[int(1)]) = 0.0f;
+    DiffPair_float_0 _S403;
+    (&_S403)->primal_1 = 0.0f;
+    (&_S403)->differential_0 = 0.0f;
+    DiffPair_float_0 _S404;
+    (&_S404)->primal_1 = _s_diff_ctx_3._S317.vals_1[int(1)];
+    (&_S404)->differential_0 = 0.0f;
+    s_bwd_prop_max_0(&_S403, &_S404, _s_dOut_0.vals_0[int(1)]);
+    *(&(&_S374)->vals_0[int(0)]) = 0.0f;
+    DiffPair_float_0 _S405;
+    (&_S405)->primal_1 = 0.0f;
+    (&_S405)->differential_0 = 0.0f;
+    DiffPair_float_0 _S406;
+    (&_S406)->primal_1 = _s_diff_ctx_3._S317.vals_1[int(0)];
+    (&_S406)->differential_0 = 0.0f;
+    s_bwd_prop_max_0(&_S405, &_S406, _s_dOut_0.vals_0[int(0)]);
+    FixedArray<float, 16>  _S407;
+    *(&_S407[int(0)]) = 0.0f;
+    *(&_S407[int(1)]) = 0.0f;
+    *(&_S407[int(2)]) = 0.0f;
+    *(&_S407[int(3)]) = 0.0f;
+    *(&_S407[int(4)]) = 0.0f;
+    *(&_S407[int(5)]) = 0.0f;
+    *(&_S407[int(6)]) = 0.0f;
+    *(&_S407[int(7)]) = 0.0f;
+    *(&_S407[int(8)]) = 0.0f;
+    *(&_S407[int(9)]) = 0.0f;
+    *(&_S407[int(10)]) = 0.0f;
+    *(&_S407[int(11)]) = 0.0f;
+    *(&_S407[int(12)]) = 0.0f;
+    *(&_S407[int(13)]) = 0.0f;
+    *(&_S407[int(14)]) = 0.0f;
+    *(&_S407[int(15)]) = 0.0f;
+    *(&_S407[int(15)]) = _S376.differential_0;
+    *(&_S407[int(14)]) = _S378.differential_0;
+    *(&_S407[int(13)]) = _S380.differential_0;
+    *(&_S407[int(12)]) = _S382.differential_0;
+    *(&_S407[int(11)]) = _S384.differential_0;
+    *(&_S407[int(10)]) = _S386.differential_0;
+    *(&_S407[int(9)]) = _S388.differential_0;
+    *(&_S407[int(8)]) = _S390.differential_0;
+    *(&_S407[int(7)]) = _S392.differential_0;
+    *(&_S407[int(6)]) = _S394.differential_0;
+    *(&_S407[int(5)]) = _S396.differential_0;
+    *(&_S407[int(4)]) = _S398.differential_0;
+    *(&_S407[int(3)]) = _S400.differential_0;
+    *(&_S407[int(2)]) = _S402.differential_0;
+    *(&_S407[int(1)]) = _S404.differential_0;
+    *(&_S407[int(0)]) = _S406.differential_0;
+    s_diff_Feature_0 _S408 = Feature_x24_syn_dzero_0();
+    s_diff_Feature_0 _S409 = _S408;
+    (&_S409)->vals_0 = _S407;
+    s_diff_Feature_0 _S410 = Feature_x24_syn_dadd_0(_S374, _S409);
+    DiffPair_Feature_0 _S411;
+    (&_S411)->primal_1 = _S373;
+    (&_S411)->differential_0 = _S408;
+    s_bwd_prop_Linear_eval_0(this_30.layers_0[int(2)], &_S411, _S410, _S369);
+    _S374 = _S411.differential_0;
+    *(&(&_S374)->vals_0[int(15)]) = 0.0f;
     DiffPair_float_0 _S412;
-    (&_S412)->primal_1 = _s_diff_ctx_3._S315.vals_1[int(13)];
+    (&_S412)->primal_1 = 0.0f;
     (&_S412)->differential_0 = 0.0f;
-    s_bwd_prop_max_0(&_S411, &_S412, _S406.differential_0.vals_0[int(13)]);
-    *(&(&_S369)->vals_0[int(12)]) = 0.0f;
     DiffPair_float_0 _S413;
-    (&_S413)->primal_1 = 0.0f;
+    (&_S413)->primal_1 = _s_diff_ctx_3._S316.vals_1[int(15)];
     (&_S413)->differential_0 = 0.0f;
+    s_bwd_prop_max_0(&_S412, &_S413, _S411.differential_0.vals_0[int(15)]);
+    *(&(&_S374)->vals_0[int(14)]) = 0.0f;
     DiffPair_float_0 _S414;
-    (&_S414)->primal_1 = _s_diff_ctx_3._S315.vals_1[int(12)];
+    (&_S414)->primal_1 = 0.0f;
     (&_S414)->differential_0 = 0.0f;
-    s_bwd_prop_max_0(&_S413, &_S414, _S406.differential_0.vals_0[int(12)]);
-    *(&(&_S369)->vals_0[int(11)]) = 0.0f;
     DiffPair_float_0 _S415;
-    (&_S415)->primal_1 = 0.0f;
+    (&_S415)->primal_1 = _s_diff_ctx_3._S316.vals_1[int(14)];
     (&_S415)->differential_0 = 0.0f;
+    s_bwd_prop_max_0(&_S414, &_S415, _S411.differential_0.vals_0[int(14)]);
+    *(&(&_S374)->vals_0[int(13)]) = 0.0f;
     DiffPair_float_0 _S416;
-    (&_S416)->primal_1 = _s_diff_ctx_3._S315.vals_1[int(11)];
+    (&_S416)->primal_1 = 0.0f;
     (&_S416)->differential_0 = 0.0f;
-    s_bwd_prop_max_0(&_S415, &_S416, _S406.differential_0.vals_0[int(11)]);
-    *(&(&_S369)->vals_0[int(10)]) = 0.0f;
     DiffPair_float_0 _S417;
-    (&_S417)->primal_1 = 0.0f;
+    (&_S417)->primal_1 = _s_diff_ctx_3._S316.vals_1[int(13)];
     (&_S417)->differential_0 = 0.0f;
+    s_bwd_prop_max_0(&_S416, &_S417, _S411.differential_0.vals_0[int(13)]);
+    *(&(&_S374)->vals_0[int(12)]) = 0.0f;
     DiffPair_float_0 _S418;
-    (&_S418)->primal_1 = _s_diff_ctx_3._S315.vals_1[int(10)];
+    (&_S418)->primal_1 = 0.0f;
     (&_S418)->differential_0 = 0.0f;
-    s_bwd_prop_max_0(&_S417, &_S418, _S406.differential_0.vals_0[int(10)]);
-    *(&(&_S369)->vals_0[int(9)]) = 0.0f;
     DiffPair_float_0 _S419;
-    (&_S419)->primal_1 = 0.0f;
+    (&_S419)->primal_1 = _s_diff_ctx_3._S316.vals_1[int(12)];
     (&_S419)->differential_0 = 0.0f;
+    s_bwd_prop_max_0(&_S418, &_S419, _S411.differential_0.vals_0[int(12)]);
+    *(&(&_S374)->vals_0[int(11)]) = 0.0f;
     DiffPair_float_0 _S420;
-    (&_S420)->primal_1 = _s_diff_ctx_3._S315.vals_1[int(9)];
+    (&_S420)->primal_1 = 0.0f;
     (&_S420)->differential_0 = 0.0f;
-    s_bwd_prop_max_0(&_S419, &_S420, _S406.differential_0.vals_0[int(9)]);
-    *(&(&_S369)->vals_0[int(8)]) = 0.0f;
     DiffPair_float_0 _S421;
-    (&_S421)->primal_1 = 0.0f;
+    (&_S421)->primal_1 = _s_diff_ctx_3._S316.vals_1[int(11)];
     (&_S421)->differential_0 = 0.0f;
+    s_bwd_prop_max_0(&_S420, &_S421, _S411.differential_0.vals_0[int(11)]);
+    *(&(&_S374)->vals_0[int(10)]) = 0.0f;
     DiffPair_float_0 _S422;
-    (&_S422)->primal_1 = _s_diff_ctx_3._S315.vals_1[int(8)];
+    (&_S422)->primal_1 = 0.0f;
     (&_S422)->differential_0 = 0.0f;
-    s_bwd_prop_max_0(&_S421, &_S422, _S406.differential_0.vals_0[int(8)]);
-    *(&(&_S369)->vals_0[int(7)]) = 0.0f;
     DiffPair_float_0 _S423;
-    (&_S423)->primal_1 = 0.0f;
+    (&_S423)->primal_1 = _s_diff_ctx_3._S316.vals_1[int(10)];
     (&_S423)->differential_0 = 0.0f;
+    s_bwd_prop_max_0(&_S422, &_S423, _S411.differential_0.vals_0[int(10)]);
+    *(&(&_S374)->vals_0[int(9)]) = 0.0f;
     DiffPair_float_0 _S424;
-    (&_S424)->primal_1 = _s_diff_ctx_3._S315.vals_1[int(7)];
+    (&_S424)->primal_1 = 0.0f;
     (&_S424)->differential_0 = 0.0f;
-    s_bwd_prop_max_0(&_S423, &_S424, _S406.differential_0.vals_0[int(7)]);
-    *(&(&_S369)->vals_0[int(6)]) = 0.0f;
     DiffPair_float_0 _S425;
-    (&_S425)->primal_1 = 0.0f;
+    (&_S425)->primal_1 = _s_diff_ctx_3._S316.vals_1[int(9)];
     (&_S425)->differential_0 = 0.0f;
+    s_bwd_prop_max_0(&_S424, &_S425, _S411.differential_0.vals_0[int(9)]);
+    *(&(&_S374)->vals_0[int(8)]) = 0.0f;
     DiffPair_float_0 _S426;
-    (&_S426)->primal_1 = _s_diff_ctx_3._S315.vals_1[int(6)];
+    (&_S426)->primal_1 = 0.0f;
     (&_S426)->differential_0 = 0.0f;
-    s_bwd_prop_max_0(&_S425, &_S426, _S406.differential_0.vals_0[int(6)]);
-    *(&(&_S369)->vals_0[int(5)]) = 0.0f;
     DiffPair_float_0 _S427;
-    (&_S427)->primal_1 = 0.0f;
+    (&_S427)->primal_1 = _s_diff_ctx_3._S316.vals_1[int(8)];
     (&_S427)->differential_0 = 0.0f;
+    s_bwd_prop_max_0(&_S426, &_S427, _S411.differential_0.vals_0[int(8)]);
+    *(&(&_S374)->vals_0[int(7)]) = 0.0f;
     DiffPair_float_0 _S428;
-    (&_S428)->primal_1 = _s_diff_ctx_3._S315.vals_1[int(5)];
+    (&_S428)->primal_1 = 0.0f;
     (&_S428)->differential_0 = 0.0f;
-    s_bwd_prop_max_0(&_S427, &_S428, _S406.differential_0.vals_0[int(5)]);
-    *(&(&_S369)->vals_0[int(4)]) = 0.0f;
     DiffPair_float_0 _S429;
-    (&_S429)->primal_1 = 0.0f;
+    (&_S429)->primal_1 = _s_diff_ctx_3._S316.vals_1[int(7)];
     (&_S429)->differential_0 = 0.0f;
+    s_bwd_prop_max_0(&_S428, &_S429, _S411.differential_0.vals_0[int(7)]);
+    *(&(&_S374)->vals_0[int(6)]) = 0.0f;
     DiffPair_float_0 _S430;
-    (&_S430)->primal_1 = _s_diff_ctx_3._S315.vals_1[int(4)];
+    (&_S430)->primal_1 = 0.0f;
     (&_S430)->differential_0 = 0.0f;
-    s_bwd_prop_max_0(&_S429, &_S430, _S406.differential_0.vals_0[int(4)]);
-    *(&(&_S369)->vals_0[int(3)]) = 0.0f;
     DiffPair_float_0 _S431;
-    (&_S431)->primal_1 = 0.0f;
+    (&_S431)->primal_1 = _s_diff_ctx_3._S316.vals_1[int(6)];
     (&_S431)->differential_0 = 0.0f;
+    s_bwd_prop_max_0(&_S430, &_S431, _S411.differential_0.vals_0[int(6)]);
+    *(&(&_S374)->vals_0[int(5)]) = 0.0f;
     DiffPair_float_0 _S432;
-    (&_S432)->primal_1 = _s_diff_ctx_3._S315.vals_1[int(3)];
+    (&_S432)->primal_1 = 0.0f;
     (&_S432)->differential_0 = 0.0f;
-    s_bwd_prop_max_0(&_S431, &_S432, _S406.differential_0.vals_0[int(3)]);
-    *(&(&_S369)->vals_0[int(2)]) = 0.0f;
     DiffPair_float_0 _S433;
-    (&_S433)->primal_1 = 0.0f;
+    (&_S433)->primal_1 = _s_diff_ctx_3._S316.vals_1[int(5)];
     (&_S433)->differential_0 = 0.0f;
+    s_bwd_prop_max_0(&_S432, &_S433, _S411.differential_0.vals_0[int(5)]);
+    *(&(&_S374)->vals_0[int(4)]) = 0.0f;
     DiffPair_float_0 _S434;
-    (&_S434)->primal_1 = _s_diff_ctx_3._S315.vals_1[int(2)];
+    (&_S434)->primal_1 = 0.0f;
     (&_S434)->differential_0 = 0.0f;
-    s_bwd_prop_max_0(&_S433, &_S434, _S406.differential_0.vals_0[int(2)]);
-    *(&(&_S369)->vals_0[int(1)]) = 0.0f;
     DiffPair_float_0 _S435;
-    (&_S435)->primal_1 = 0.0f;
+    (&_S435)->primal_1 = _s_diff_ctx_3._S316.vals_1[int(4)];
     (&_S435)->differential_0 = 0.0f;
+    s_bwd_prop_max_0(&_S434, &_S435, _S411.differential_0.vals_0[int(4)]);
+    *(&(&_S374)->vals_0[int(3)]) = 0.0f;
     DiffPair_float_0 _S436;
-    (&_S436)->primal_1 = _s_diff_ctx_3._S315.vals_1[int(1)];
+    (&_S436)->primal_1 = 0.0f;
     (&_S436)->differential_0 = 0.0f;
-    s_bwd_prop_max_0(&_S435, &_S436, _S406.differential_0.vals_0[int(1)]);
-    *(&(&_S369)->vals_0[int(0)]) = 0.0f;
     DiffPair_float_0 _S437;
-    (&_S437)->primal_1 = 0.0f;
+    (&_S437)->primal_1 = _s_diff_ctx_3._S316.vals_1[int(3)];
     (&_S437)->differential_0 = 0.0f;
+    s_bwd_prop_max_0(&_S436, &_S437, _S411.differential_0.vals_0[int(3)]);
+    *(&(&_S374)->vals_0[int(2)]) = 0.0f;
     DiffPair_float_0 _S438;
-    (&_S438)->primal_1 = _s_diff_ctx_3._S315.vals_1[int(0)];
+    (&_S438)->primal_1 = 0.0f;
     (&_S438)->differential_0 = 0.0f;
-    s_bwd_prop_max_0(&_S437, &_S438, _S406.differential_0.vals_0[int(0)]);
-    FixedArray<float, 16>  _S439;
-    *(&_S439[int(0)]) = 0.0f;
-    *(&_S439[int(1)]) = 0.0f;
-    *(&_S439[int(2)]) = 0.0f;
-    *(&_S439[int(3)]) = 0.0f;
-    *(&_S439[int(4)]) = 0.0f;
-    *(&_S439[int(5)]) = 0.0f;
-    *(&_S439[int(6)]) = 0.0f;
-    *(&_S439[int(7)]) = 0.0f;
-    *(&_S439[int(8)]) = 0.0f;
-    *(&_S439[int(9)]) = 0.0f;
-    *(&_S439[int(10)]) = 0.0f;
-    *(&_S439[int(11)]) = 0.0f;
-    *(&_S439[int(12)]) = 0.0f;
-    *(&_S439[int(13)]) = 0.0f;
-    *(&_S439[int(14)]) = 0.0f;
-    *(&_S439[int(15)]) = 0.0f;
-    *(&_S439[int(15)]) = _S408.differential_0;
-    *(&_S439[int(14)]) = _S410.differential_0;
-    *(&_S439[int(13)]) = _S412.differential_0;
-    *(&_S439[int(12)]) = _S414.differential_0;
-    *(&_S439[int(11)]) = _S416.differential_0;
-    *(&_S439[int(10)]) = _S418.differential_0;
-    *(&_S439[int(9)]) = _S420.differential_0;
-    *(&_S439[int(8)]) = _S422.differential_0;
-    *(&_S439[int(7)]) = _S424.differential_0;
-    *(&_S439[int(6)]) = _S426.differential_0;
-    *(&_S439[int(5)]) = _S428.differential_0;
-    *(&_S439[int(4)]) = _S430.differential_0;
-    *(&_S439[int(3)]) = _S432.differential_0;
-    *(&_S439[int(2)]) = _S434.differential_0;
-    *(&_S439[int(1)]) = _S436.differential_0;
-    *(&_S439[int(0)]) = _S438.differential_0;
-    s_diff_Feature_0 _S440 = _S403;
-    (&_S440)->vals_0 = _S439;
-    s_diff_Feature_0 _S441 = Feature_x24_syn_dadd_0(_S369, _S440);
-    DiffPair_Feature_0 _S442;
-    (&_S442)->primal_1 = _S366;
-    (&_S442)->differential_0 = _S403;
-    s_bwd_prop_Linear_eval_0(this_30.layers_0[int(1)], &_S442, _S441, _S364);
-    _S369 = _S442.differential_0;
-    *(&(&_S369)->vals_0[int(15)]) = 0.0f;
+    DiffPair_float_0 _S439;
+    (&_S439)->primal_1 = _s_diff_ctx_3._S316.vals_1[int(2)];
+    (&_S439)->differential_0 = 0.0f;
+    s_bwd_prop_max_0(&_S438, &_S439, _S411.differential_0.vals_0[int(2)]);
+    *(&(&_S374)->vals_0[int(1)]) = 0.0f;
+    DiffPair_float_0 _S440;
+    (&_S440)->primal_1 = 0.0f;
+    (&_S440)->differential_0 = 0.0f;
+    DiffPair_float_0 _S441;
+    (&_S441)->primal_1 = _s_diff_ctx_3._S316.vals_1[int(1)];
+    (&_S441)->differential_0 = 0.0f;
+    s_bwd_prop_max_0(&_S440, &_S441, _S411.differential_0.vals_0[int(1)]);
+    *(&(&_S374)->vals_0[int(0)]) = 0.0f;
+    DiffPair_float_0 _S442;
+    (&_S442)->primal_1 = 0.0f;
+    (&_S442)->differential_0 = 0.0f;
     DiffPair_float_0 _S443;
-    (&_S443)->primal_1 = 0.0f;
+    (&_S443)->primal_1 = _s_diff_ctx_3._S316.vals_1[int(0)];
     (&_S443)->differential_0 = 0.0f;
-    DiffPair_float_0 _S444;
-    (&_S444)->primal_1 = _s_diff_ctx_3._S314.vals_1[int(15)];
-    (&_S444)->differential_0 = 0.0f;
-    s_bwd_prop_max_0(&_S443, &_S444, _S442.differential_0.vals_0[int(15)]);
-    *(&(&_S369)->vals_0[int(14)]) = 0.0f;
-    DiffPair_float_0 _S445;
-    (&_S445)->primal_1 = 0.0f;
-    (&_S445)->differential_0 = 0.0f;
-    DiffPair_float_0 _S446;
-    (&_S446)->primal_1 = _s_diff_ctx_3._S314.vals_1[int(14)];
-    (&_S446)->differential_0 = 0.0f;
-    s_bwd_prop_max_0(&_S445, &_S446, _S442.differential_0.vals_0[int(14)]);
-    *(&(&_S369)->vals_0[int(13)]) = 0.0f;
-    DiffPair_float_0 _S447;
-    (&_S447)->primal_1 = 0.0f;
-    (&_S447)->differential_0 = 0.0f;
+    s_bwd_prop_max_0(&_S442, &_S443, _S411.differential_0.vals_0[int(0)]);
+    FixedArray<float, 16>  _S444;
+    *(&_S444[int(0)]) = 0.0f;
+    *(&_S444[int(1)]) = 0.0f;
+    *(&_S444[int(2)]) = 0.0f;
+    *(&_S444[int(3)]) = 0.0f;
+    *(&_S444[int(4)]) = 0.0f;
+    *(&_S444[int(5)]) = 0.0f;
+    *(&_S444[int(6)]) = 0.0f;
+    *(&_S444[int(7)]) = 0.0f;
+    *(&_S444[int(8)]) = 0.0f;
+    *(&_S444[int(9)]) = 0.0f;
+    *(&_S444[int(10)]) = 0.0f;
+    *(&_S444[int(11)]) = 0.0f;
+    *(&_S444[int(12)]) = 0.0f;
+    *(&_S444[int(13)]) = 0.0f;
+    *(&_S444[int(14)]) = 0.0f;
+    *(&_S444[int(15)]) = 0.0f;
+    *(&_S444[int(15)]) = _S413.differential_0;
+    *(&_S444[int(14)]) = _S415.differential_0;
+    *(&_S444[int(13)]) = _S417.differential_0;
+    *(&_S444[int(12)]) = _S419.differential_0;
+    *(&_S444[int(11)]) = _S421.differential_0;
+    *(&_S444[int(10)]) = _S423.differential_0;
+    *(&_S444[int(9)]) = _S425.differential_0;
+    *(&_S444[int(8)]) = _S427.differential_0;
+    *(&_S444[int(7)]) = _S429.differential_0;
+    *(&_S444[int(6)]) = _S431.differential_0;
+    *(&_S444[int(5)]) = _S433.differential_0;
+    *(&_S444[int(4)]) = _S435.differential_0;
+    *(&_S444[int(3)]) = _S437.differential_0;
+    *(&_S444[int(2)]) = _S439.differential_0;
+    *(&_S444[int(1)]) = _S441.differential_0;
+    *(&_S444[int(0)]) = _S443.differential_0;
+    s_diff_Feature_0 _S445 = _S408;
+    (&_S445)->vals_0 = _S444;
+    s_diff_Feature_0 _S446 = Feature_x24_syn_dadd_0(_S374, _S445);
+    DiffPair_Feature_0 _S447;
+    (&_S447)->primal_1 = _S371;
+    (&_S447)->differential_0 = _S408;
+    s_bwd_prop_Linear_eval_0(this_30.layers_0[int(1)], &_S447, _S446, _S369);
+    _S374 = _S447.differential_0;
+    *(&(&_S374)->vals_0[int(15)]) = 0.0f;
     DiffPair_float_0 _S448;
-    (&_S448)->primal_1 = _s_diff_ctx_3._S314.vals_1[int(13)];
+    (&_S448)->primal_1 = 0.0f;
     (&_S448)->differential_0 = 0.0f;
-    s_bwd_prop_max_0(&_S447, &_S448, _S442.differential_0.vals_0[int(13)]);
-    *(&(&_S369)->vals_0[int(12)]) = 0.0f;
     DiffPair_float_0 _S449;
-    (&_S449)->primal_1 = 0.0f;
+    (&_S449)->primal_1 = _s_diff_ctx_3._S315.vals_1[int(15)];
     (&_S449)->differential_0 = 0.0f;
+    s_bwd_prop_max_0(&_S448, &_S449, _S447.differential_0.vals_0[int(15)]);
+    *(&(&_S374)->vals_0[int(14)]) = 0.0f;
     DiffPair_float_0 _S450;
-    (&_S450)->primal_1 = _s_diff_ctx_3._S314.vals_1[int(12)];
+    (&_S450)->primal_1 = 0.0f;
     (&_S450)->differential_0 = 0.0f;
-    s_bwd_prop_max_0(&_S449, &_S450, _S442.differential_0.vals_0[int(12)]);
-    *(&(&_S369)->vals_0[int(11)]) = 0.0f;
     DiffPair_float_0 _S451;
-    (&_S451)->primal_1 = 0.0f;
+    (&_S451)->primal_1 = _s_diff_ctx_3._S315.vals_1[int(14)];
     (&_S451)->differential_0 = 0.0f;
+    s_bwd_prop_max_0(&_S450, &_S451, _S447.differential_0.vals_0[int(14)]);
+    *(&(&_S374)->vals_0[int(13)]) = 0.0f;
     DiffPair_float_0 _S452;
-    (&_S452)->primal_1 = _s_diff_ctx_3._S314.vals_1[int(11)];
+    (&_S452)->primal_1 = 0.0f;
     (&_S452)->differential_0 = 0.0f;
-    s_bwd_prop_max_0(&_S451, &_S452, _S442.differential_0.vals_0[int(11)]);
-    *(&(&_S369)->vals_0[int(10)]) = 0.0f;
     DiffPair_float_0 _S453;
-    (&_S453)->primal_1 = 0.0f;
+    (&_S453)->primal_1 = _s_diff_ctx_3._S315.vals_1[int(13)];
     (&_S453)->differential_0 = 0.0f;
+    s_bwd_prop_max_0(&_S452, &_S453, _S447.differential_0.vals_0[int(13)]);
+    *(&(&_S374)->vals_0[int(12)]) = 0.0f;
     DiffPair_float_0 _S454;
-    (&_S454)->primal_1 = _s_diff_ctx_3._S314.vals_1[int(10)];
+    (&_S454)->primal_1 = 0.0f;
     (&_S454)->differential_0 = 0.0f;
-    s_bwd_prop_max_0(&_S453, &_S454, _S442.differential_0.vals_0[int(10)]);
-    *(&(&_S369)->vals_0[int(9)]) = 0.0f;
     DiffPair_float_0 _S455;
-    (&_S455)->primal_1 = 0.0f;
+    (&_S455)->primal_1 = _s_diff_ctx_3._S315.vals_1[int(12)];
     (&_S455)->differential_0 = 0.0f;
+    s_bwd_prop_max_0(&_S454, &_S455, _S447.differential_0.vals_0[int(12)]);
+    *(&(&_S374)->vals_0[int(11)]) = 0.0f;
     DiffPair_float_0 _S456;
-    (&_S456)->primal_1 = _s_diff_ctx_3._S314.vals_1[int(9)];
+    (&_S456)->primal_1 = 0.0f;
     (&_S456)->differential_0 = 0.0f;
-    s_bwd_prop_max_0(&_S455, &_S456, _S442.differential_0.vals_0[int(9)]);
-    *(&(&_S369)->vals_0[int(8)]) = 0.0f;
     DiffPair_float_0 _S457;
-    (&_S457)->primal_1 = 0.0f;
+    (&_S457)->primal_1 = _s_diff_ctx_3._S315.vals_1[int(11)];
     (&_S457)->differential_0 = 0.0f;
+    s_bwd_prop_max_0(&_S456, &_S457, _S447.differential_0.vals_0[int(11)]);
+    *(&(&_S374)->vals_0[int(10)]) = 0.0f;
     DiffPair_float_0 _S458;
-    (&_S458)->primal_1 = _s_diff_ctx_3._S314.vals_1[int(8)];
+    (&_S458)->primal_1 = 0.0f;
     (&_S458)->differential_0 = 0.0f;
-    s_bwd_prop_max_0(&_S457, &_S458, _S442.differential_0.vals_0[int(8)]);
-    *(&(&_S369)->vals_0[int(7)]) = 0.0f;
     DiffPair_float_0 _S459;
-    (&_S459)->primal_1 = 0.0f;
+    (&_S459)->primal_1 = _s_diff_ctx_3._S315.vals_1[int(10)];
     (&_S459)->differential_0 = 0.0f;
+    s_bwd_prop_max_0(&_S458, &_S459, _S447.differential_0.vals_0[int(10)]);
+    *(&(&_S374)->vals_0[int(9)]) = 0.0f;
     DiffPair_float_0 _S460;
-    (&_S460)->primal_1 = _s_diff_ctx_3._S314.vals_1[int(7)];
+    (&_S460)->primal_1 = 0.0f;
     (&_S460)->differential_0 = 0.0f;
-    s_bwd_prop_max_0(&_S459, &_S460, _S442.differential_0.vals_0[int(7)]);
-    *(&(&_S369)->vals_0[int(6)]) = 0.0f;
     DiffPair_float_0 _S461;
-    (&_S461)->primal_1 = 0.0f;
+    (&_S461)->primal_1 = _s_diff_ctx_3._S315.vals_1[int(9)];
     (&_S461)->differential_0 = 0.0f;
+    s_bwd_prop_max_0(&_S460, &_S461, _S447.differential_0.vals_0[int(9)]);
+    *(&(&_S374)->vals_0[int(8)]) = 0.0f;
     DiffPair_float_0 _S462;
-    (&_S462)->primal_1 = _s_diff_ctx_3._S314.vals_1[int(6)];
+    (&_S462)->primal_1 = 0.0f;
     (&_S462)->differential_0 = 0.0f;
-    s_bwd_prop_max_0(&_S461, &_S462, _S442.differential_0.vals_0[int(6)]);
-    *(&(&_S369)->vals_0[int(5)]) = 0.0f;
     DiffPair_float_0 _S463;
-    (&_S463)->primal_1 = 0.0f;
+    (&_S463)->primal_1 = _s_diff_ctx_3._S315.vals_1[int(8)];
     (&_S463)->differential_0 = 0.0f;
+    s_bwd_prop_max_0(&_S462, &_S463, _S447.differential_0.vals_0[int(8)]);
+    *(&(&_S374)->vals_0[int(7)]) = 0.0f;
     DiffPair_float_0 _S464;
-    (&_S464)->primal_1 = _s_diff_ctx_3._S314.vals_1[int(5)];
+    (&_S464)->primal_1 = 0.0f;
     (&_S464)->differential_0 = 0.0f;
-    s_bwd_prop_max_0(&_S463, &_S464, _S442.differential_0.vals_0[int(5)]);
-    *(&(&_S369)->vals_0[int(4)]) = 0.0f;
     DiffPair_float_0 _S465;
-    (&_S465)->primal_1 = 0.0f;
+    (&_S465)->primal_1 = _s_diff_ctx_3._S315.vals_1[int(7)];
     (&_S465)->differential_0 = 0.0f;
+    s_bwd_prop_max_0(&_S464, &_S465, _S447.differential_0.vals_0[int(7)]);
+    *(&(&_S374)->vals_0[int(6)]) = 0.0f;
     DiffPair_float_0 _S466;
-    (&_S466)->primal_1 = _s_diff_ctx_3._S314.vals_1[int(4)];
+    (&_S466)->primal_1 = 0.0f;
     (&_S466)->differential_0 = 0.0f;
-    s_bwd_prop_max_0(&_S465, &_S466, _S442.differential_0.vals_0[int(4)]);
-    *(&(&_S369)->vals_0[int(3)]) = 0.0f;
     DiffPair_float_0 _S467;
-    (&_S467)->primal_1 = 0.0f;
+    (&_S467)->primal_1 = _s_diff_ctx_3._S315.vals_1[int(6)];
     (&_S467)->differential_0 = 0.0f;
+    s_bwd_prop_max_0(&_S466, &_S467, _S447.differential_0.vals_0[int(6)]);
+    *(&(&_S374)->vals_0[int(5)]) = 0.0f;
     DiffPair_float_0 _S468;
-    (&_S468)->primal_1 = _s_diff_ctx_3._S314.vals_1[int(3)];
+    (&_S468)->primal_1 = 0.0f;
     (&_S468)->differential_0 = 0.0f;
-    s_bwd_prop_max_0(&_S467, &_S468, _S442.differential_0.vals_0[int(3)]);
-    *(&(&_S369)->vals_0[int(2)]) = 0.0f;
     DiffPair_float_0 _S469;
-    (&_S469)->primal_1 = 0.0f;
+    (&_S469)->primal_1 = _s_diff_ctx_3._S315.vals_1[int(5)];
     (&_S469)->differential_0 = 0.0f;
+    s_bwd_prop_max_0(&_S468, &_S469, _S447.differential_0.vals_0[int(5)]);
+    *(&(&_S374)->vals_0[int(4)]) = 0.0f;
     DiffPair_float_0 _S470;
-    (&_S470)->primal_1 = _s_diff_ctx_3._S314.vals_1[int(2)];
+    (&_S470)->primal_1 = 0.0f;
     (&_S470)->differential_0 = 0.0f;
-    s_bwd_prop_max_0(&_S469, &_S470, _S442.differential_0.vals_0[int(2)]);
-    *(&(&_S369)->vals_0[int(1)]) = 0.0f;
     DiffPair_float_0 _S471;
-    (&_S471)->primal_1 = 0.0f;
+    (&_S471)->primal_1 = _s_diff_ctx_3._S315.vals_1[int(4)];
     (&_S471)->differential_0 = 0.0f;
+    s_bwd_prop_max_0(&_S470, &_S471, _S447.differential_0.vals_0[int(4)]);
+    *(&(&_S374)->vals_0[int(3)]) = 0.0f;
     DiffPair_float_0 _S472;
-    (&_S472)->primal_1 = _s_diff_ctx_3._S314.vals_1[int(1)];
+    (&_S472)->primal_1 = 0.0f;
     (&_S472)->differential_0 = 0.0f;
-    s_bwd_prop_max_0(&_S471, &_S472, _S442.differential_0.vals_0[int(1)]);
-    *(&(&_S369)->vals_0[int(0)]) = 0.0f;
     DiffPair_float_0 _S473;
-    (&_S473)->primal_1 = 0.0f;
+    (&_S473)->primal_1 = _s_diff_ctx_3._S315.vals_1[int(3)];
     (&_S473)->differential_0 = 0.0f;
+    s_bwd_prop_max_0(&_S472, &_S473, _S447.differential_0.vals_0[int(3)]);
+    *(&(&_S374)->vals_0[int(2)]) = 0.0f;
     DiffPair_float_0 _S474;
-    (&_S474)->primal_1 = _s_diff_ctx_3._S314.vals_1[int(0)];
+    (&_S474)->primal_1 = 0.0f;
     (&_S474)->differential_0 = 0.0f;
-    s_bwd_prop_max_0(&_S473, &_S474, _S442.differential_0.vals_0[int(0)]);
-    FixedArray<float, 16>  _S475;
-    *(&_S475[int(0)]) = 0.0f;
-    *(&_S475[int(1)]) = 0.0f;
-    *(&_S475[int(2)]) = 0.0f;
-    *(&_S475[int(3)]) = 0.0f;
-    *(&_S475[int(4)]) = 0.0f;
-    *(&_S475[int(5)]) = 0.0f;
-    *(&_S475[int(6)]) = 0.0f;
-    *(&_S475[int(7)]) = 0.0f;
-    *(&_S475[int(8)]) = 0.0f;
-    *(&_S475[int(9)]) = 0.0f;
-    *(&_S475[int(10)]) = 0.0f;
-    *(&_S475[int(11)]) = 0.0f;
-    *(&_S475[int(12)]) = 0.0f;
-    *(&_S475[int(13)]) = 0.0f;
-    *(&_S475[int(14)]) = 0.0f;
-    *(&_S475[int(15)]) = 0.0f;
-    *(&_S475[int(15)]) = _S444.differential_0;
-    *(&_S475[int(14)]) = _S446.differential_0;
-    *(&_S475[int(13)]) = _S448.differential_0;
-    *(&_S475[int(12)]) = _S450.differential_0;
-    *(&_S475[int(11)]) = _S452.differential_0;
-    *(&_S475[int(10)]) = _S454.differential_0;
-    *(&_S475[int(9)]) = _S456.differential_0;
-    *(&_S475[int(8)]) = _S458.differential_0;
-    *(&_S475[int(7)]) = _S460.differential_0;
-    *(&_S475[int(6)]) = _S462.differential_0;
-    *(&_S475[int(5)]) = _S464.differential_0;
-    *(&_S475[int(4)]) = _S466.differential_0;
-    *(&_S475[int(3)]) = _S468.differential_0;
-    *(&_S475[int(2)]) = _S470.differential_0;
-    *(&_S475[int(1)]) = _S472.differential_0;
-    *(&_S475[int(0)]) = _S474.differential_0;
-    s_diff_Feature_0 _S476 = _S403;
-    (&_S476)->vals_0 = _S475;
-    s_diff_Feature_0 _S477 = Feature_x24_syn_dadd_0(_S369, _S476);
-    DiffPair_Feature_0 _S478;
-    (&_S478)->primal_1 = (*dpin_feature_1).primal_1;
-    (&_S478)->differential_0 = _S403;
-    s_bwd_prop_Linear_eval_0(this_30.layers_0[int(0)], &_S478, _S477, _S364);
+    DiffPair_float_0 _S475;
+    (&_S475)->primal_1 = _s_diff_ctx_3._S315.vals_1[int(2)];
+    (&_S475)->differential_0 = 0.0f;
+    s_bwd_prop_max_0(&_S474, &_S475, _S447.differential_0.vals_0[int(2)]);
+    *(&(&_S374)->vals_0[int(1)]) = 0.0f;
+    DiffPair_float_0 _S476;
+    (&_S476)->primal_1 = 0.0f;
+    (&_S476)->differential_0 = 0.0f;
+    DiffPair_float_0 _S477;
+    (&_S477)->primal_1 = _s_diff_ctx_3._S315.vals_1[int(1)];
+    (&_S477)->differential_0 = 0.0f;
+    s_bwd_prop_max_0(&_S476, &_S477, _S447.differential_0.vals_0[int(1)]);
+    *(&(&_S374)->vals_0[int(0)]) = 0.0f;
+    DiffPair_float_0 _S478;
+    (&_S478)->primal_1 = 0.0f;
+    (&_S478)->differential_0 = 0.0f;
+    DiffPair_float_0 _S479;
+    (&_S479)->primal_1 = _s_diff_ctx_3._S315.vals_1[int(0)];
+    (&_S479)->differential_0 = 0.0f;
+    s_bwd_prop_max_0(&_S478, &_S479, _S447.differential_0.vals_0[int(0)]);
+    FixedArray<float, 16>  _S480;
+    *(&_S480[int(0)]) = 0.0f;
+    *(&_S480[int(1)]) = 0.0f;
+    *(&_S480[int(2)]) = 0.0f;
+    *(&_S480[int(3)]) = 0.0f;
+    *(&_S480[int(4)]) = 0.0f;
+    *(&_S480[int(5)]) = 0.0f;
+    *(&_S480[int(6)]) = 0.0f;
+    *(&_S480[int(7)]) = 0.0f;
+    *(&_S480[int(8)]) = 0.0f;
+    *(&_S480[int(9)]) = 0.0f;
+    *(&_S480[int(10)]) = 0.0f;
+    *(&_S480[int(11)]) = 0.0f;
+    *(&_S480[int(12)]) = 0.0f;
+    *(&_S480[int(13)]) = 0.0f;
+    *(&_S480[int(14)]) = 0.0f;
+    *(&_S480[int(15)]) = 0.0f;
+    *(&_S480[int(15)]) = _S449.differential_0;
+    *(&_S480[int(14)]) = _S451.differential_0;
+    *(&_S480[int(13)]) = _S453.differential_0;
+    *(&_S480[int(12)]) = _S455.differential_0;
+    *(&_S480[int(11)]) = _S457.differential_0;
+    *(&_S480[int(10)]) = _S459.differential_0;
+    *(&_S480[int(9)]) = _S461.differential_0;
+    *(&_S480[int(8)]) = _S463.differential_0;
+    *(&_S480[int(7)]) = _S465.differential_0;
+    *(&_S480[int(6)]) = _S467.differential_0;
+    *(&_S480[int(5)]) = _S469.differential_0;
+    *(&_S480[int(4)]) = _S471.differential_0;
+    *(&_S480[int(3)]) = _S473.differential_0;
+    *(&_S480[int(2)]) = _S475.differential_0;
+    *(&_S480[int(1)]) = _S477.differential_0;
+    *(&_S480[int(0)]) = _S479.differential_0;
+    s_diff_Feature_0 _S481 = _S408;
+    (&_S481)->vals_0 = _S480;
+    s_diff_Feature_0 _S482 = Feature_x24_syn_dadd_0(_S374, _S481);
+    DiffPair_Feature_0 _S483;
+    (&_S483)->primal_1 = (*dpin_feature_1).primal_1;
+    (&_S483)->differential_0 = _S408;
+    s_bwd_prop_Linear_eval_0(this_30.layers_0[int(0)], &_S483, _S482, _S369);
     dpin_feature_1->primal_1 = (*dpin_feature_1).primal_1;
-    dpin_feature_1->differential_0 = _S478.differential_0;
+    dpin_feature_1->differential_0 = _S483.differential_0;
     return;
 }
 
-__device__ void s_bwd_prop_DiffTensorView_load_0(DiffTensorView_0 _S479, uint4  _S480, float _S481)
+__device__ void s_bwd_prop_DiffTensorView_load_0(DiffTensorView_0 _S484, uint4  _S485, float _S486)
 {
-    DiffTensorView_load_backward_0(_S479, _S480, _S481);
+    DiffTensorView_load_backward_0(_S484, _S485, _S486);
     return;
 }
 
 __device__ void s_bwd_prop_getInFeature_0(DiffTensorView_0 input_9, uint3  idx_2, s_diff_Feature_0 _s_dOut_1, s_bwd_prop_getInFeature_Intermediates_0 _s_diff_ctx_4)
 {
-    uint _S482 = idx_2.x;
-    uint _S483 = idx_2.y;
-    uint _S484 = idx_2.z;
-    s_diff_Feature_0 _S485 = Feature_x24_syn_dzero_0();
-    s_diff_Feature_0 _S486 = Feature_x24_syn_dadd_0(_s_dOut_1, _S485);
-    int _dc_0 = _s_diff_ctx_4._S313 - int(1);
-    s_diff_Feature_0 _S487 = _S486;
+    uint _S487 = idx_2.x;
+    uint _S488 = idx_2.y;
+    uint _S489 = idx_2.z;
+    uint4  _S490 = make_uint4 (_S487, _S488, _S489, 15U);
+    s_diff_Feature_0 _S491 = Feature_x24_syn_dzero_0();
+    s_diff_Feature_0 _S492 = _s_dOut_1;
+    *(&(&_S492)->vals_0[15U]) = 0.0f;
+    int _S493 = _s_diff_ctx_4._S314 - int(1);
+    uint4  _S494 = make_uint4 (0U);
+    s_diff_Feature_0 _S495 = Feature_x24_syn_dadd_0(_S492, _S491);
+    s_bwd_prop_DiffTensorView_load_0(input_9, _S490, _s_dOut_1.vals_0[15U]);
+    int _dc_0 = _S493;
+    _S492 = _S495;
     for(;;)
     {
         if(_dc_0 >= int(0))
@@ -4855,290 +4872,308 @@ __device__ void s_bwd_prop_getInFeature_0(DiffTensorView_0 input_9, uint3  idx_2
         {
             break;
         }
-        uint4  _S488 = make_uint4 (_S482, _S483, _S484, uint(_dc_0));
-        s_diff_Feature_0 _S489 = Feature_x24_syn_dadd_0(_S487, _S485);
-        s_diff_Feature_0 _S490 = _S489;
-        *(&(&_S490)->vals_0[_dc_0]) = 0.0f;
-        s_bwd_prop_DiffTensorView_load_0(input_9, _S488, _S489.vals_0[_dc_0]);
-        s_diff_Feature_0 _S491 = Feature_x24_syn_dadd_0(_S490, _S485);
+        bool _S496 = _dc_0 < int(15);
+        uint4  _S497;
+        if(_S496)
+        {
+            _S497 = make_uint4 (_S487, _S488, _S489, uint(_dc_0));
+        }
+        else
+        {
+            _S497 = _S494;
+        }
+        s_diff_Feature_0 _S498 = Feature_x24_syn_dadd_0(_S492, _S491);
+        if(_S496)
+        {
+            s_diff_Feature_0 _S499 = _S498;
+            *(&(&_S499)->vals_0[_dc_0]) = 0.0f;
+            s_bwd_prop_DiffTensorView_load_0(input_9, _S497, _S498.vals_0[_dc_0]);
+            _S492 = Feature_x24_syn_dadd_0(_S499, _S491);
+        }
+        else
+        {
+            _S492 = Feature_x24_syn_dadd_0(_S498, _S491);
+        }
         _dc_0 = _dc_0 - int(1);
-        _S487 = _S491;
     }
     return;
 }
 
-__device__ void s_bwd_prop_DiffTensorView_storeOnce_0(DiffTensorView_0 _S492, uint4  _S493, DiffPair_float_0 * _S494)
+__device__ void s_bwd_prop_DiffTensorView_storeOnce_0(DiffTensorView_0 _S500, uint4  _S501, DiffPair_float_0 * _S502)
 {
-    DiffTensorView_storeOnce_backward_0(_S492, _S493, _S494);
+    DiffTensorView_storeOnce_backward_0(_S500, _S501, _S502);
     return;
 }
 
-__device__ void s_bwd_prop_renderImage_0(MLP_0 mlp_1, DiffTensorView_0 featureGrid_1, DiffTensorView_0 imageOutput_1, s_bwd_prop_renderImage_Intermediates_0 _s_diff_ctx_5, uint _S495)
+__device__ void s_bwd_prop_renderImage_0(MLP_0 mlp_1, DiffTensorView_0 featureGrid_1, DiffTensorView_0 imageOutput_1, s_bwd_prop_renderImage_Intermediates_0 _s_diff_ctx_5, uint _S503)
 {
     uint3  dispatchIdx_1 = ((threadIdx)) + ((blockIdx)) * ((blockDim));
-    uint _S496 = dispatchIdx_1.x;
-    uint _S497 = dispatchIdx_1.y;
-    uint _S498 = dispatchIdx_1.z;
-    bool _S499 = !(_S496 >= _s_diff_ctx_5._S322 || _S497 >= _s_diff_ctx_5._S323 || _S498 >= _s_diff_ctx_5._S324);
-    uint _S500 = __ballot_sync(_S495, _S499);
+    uint _S504 = dispatchIdx_1.x;
+    uint _S505 = dispatchIdx_1.y;
+    uint _S506 = dispatchIdx_1.z;
+    bool _S507 = !(_S504 >= _s_diff_ctx_5._S323 || _S505 >= _s_diff_ctx_5._S324 || _S506 >= _s_diff_ctx_5._S325);
+    uint _S508 = __ballot_sync(_S503, _S507);
     int _dc_1;
-    uint _S501;
-    uint _S502;
-    if(_S499)
+    uint _S509;
+    uint _S510;
+    if(_S507)
     {
-        uint3  idx_3 = make_uint3 (_S496, _S497, _S498);
-        s_bwd_prop_getInFeature_Intermediates_0 _S503 = _s_diff_ctx_5._S317;
-        Feature_0 _S504 = s_bwd_primal_getInFeature_0(featureGrid_1, idx_3, &_S503);
-        s_bwd_prop_MLP_eval_Intermediates_0 _S505 = _s_diff_ctx_5._S319;
-        Feature_0 _S506 = s_bwd_primal_MLP_eval_0(mlp_1, _S504, &_S505);
+        uint3  idx_3 = make_uint3 (_S504, _S505, _S506);
+        s_bwd_prop_getInFeature_Intermediates_0 _S511 = _s_diff_ctx_5._S318;
+        Feature_0 _S512 = s_bwd_primal_getInFeature_0(featureGrid_1, idx_3, &_S511);
+        s_bwd_prop_MLP_eval_Intermediates_0 _S513 = _s_diff_ctx_5._S320;
+        Feature_0 _S514 = s_bwd_primal_MLP_eval_0(mlp_1, _S512, &_S513);
         bool _bflag_2 = true;
         _dc_1 = int(0);
         int _pc_2 = int(0);
-        _S501 = _S500;
+        _S509 = _S508;
         for(;;)
         {
-            uint _S507 = 0U;
-            uint _S508 = __ballot_sync(_S501, _bflag_2);
+            uint _S515 = 0U;
+            uint _S516 = __ballot_sync(_S509, _bflag_2);
             if(_bflag_2)
             {
-                uint _S509 = __ballot_sync(_S501, true);
-                _S507 = _S509;
+                uint _S517 = __ballot_sync(_S509, true);
+                _S515 = _S517;
             }
             else
             {
-                uint _S510 = __ballot_sync(_S501, false);
-                uint _S511 = __ballot_sync(_S500, true);
+                uint _S518 = __ballot_sync(_S509, false);
+                uint _S519 = __ballot_sync(_S508, true);
                 break;
             }
-            s_primal_ctx_DiffTensorView_storeOnce_0(imageOutput_1, make_uint4 (_S496, _S497, _S498, uint(_dc_1)), _S506.vals_1[_dc_1]);
-            int i_14 = _dc_1 + int(1);
-            bool _S512 = i_14 < int(3);
-            uint _S513 = __ballot_sync(_S507, _S512);
-            if(_S512)
+            s_primal_ctx_DiffTensorView_storeOnce_0(imageOutput_1, make_uint4 (_S504, _S505, _S506, uint(_dc_1)), _S514.vals_1[_dc_1]);
+            int i_12 = _dc_1 + int(1);
+            bool _S520 = i_12 < int(4);
+            uint _S521 = __ballot_sync(_S515, _S520);
+            if(_S520)
             {
-                uint _S514 = __ballot_sync(_S507, true);
-                _S502 = _S514;
+                uint _S522 = __ballot_sync(_S515, true);
+                _S510 = _S522;
             }
             else
             {
-                uint _S515 = __ballot_sync(_S507, true);
+                uint _S523 = __ballot_sync(_S515, true);
                 _bflag_2 = false;
-                _S502 = _S515;
+                _S510 = _S523;
             }
-            uint _S516 = __ballot_sync(_S502, _bflag_2);
+            uint _S524 = __ballot_sync(_S510, _bflag_2);
             if(_bflag_2)
             {
-                uint _S517 = __ballot_sync(_S502, true);
-                _dc_1 = i_14;
-                _S501 = _S517;
+                uint _S525 = __ballot_sync(_S510, true);
+                _dc_1 = i_12;
+                _S509 = _S525;
             }
             else
             {
-                uint _S518 = __ballot_sync(_S502, true);
-                _S501 = _S518;
+                uint _S526 = __ballot_sync(_S510, true);
+                _S509 = _S526;
             }
             _pc_2 = _pc_2 + int(1);
         }
-        uint _S519 = __ballot_sync(_S495, true);
-        _S501 = _S519;
+        uint _S527 = __ballot_sync(_S503, true);
+        _S509 = _S527;
     }
     else
     {
-        uint _S520 = __ballot_sync(_S495, true);
-        _S501 = _S520;
+        uint _S528 = __ballot_sync(_S503, true);
+        _S509 = _S528;
     }
-    uint3  _S521 = make_uint3 (0U);
-    uint _S522 = __ballot_sync(_S501, _S499);
-    uint3  _S523;
-    FixedArray<float, 16>  _S524;
-    if(_S499)
+    uint3  _S529 = make_uint3 (0U);
+    uint _S530 = __ballot_sync(_S509, _S507);
+    uint3  _S531;
+    FixedArray<float, 16>  _S532;
+    if(_S507)
     {
-        uint3  idx_4 = make_uint3 (_S496, _S497, _S498);
-        uint _S525 = __ballot_sync(_S501, true);
-        _S523 = idx_4;
-        _S524 = _s_diff_ctx_5._S320.vals_1;
-        _S501 = _S525;
+        uint3  idx_4 = make_uint3 (_S504, _S505, _S506);
+        uint _S533 = __ballot_sync(_S509, true);
+        _S531 = idx_4;
+        _S532 = _s_diff_ctx_5._S321.vals_1;
+        _S509 = _S533;
     }
     else
     {
-        uint _S526 = __ballot_sync(_S501, true);
-        _S523 = _S521;
-        *(&_S524[int(0)]) = 0.0f;
-        *(&_S524[int(1)]) = 0.0f;
-        *(&_S524[int(2)]) = 0.0f;
-        *(&_S524[int(3)]) = 0.0f;
-        *(&_S524[int(4)]) = 0.0f;
-        *(&_S524[int(5)]) = 0.0f;
-        *(&_S524[int(6)]) = 0.0f;
-        *(&_S524[int(7)]) = 0.0f;
-        *(&_S524[int(8)]) = 0.0f;
-        *(&_S524[int(9)]) = 0.0f;
-        *(&_S524[int(10)]) = 0.0f;
-        *(&_S524[int(11)]) = 0.0f;
-        *(&_S524[int(12)]) = 0.0f;
-        *(&_S524[int(13)]) = 0.0f;
-        *(&_S524[int(14)]) = 0.0f;
-        *(&_S524[int(15)]) = 0.0f;
-        _S501 = _S526;
+        uint _S534 = __ballot_sync(_S509, true);
+        _S531 = _S529;
+        *(&_S532[int(0)]) = 0.0f;
+        *(&_S532[int(1)]) = 0.0f;
+        *(&_S532[int(2)]) = 0.0f;
+        *(&_S532[int(3)]) = 0.0f;
+        *(&_S532[int(4)]) = 0.0f;
+        *(&_S532[int(5)]) = 0.0f;
+        *(&_S532[int(6)]) = 0.0f;
+        *(&_S532[int(7)]) = 0.0f;
+        *(&_S532[int(8)]) = 0.0f;
+        *(&_S532[int(9)]) = 0.0f;
+        *(&_S532[int(10)]) = 0.0f;
+        *(&_S532[int(11)]) = 0.0f;
+        *(&_S532[int(12)]) = 0.0f;
+        *(&_S532[int(13)]) = 0.0f;
+        *(&_S532[int(14)]) = 0.0f;
+        *(&_S532[int(15)]) = 0.0f;
+        _S509 = _S534;
     }
-    uint _S527 = __ballot_sync(_S501, _S499);
-    if(_S499)
+    uint _S535 = __ballot_sync(_S509, _S507);
+    if(_S507)
     {
-        uint _S528 = 0U;
-        s_diff_Feature_0 _S529 = Feature_x24_syn_dzero_0();
-        _dc_1 = _s_diff_ctx_5._S321 - int(1);
-        FixedArray<float, 16>  _S530;
-        *(&_S530[int(0)]) = 0.0f;
-        *(&_S530[int(1)]) = 0.0f;
-        *(&_S530[int(2)]) = 0.0f;
-        *(&_S530[int(3)]) = 0.0f;
-        *(&_S530[int(4)]) = 0.0f;
-        *(&_S530[int(5)]) = 0.0f;
-        *(&_S530[int(6)]) = 0.0f;
-        *(&_S530[int(7)]) = 0.0f;
-        *(&_S530[int(8)]) = 0.0f;
-        *(&_S530[int(9)]) = 0.0f;
-        *(&_S530[int(10)]) = 0.0f;
-        *(&_S530[int(11)]) = 0.0f;
-        *(&_S530[int(12)]) = 0.0f;
-        *(&_S530[int(13)]) = 0.0f;
-        *(&_S530[int(14)]) = 0.0f;
-        *(&_S530[int(15)]) = 0.0f;
-        _S502 = _S527;
+        uint _S536 = 0U;
+        s_diff_Feature_0 _S537 = Feature_x24_syn_dzero_0();
+        _dc_1 = _s_diff_ctx_5._S322 - int(1);
+        FixedArray<float, 16>  _S538;
+        *(&_S538[int(0)]) = 0.0f;
+        *(&_S538[int(1)]) = 0.0f;
+        *(&_S538[int(2)]) = 0.0f;
+        *(&_S538[int(3)]) = 0.0f;
+        *(&_S538[int(4)]) = 0.0f;
+        *(&_S538[int(5)]) = 0.0f;
+        *(&_S538[int(6)]) = 0.0f;
+        *(&_S538[int(7)]) = 0.0f;
+        *(&_S538[int(8)]) = 0.0f;
+        *(&_S538[int(9)]) = 0.0f;
+        *(&_S538[int(10)]) = 0.0f;
+        *(&_S538[int(11)]) = 0.0f;
+        *(&_S538[int(12)]) = 0.0f;
+        *(&_S538[int(13)]) = 0.0f;
+        *(&_S538[int(14)]) = 0.0f;
+        *(&_S538[int(15)]) = 0.0f;
+        _S510 = _S535;
         for(;;)
         {
-            bool _S531 = _dc_1 >= int(0);
-            uint _S532 = __ballot_sync(_S502, _S531);
-            if(_S531)
+            bool _S539 = _dc_1 >= int(0);
+            uint _S540 = __ballot_sync(_S510, _S539);
+            if(_S539)
             {
-                uint _S533 = __ballot_sync(_S502, true);
+                uint _S541 = __ballot_sync(_S510, true);
             }
             else
             {
-                uint _S534 = __ballot_sync(_S502, false);
-                uint _S535 = __ballot_sync(_S502, false);
-                uint _S536 = __ballot_sync(_S527, true);
-                _S528 = _S536;
+                uint _S542 = __ballot_sync(_S510, false);
+                uint _S543 = __ballot_sync(_S510, false);
+                uint _S544 = __ballot_sync(_S535, true);
+                _S536 = _S544;
                 break;
             }
-            uint4  _S537 = make_uint4 (_S496, _S497, _S498, uint(_dc_1));
-            DiffPair_float_0 _S538;
-            (&_S538)->primal_1 = _S524[_dc_1];
-            (&_S538)->differential_0 = 0.0f;
-            s_bwd_prop_DiffTensorView_storeOnce_0(imageOutput_1, _S537, &_S538);
-            FixedArray<float, 16>  _S539;
-            *(&_S539[int(0)]) = 0.0f;
-            *(&_S539[int(1)]) = 0.0f;
-            *(&_S539[int(2)]) = 0.0f;
-            *(&_S539[int(3)]) = 0.0f;
-            *(&_S539[int(4)]) = 0.0f;
-            *(&_S539[int(5)]) = 0.0f;
-            *(&_S539[int(6)]) = 0.0f;
-            *(&_S539[int(7)]) = 0.0f;
-            *(&_S539[int(8)]) = 0.0f;
-            *(&_S539[int(9)]) = 0.0f;
-            *(&_S539[int(10)]) = 0.0f;
-            *(&_S539[int(11)]) = 0.0f;
-            *(&_S539[int(12)]) = 0.0f;
-            *(&_S539[int(13)]) = 0.0f;
-            *(&_S539[int(14)]) = 0.0f;
-            *(&_S539[int(15)]) = 0.0f;
-            *(&_S539[_dc_1]) = _S538.differential_0;
-            float _S540 = _S530[int(0)] + _S539[int(0)];
-            float _S541 = _S530[int(1)] + _S539[int(1)];
-            float _S542 = _S530[int(2)] + _S539[int(2)];
-            float _S543 = _S530[int(3)] + _S539[int(3)];
-            float _S544 = _S530[int(4)] + _S539[int(4)];
-            float _S545 = _S530[int(5)] + _S539[int(5)];
-            float _S546 = _S530[int(6)] + _S539[int(6)];
-            float _S547 = _S530[int(7)] + _S539[int(7)];
-            float _S548 = _S530[int(8)] + _S539[int(8)];
-            float _S549 = _S530[int(9)] + _S539[int(9)];
-            float _S550 = _S530[int(10)] + _S539[int(10)];
-            float _S551 = _S530[int(11)] + _S539[int(11)];
-            float _S552 = _S530[int(12)] + _S539[int(12)];
-            float _S553 = _S530[int(13)] + _S539[int(13)];
-            float _S554 = _S530[int(14)] + _S539[int(14)];
-            float _S555 = _S530[int(15)] + _S539[int(15)];
-            uint _S556 = __ballot_sync(_S502, true);
+            uint4  _S545 = make_uint4 (_S504, _S505, _S506, uint(_dc_1));
+            DiffPair_float_0 _S546;
+            (&_S546)->primal_1 = _S532[_dc_1];
+            (&_S546)->differential_0 = 0.0f;
+            s_bwd_prop_DiffTensorView_storeOnce_0(imageOutput_1, _S545, &_S546);
+            FixedArray<float, 16>  _S547;
+            *(&_S547[int(0)]) = 0.0f;
+            *(&_S547[int(1)]) = 0.0f;
+            *(&_S547[int(2)]) = 0.0f;
+            *(&_S547[int(3)]) = 0.0f;
+            *(&_S547[int(4)]) = 0.0f;
+            *(&_S547[int(5)]) = 0.0f;
+            *(&_S547[int(6)]) = 0.0f;
+            *(&_S547[int(7)]) = 0.0f;
+            *(&_S547[int(8)]) = 0.0f;
+            *(&_S547[int(9)]) = 0.0f;
+            *(&_S547[int(10)]) = 0.0f;
+            *(&_S547[int(11)]) = 0.0f;
+            *(&_S547[int(12)]) = 0.0f;
+            *(&_S547[int(13)]) = 0.0f;
+            *(&_S547[int(14)]) = 0.0f;
+            *(&_S547[int(15)]) = 0.0f;
+            *(&_S547[_dc_1]) = _S546.differential_0;
+            float _S548 = _S538[int(0)] + _S547[int(0)];
+            float _S549 = _S538[int(1)] + _S547[int(1)];
+            float _S550 = _S538[int(2)] + _S547[int(2)];
+            float _S551 = _S538[int(3)] + _S547[int(3)];
+            float _S552 = _S538[int(4)] + _S547[int(4)];
+            float _S553 = _S538[int(5)] + _S547[int(5)];
+            float _S554 = _S538[int(6)] + _S547[int(6)];
+            float _S555 = _S538[int(7)] + _S547[int(7)];
+            float _S556 = _S538[int(8)] + _S547[int(8)];
+            float _S557 = _S538[int(9)] + _S547[int(9)];
+            float _S558 = _S538[int(10)] + _S547[int(10)];
+            float _S559 = _S538[int(11)] + _S547[int(11)];
+            float _S560 = _S538[int(12)] + _S547[int(12)];
+            float _S561 = _S538[int(13)] + _S547[int(13)];
+            float _S562 = _S538[int(14)] + _S547[int(14)];
+            float _S563 = _S538[int(15)] + _S547[int(15)];
+            uint _S564 = __ballot_sync(_S510, true);
             _dc_1 = _dc_1 - int(1);
-            *(&_S530[int(0)]) = _S540;
-            *(&_S530[int(1)]) = _S541;
-            *(&_S530[int(2)]) = _S542;
-            *(&_S530[int(3)]) = _S543;
-            *(&_S530[int(4)]) = _S544;
-            *(&_S530[int(5)]) = _S545;
-            *(&_S530[int(6)]) = _S546;
-            *(&_S530[int(7)]) = _S547;
-            *(&_S530[int(8)]) = _S548;
-            *(&_S530[int(9)]) = _S549;
-            *(&_S530[int(10)]) = _S550;
-            *(&_S530[int(11)]) = _S551;
-            *(&_S530[int(12)]) = _S552;
-            *(&_S530[int(13)]) = _S553;
-            *(&_S530[int(14)]) = _S554;
-            *(&_S530[int(15)]) = _S555;
-            _S502 = _S556;
+            *(&_S538[int(0)]) = _S548;
+            *(&_S538[int(1)]) = _S549;
+            *(&_S538[int(2)]) = _S550;
+            *(&_S538[int(3)]) = _S551;
+            *(&_S538[int(4)]) = _S552;
+            *(&_S538[int(5)]) = _S553;
+            *(&_S538[int(6)]) = _S554;
+            *(&_S538[int(7)]) = _S555;
+            *(&_S538[int(8)]) = _S556;
+            *(&_S538[int(9)]) = _S557;
+            *(&_S538[int(10)]) = _S558;
+            *(&_S538[int(11)]) = _S559;
+            *(&_S538[int(12)]) = _S560;
+            *(&_S538[int(13)]) = _S561;
+            *(&_S538[int(14)]) = _S562;
+            *(&_S538[int(15)]) = _S563;
+            _S510 = _S564;
         }
-        s_diff_Feature_0 _S557 = _S529;
-        (&_S557)->vals_0 = _S530;
-        DiffPair_Feature_0 _S558;
-        (&_S558)->primal_1 = _s_diff_ctx_5._S318;
-        (&_S558)->differential_0 = _S529;
-        s_bwd_prop_MLP_eval_0(mlp_1, &_S558, _S557, _s_diff_ctx_5._S319, _S528);
-        s_bwd_prop_getInFeature_0(featureGrid_1, _S523, _S558.differential_0, _s_diff_ctx_5._S317);
-        uint _S559 = __ballot_sync(_S501, true);
+        s_diff_Feature_0 _S565 = _S537;
+        (&_S565)->vals_0 = _S538;
+        DiffPair_Feature_0 _S566;
+        (&_S566)->primal_1 = _s_diff_ctx_5._S319;
+        (&_S566)->differential_0 = _S537;
+        s_bwd_prop_MLP_eval_0(mlp_1, &_S566, _S565, _s_diff_ctx_5._S320, _S536);
+        s_bwd_prop_getInFeature_0(featureGrid_1, _S531, _S566.differential_0, _s_diff_ctx_5._S318);
+        uint _S567 = __ballot_sync(_S509, true);
     }
     return;
 }
 
-__device__ void s_bwd_renderImage_0(MLP_0 _S560, DiffTensorView_0 _S561, DiffTensorView_0 _S562, uint _S563)
+__device__ void s_bwd_renderImage_0(MLP_0 _S568, DiffTensorView_0 _S569, DiffTensorView_0 _S570, uint _S571)
 {
-    s_bwd_prop_renderImage_Intermediates_0 _S564;
-    s_bwd_primal_renderImage_0(_S560, _S561, _S562, &_S564);
-    s_bwd_prop_renderImage_0(_S560, _S561, _S562, _S564, _S563);
+    s_bwd_prop_renderImage_Intermediates_0 _S572;
+    s_bwd_primal_renderImage_0(_S568, _S569, _S570, &_S572);
+    s_bwd_prop_renderImage_0(_S568, _S569, _S570, _S572, _S571);
     return;
 }
 
 extern "C" {
-__global__ void __kernel__renderImage_bwd_diff(MLP_0 _S565, DiffTensorView_0 _S566, DiffTensorView_0 _S567)
+__global__ void __kernel__renderImage_bwd_diff(MLP_0 _S573, DiffTensorView_0 _S574, DiffTensorView_0 _S575)
 {
-    uint _S568 = __ballot_sync(4294967295U, true);
-    s_bwd_renderImage_0(_S565, _S566, _S567, _S568);
+    uint _S576 = __ballot_sync(4294967295U, true);
+    s_bwd_renderImage_0(_S573, _S574, _S575, _S576);
     return;
 }
 
 }
 __device__ DiffPair_Feature_0 s_fwd_getInFeature_0(DiffTensorView_0 input_10, uint3  idx_5)
 {
-    FixedArray<float, 16>  _S569 = {
+    FixedArray<float, 16>  _S577 = {
         0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f
     };
-    uint _S570 = idx_5.x;
-    uint _S571 = idx_5.y;
-    uint _S572 = idx_5.z;
-    int i_15 = int(0);
+    uint _S578 = idx_5.x;
+    uint _S579 = idx_5.y;
+    uint _S580 = idx_5.z;
+    uint4  _S581 = make_uint4 (_S578, _S579, _S580, 15U);
+    int i_13 = int(0);
     Feature_0 output_4;
-    (&output_4)->vals_1 = _S569;
+    (&output_4)->vals_1 = _S577;
     s_diff_Feature_0 s_diff_output_0;
-    (&s_diff_output_0)->vals_0 = _S569;
+    (&s_diff_output_0)->vals_0 = _S577;
     for(;;)
     {
-        DiffPair_float_0 _S573 = DiffTensorView_load_forward_0(input_10, make_uint4 (_S570, _S571, _S572, uint(i_15)));
-        *(&(&output_4)->vals_1[i_15]) = _S573.primal_1;
-        *(&(&s_diff_output_0)->vals_0[i_15]) = _S573.differential_0;
-        int i_16 = i_15 + int(1);
-        if(i_16 < int(16))
+        if(i_13 < int(15))
         {
         }
         else
         {
             break;
         }
-        i_15 = i_16;
+        DiffPair_float_0 _S582 = DiffTensorView_load_forward_0(input_10, make_uint4 (_S578, _S579, _S580, uint(i_13)));
+        *(&(&output_4)->vals_1[i_13]) = _S582.primal_1;
+        *(&(&s_diff_output_0)->vals_0[i_13]) = _S582.differential_0;
+        i_13 = i_13 + int(1);
     }
-    DiffPair_Feature_0 _S574 = { output_4, s_diff_output_0 };
-    return _S574;
+    DiffPair_float_0 _S583 = DiffTensorView_load_forward_0(input_10, _S581);
+    *(&(&output_4)->vals_1[15U]) = _S583.primal_1;
+    *(&(&s_diff_output_0)->vals_0[15U]) = _S583.differential_0;
+    DiffPair_Feature_0 _S584 = { output_4, s_diff_output_0 };
+    return _S584;
 }
 
 __device__ DiffPair_Feature_0 s_fwd_Linear_eval_0(Linear_0 this_31, DiffPair_Feature_0 dpin_feature_2)
@@ -5146,289 +5181,289 @@ __device__ DiffPair_Feature_0 s_fwd_Linear_eval_0(Linear_0 this_31, DiffPair_Fea
     float * inPtr_4 = Linear_moveInputsToSharedMem_0(this_31, dpin_feature_2.primal_1.vals_1);
     float * wtPtr_5 = Linear_moveWeightsToSharedMem_0(this_31);
     float * outPtr_4 = Linear_outBufferForCurrentWarp_0(this_31);
-    float _S575 = *inPtr_4;
-    float _S576 = *wtPtr_5;
-    float _S577 = *outPtr_4;
-    _inline_matmul_1(&_S575, &_S576, &_S577);
-    *outPtr_4 = _S577;
-    *wtPtr_5 = _S576;
-    *inPtr_4 = _S575;
-    FixedArray<float, 16>  _S578 = {
+    float _S585 = *inPtr_4;
+    float _S586 = *wtPtr_5;
+    float _S587 = *outPtr_4;
+    _inline_matmul_1(&_S585, &_S586, &_S587);
+    *outPtr_4 = _S587;
+    *wtPtr_5 = _S586;
+    *inPtr_4 = _S585;
+    FixedArray<float, 16>  _S588 = {
         0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f
     };
-    float * _S579 = ((this_31.bias_0.primal_0).data_ptr<float>());
-    FixedArray<float, 16>  _S580;
-    *(&_S580[int(0)]) = 0.0f;
-    *(&_S580[int(1)]) = 0.0f;
-    *(&_S580[int(2)]) = 0.0f;
-    *(&_S580[int(3)]) = 0.0f;
-    *(&_S580[int(4)]) = 0.0f;
-    *(&_S580[int(5)]) = 0.0f;
-    *(&_S580[int(6)]) = 0.0f;
-    *(&_S580[int(7)]) = 0.0f;
-    *(&_S580[int(8)]) = 0.0f;
-    *(&_S580[int(9)]) = 0.0f;
-    *(&_S580[int(10)]) = 0.0f;
-    *(&_S580[int(11)]) = 0.0f;
-    *(&_S580[int(12)]) = 0.0f;
-    *(&_S580[int(13)]) = 0.0f;
-    *(&_S580[int(14)]) = 0.0f;
-    *(&_S580[int(15)]) = 0.0f;
-    float _S581 = *_S579;
-    Linear_moveOutputsToLocalArray_0(this_31, &_S580, &_S581);
-    *_S579 = _S581;
-    Feature_0 _S582 = { _S580 };
-    s_diff_Feature_0 _S583 = { _S578 };
-    DiffPair_Feature_0 _S584 = { _S582, _S583 };
-    return _S584;
+    float * _S589 = ((this_31.bias_0.primal_0).data_ptr<float>());
+    FixedArray<float, 16>  _S590;
+    *(&_S590[int(0)]) = 0.0f;
+    *(&_S590[int(1)]) = 0.0f;
+    *(&_S590[int(2)]) = 0.0f;
+    *(&_S590[int(3)]) = 0.0f;
+    *(&_S590[int(4)]) = 0.0f;
+    *(&_S590[int(5)]) = 0.0f;
+    *(&_S590[int(6)]) = 0.0f;
+    *(&_S590[int(7)]) = 0.0f;
+    *(&_S590[int(8)]) = 0.0f;
+    *(&_S590[int(9)]) = 0.0f;
+    *(&_S590[int(10)]) = 0.0f;
+    *(&_S590[int(11)]) = 0.0f;
+    *(&_S590[int(12)]) = 0.0f;
+    *(&_S590[int(13)]) = 0.0f;
+    *(&_S590[int(14)]) = 0.0f;
+    *(&_S590[int(15)]) = 0.0f;
+    float _S591 = *_S589;
+    Linear_moveOutputsToLocalArray_0(this_31, &_S590, &_S591);
+    *_S589 = _S591;
+    Feature_0 _S592 = { _S590 };
+    s_diff_Feature_0 _S593 = { _S588 };
+    DiffPair_Feature_0 _S594 = { _S592, _S593 };
+    return _S594;
 }
 
 __device__ DiffPair_Feature_0 s_fwd_MLP_eval_0(MLP_0 this_32, DiffPair_Feature_0 dpin_feature_3)
 {
-    DiffPair_Feature_0 _S585 = { dpin_feature_3.primal_1, dpin_feature_3.differential_0 };
-    DiffPair_float_0 _S586 = { 0.0f, 0.0f };
-    DiffPair_Feature_0 _S587 = s_fwd_Linear_eval_0(this_32.layers_0[int(0)], _S585);
-    DiffPair_float_0 _S588 = { _S587.primal_1.vals_1[int(0)], _S587.differential_0.vals_0[int(0)] };
-    DiffPair_float_0 _S589 = _d_max_1(_S586, _S588);
-    Feature_0 _S590 = _S587.primal_1;
-    *(&(&_S590)->vals_1[int(0)]) = _S589.primal_1;
-    s_diff_Feature_0 _S591 = _S587.differential_0;
-    *(&(&_S591)->vals_0[int(0)]) = _S589.differential_0;
-    DiffPair_float_0 _S592 = { _S587.primal_1.vals_1[int(1)], _S587.differential_0.vals_0[int(1)] };
-    DiffPair_float_0 _S593 = _d_max_1(_S586, _S592);
-    *(&(&_S590)->vals_1[int(1)]) = _S593.primal_1;
-    *(&(&_S591)->vals_0[int(1)]) = _S593.differential_0;
-    DiffPair_float_0 _S594 = { _S587.primal_1.vals_1[int(2)], _S587.differential_0.vals_0[int(2)] };
-    DiffPair_float_0 _S595 = _d_max_1(_S586, _S594);
-    *(&(&_S590)->vals_1[int(2)]) = _S595.primal_1;
-    *(&(&_S591)->vals_0[int(2)]) = _S595.differential_0;
-    DiffPair_float_0 _S596 = { _S587.primal_1.vals_1[int(3)], _S587.differential_0.vals_0[int(3)] };
-    DiffPair_float_0 _S597 = _d_max_1(_S586, _S596);
-    *(&(&_S590)->vals_1[int(3)]) = _S597.primal_1;
-    *(&(&_S591)->vals_0[int(3)]) = _S597.differential_0;
-    DiffPair_float_0 _S598 = { _S587.primal_1.vals_1[int(4)], _S587.differential_0.vals_0[int(4)] };
-    DiffPair_float_0 _S599 = _d_max_1(_S586, _S598);
-    *(&(&_S590)->vals_1[int(4)]) = _S599.primal_1;
-    *(&(&_S591)->vals_0[int(4)]) = _S599.differential_0;
-    DiffPair_float_0 _S600 = { _S587.primal_1.vals_1[int(5)], _S587.differential_0.vals_0[int(5)] };
-    DiffPair_float_0 _S601 = _d_max_1(_S586, _S600);
-    *(&(&_S590)->vals_1[int(5)]) = _S601.primal_1;
-    *(&(&_S591)->vals_0[int(5)]) = _S601.differential_0;
-    DiffPair_float_0 _S602 = { _S587.primal_1.vals_1[int(6)], _S587.differential_0.vals_0[int(6)] };
-    DiffPair_float_0 _S603 = _d_max_1(_S586, _S602);
-    *(&(&_S590)->vals_1[int(6)]) = _S603.primal_1;
-    *(&(&_S591)->vals_0[int(6)]) = _S603.differential_0;
-    DiffPair_float_0 _S604 = { _S587.primal_1.vals_1[int(7)], _S587.differential_0.vals_0[int(7)] };
-    DiffPair_float_0 _S605 = _d_max_1(_S586, _S604);
-    *(&(&_S590)->vals_1[int(7)]) = _S605.primal_1;
-    *(&(&_S591)->vals_0[int(7)]) = _S605.differential_0;
-    DiffPair_float_0 _S606 = { _S587.primal_1.vals_1[int(8)], _S587.differential_0.vals_0[int(8)] };
-    DiffPair_float_0 _S607 = _d_max_1(_S586, _S606);
-    *(&(&_S590)->vals_1[int(8)]) = _S607.primal_1;
-    *(&(&_S591)->vals_0[int(8)]) = _S607.differential_0;
-    DiffPair_float_0 _S608 = { _S587.primal_1.vals_1[int(9)], _S587.differential_0.vals_0[int(9)] };
-    DiffPair_float_0 _S609 = _d_max_1(_S586, _S608);
-    *(&(&_S590)->vals_1[int(9)]) = _S609.primal_1;
-    *(&(&_S591)->vals_0[int(9)]) = _S609.differential_0;
-    DiffPair_float_0 _S610 = { _S587.primal_1.vals_1[int(10)], _S587.differential_0.vals_0[int(10)] };
-    DiffPair_float_0 _S611 = _d_max_1(_S586, _S610);
-    *(&(&_S590)->vals_1[int(10)]) = _S611.primal_1;
-    *(&(&_S591)->vals_0[int(10)]) = _S611.differential_0;
-    DiffPair_float_0 _S612 = { _S587.primal_1.vals_1[int(11)], _S587.differential_0.vals_0[int(11)] };
-    DiffPair_float_0 _S613 = _d_max_1(_S586, _S612);
-    *(&(&_S590)->vals_1[int(11)]) = _S613.primal_1;
-    *(&(&_S591)->vals_0[int(11)]) = _S613.differential_0;
-    DiffPair_float_0 _S614 = { _S587.primal_1.vals_1[int(12)], _S587.differential_0.vals_0[int(12)] };
-    DiffPair_float_0 _S615 = _d_max_1(_S586, _S614);
-    *(&(&_S590)->vals_1[int(12)]) = _S615.primal_1;
-    *(&(&_S591)->vals_0[int(12)]) = _S615.differential_0;
-    DiffPair_float_0 _S616 = { _S587.primal_1.vals_1[int(13)], _S587.differential_0.vals_0[int(13)] };
-    DiffPair_float_0 _S617 = _d_max_1(_S586, _S616);
-    *(&(&_S590)->vals_1[int(13)]) = _S617.primal_1;
-    *(&(&_S591)->vals_0[int(13)]) = _S617.differential_0;
-    DiffPair_float_0 _S618 = { _S587.primal_1.vals_1[int(14)], _S587.differential_0.vals_0[int(14)] };
-    DiffPair_float_0 _S619 = _d_max_1(_S586, _S618);
-    *(&(&_S590)->vals_1[int(14)]) = _S619.primal_1;
-    *(&(&_S591)->vals_0[int(14)]) = _S619.differential_0;
-    DiffPair_float_0 _S620 = { _S587.primal_1.vals_1[int(15)], _S587.differential_0.vals_0[int(15)] };
-    DiffPair_float_0 _S621 = _d_max_1(_S586, _S620);
-    *(&(&_S590)->vals_1[int(15)]) = _S621.primal_1;
-    *(&(&_S591)->vals_0[int(15)]) = _S621.differential_0;
-    DiffPair_Feature_0 _S622 = { _S590, _S591 };
-    DiffPair_Feature_0 _S623 = s_fwd_Linear_eval_0(this_32.layers_0[int(1)], _S622);
-    DiffPair_float_0 _S624 = { _S623.primal_1.vals_1[int(0)], _S623.differential_0.vals_0[int(0)] };
-    DiffPair_float_0 _S625 = _d_max_1(_S586, _S624);
-    _S590 = _S623.primal_1;
-    *(&(&_S590)->vals_1[int(0)]) = _S625.primal_1;
-    _S591 = _S623.differential_0;
-    *(&(&_S591)->vals_0[int(0)]) = _S625.differential_0;
-    DiffPair_float_0 _S626 = { _S623.primal_1.vals_1[int(1)], _S623.differential_0.vals_0[int(1)] };
-    DiffPair_float_0 _S627 = _d_max_1(_S586, _S626);
-    *(&(&_S590)->vals_1[int(1)]) = _S627.primal_1;
-    *(&(&_S591)->vals_0[int(1)]) = _S627.differential_0;
-    DiffPair_float_0 _S628 = { _S623.primal_1.vals_1[int(2)], _S623.differential_0.vals_0[int(2)] };
-    DiffPair_float_0 _S629 = _d_max_1(_S586, _S628);
-    *(&(&_S590)->vals_1[int(2)]) = _S629.primal_1;
-    *(&(&_S591)->vals_0[int(2)]) = _S629.differential_0;
-    DiffPair_float_0 _S630 = { _S623.primal_1.vals_1[int(3)], _S623.differential_0.vals_0[int(3)] };
-    DiffPair_float_0 _S631 = _d_max_1(_S586, _S630);
-    *(&(&_S590)->vals_1[int(3)]) = _S631.primal_1;
-    *(&(&_S591)->vals_0[int(3)]) = _S631.differential_0;
-    DiffPair_float_0 _S632 = { _S623.primal_1.vals_1[int(4)], _S623.differential_0.vals_0[int(4)] };
-    DiffPair_float_0 _S633 = _d_max_1(_S586, _S632);
-    *(&(&_S590)->vals_1[int(4)]) = _S633.primal_1;
-    *(&(&_S591)->vals_0[int(4)]) = _S633.differential_0;
-    DiffPair_float_0 _S634 = { _S623.primal_1.vals_1[int(5)], _S623.differential_0.vals_0[int(5)] };
-    DiffPair_float_0 _S635 = _d_max_1(_S586, _S634);
-    *(&(&_S590)->vals_1[int(5)]) = _S635.primal_1;
-    *(&(&_S591)->vals_0[int(5)]) = _S635.differential_0;
-    DiffPair_float_0 _S636 = { _S623.primal_1.vals_1[int(6)], _S623.differential_0.vals_0[int(6)] };
-    DiffPair_float_0 _S637 = _d_max_1(_S586, _S636);
-    *(&(&_S590)->vals_1[int(6)]) = _S637.primal_1;
-    *(&(&_S591)->vals_0[int(6)]) = _S637.differential_0;
-    DiffPair_float_0 _S638 = { _S623.primal_1.vals_1[int(7)], _S623.differential_0.vals_0[int(7)] };
-    DiffPair_float_0 _S639 = _d_max_1(_S586, _S638);
-    *(&(&_S590)->vals_1[int(7)]) = _S639.primal_1;
-    *(&(&_S591)->vals_0[int(7)]) = _S639.differential_0;
-    DiffPair_float_0 _S640 = { _S623.primal_1.vals_1[int(8)], _S623.differential_0.vals_0[int(8)] };
-    DiffPair_float_0 _S641 = _d_max_1(_S586, _S640);
-    *(&(&_S590)->vals_1[int(8)]) = _S641.primal_1;
-    *(&(&_S591)->vals_0[int(8)]) = _S641.differential_0;
-    DiffPair_float_0 _S642 = { _S623.primal_1.vals_1[int(9)], _S623.differential_0.vals_0[int(9)] };
-    DiffPair_float_0 _S643 = _d_max_1(_S586, _S642);
-    *(&(&_S590)->vals_1[int(9)]) = _S643.primal_1;
-    *(&(&_S591)->vals_0[int(9)]) = _S643.differential_0;
-    DiffPair_float_0 _S644 = { _S623.primal_1.vals_1[int(10)], _S623.differential_0.vals_0[int(10)] };
-    DiffPair_float_0 _S645 = _d_max_1(_S586, _S644);
-    *(&(&_S590)->vals_1[int(10)]) = _S645.primal_1;
-    *(&(&_S591)->vals_0[int(10)]) = _S645.differential_0;
-    DiffPair_float_0 _S646 = { _S623.primal_1.vals_1[int(11)], _S623.differential_0.vals_0[int(11)] };
-    DiffPair_float_0 _S647 = _d_max_1(_S586, _S646);
-    *(&(&_S590)->vals_1[int(11)]) = _S647.primal_1;
-    *(&(&_S591)->vals_0[int(11)]) = _S647.differential_0;
-    DiffPair_float_0 _S648 = { _S623.primal_1.vals_1[int(12)], _S623.differential_0.vals_0[int(12)] };
-    DiffPair_float_0 _S649 = _d_max_1(_S586, _S648);
-    *(&(&_S590)->vals_1[int(12)]) = _S649.primal_1;
-    *(&(&_S591)->vals_0[int(12)]) = _S649.differential_0;
-    DiffPair_float_0 _S650 = { _S623.primal_1.vals_1[int(13)], _S623.differential_0.vals_0[int(13)] };
-    DiffPair_float_0 _S651 = _d_max_1(_S586, _S650);
-    *(&(&_S590)->vals_1[int(13)]) = _S651.primal_1;
-    *(&(&_S591)->vals_0[int(13)]) = _S651.differential_0;
-    DiffPair_float_0 _S652 = { _S623.primal_1.vals_1[int(14)], _S623.differential_0.vals_0[int(14)] };
-    DiffPair_float_0 _S653 = _d_max_1(_S586, _S652);
-    *(&(&_S590)->vals_1[int(14)]) = _S653.primal_1;
-    *(&(&_S591)->vals_0[int(14)]) = _S653.differential_0;
-    DiffPair_float_0 _S654 = { _S623.primal_1.vals_1[int(15)], _S623.differential_0.vals_0[int(15)] };
-    DiffPair_float_0 _S655 = _d_max_1(_S586, _S654);
-    *(&(&_S590)->vals_1[int(15)]) = _S655.primal_1;
-    *(&(&_S591)->vals_0[int(15)]) = _S655.differential_0;
-    DiffPair_Feature_0 _S656 = { _S590, _S591 };
-    DiffPair_Feature_0 _S657 = s_fwd_Linear_eval_0(this_32.layers_0[int(2)], _S656);
-    DiffPair_float_0 _S658 = { _S657.primal_1.vals_1[int(0)], _S657.differential_0.vals_0[int(0)] };
-    DiffPair_float_0 _S659 = _d_max_1(_S586, _S658);
-    _S590 = _S657.primal_1;
-    *(&(&_S590)->vals_1[int(0)]) = _S659.primal_1;
-    _S591 = _S657.differential_0;
-    *(&(&_S591)->vals_0[int(0)]) = _S659.differential_0;
-    DiffPair_float_0 _S660 = { _S657.primal_1.vals_1[int(1)], _S657.differential_0.vals_0[int(1)] };
-    DiffPair_float_0 _S661 = _d_max_1(_S586, _S660);
-    *(&(&_S590)->vals_1[int(1)]) = _S661.primal_1;
-    *(&(&_S591)->vals_0[int(1)]) = _S661.differential_0;
-    DiffPair_float_0 _S662 = { _S657.primal_1.vals_1[int(2)], _S657.differential_0.vals_0[int(2)] };
-    DiffPair_float_0 _S663 = _d_max_1(_S586, _S662);
-    *(&(&_S590)->vals_1[int(2)]) = _S663.primal_1;
-    *(&(&_S591)->vals_0[int(2)]) = _S663.differential_0;
-    DiffPair_float_0 _S664 = { _S657.primal_1.vals_1[int(3)], _S657.differential_0.vals_0[int(3)] };
-    DiffPair_float_0 _S665 = _d_max_1(_S586, _S664);
-    *(&(&_S590)->vals_1[int(3)]) = _S665.primal_1;
-    *(&(&_S591)->vals_0[int(3)]) = _S665.differential_0;
-    DiffPair_float_0 _S666 = { _S657.primal_1.vals_1[int(4)], _S657.differential_0.vals_0[int(4)] };
-    DiffPair_float_0 _S667 = _d_max_1(_S586, _S666);
-    *(&(&_S590)->vals_1[int(4)]) = _S667.primal_1;
-    *(&(&_S591)->vals_0[int(4)]) = _S667.differential_0;
-    DiffPair_float_0 _S668 = { _S657.primal_1.vals_1[int(5)], _S657.differential_0.vals_0[int(5)] };
-    DiffPair_float_0 _S669 = _d_max_1(_S586, _S668);
-    *(&(&_S590)->vals_1[int(5)]) = _S669.primal_1;
-    *(&(&_S591)->vals_0[int(5)]) = _S669.differential_0;
-    DiffPair_float_0 _S670 = { _S657.primal_1.vals_1[int(6)], _S657.differential_0.vals_0[int(6)] };
-    DiffPair_float_0 _S671 = _d_max_1(_S586, _S670);
-    *(&(&_S590)->vals_1[int(6)]) = _S671.primal_1;
-    *(&(&_S591)->vals_0[int(6)]) = _S671.differential_0;
-    DiffPair_float_0 _S672 = { _S657.primal_1.vals_1[int(7)], _S657.differential_0.vals_0[int(7)] };
-    DiffPair_float_0 _S673 = _d_max_1(_S586, _S672);
-    *(&(&_S590)->vals_1[int(7)]) = _S673.primal_1;
-    *(&(&_S591)->vals_0[int(7)]) = _S673.differential_0;
-    DiffPair_float_0 _S674 = { _S657.primal_1.vals_1[int(8)], _S657.differential_0.vals_0[int(8)] };
-    DiffPair_float_0 _S675 = _d_max_1(_S586, _S674);
-    *(&(&_S590)->vals_1[int(8)]) = _S675.primal_1;
-    *(&(&_S591)->vals_0[int(8)]) = _S675.differential_0;
-    DiffPair_float_0 _S676 = { _S657.primal_1.vals_1[int(9)], _S657.differential_0.vals_0[int(9)] };
-    DiffPair_float_0 _S677 = _d_max_1(_S586, _S676);
-    *(&(&_S590)->vals_1[int(9)]) = _S677.primal_1;
-    *(&(&_S591)->vals_0[int(9)]) = _S677.differential_0;
-    DiffPair_float_0 _S678 = { _S657.primal_1.vals_1[int(10)], _S657.differential_0.vals_0[int(10)] };
-    DiffPair_float_0 _S679 = _d_max_1(_S586, _S678);
-    *(&(&_S590)->vals_1[int(10)]) = _S679.primal_1;
-    *(&(&_S591)->vals_0[int(10)]) = _S679.differential_0;
-    DiffPair_float_0 _S680 = { _S657.primal_1.vals_1[int(11)], _S657.differential_0.vals_0[int(11)] };
-    DiffPair_float_0 _S681 = _d_max_1(_S586, _S680);
-    *(&(&_S590)->vals_1[int(11)]) = _S681.primal_1;
-    *(&(&_S591)->vals_0[int(11)]) = _S681.differential_0;
-    DiffPair_float_0 _S682 = { _S657.primal_1.vals_1[int(12)], _S657.differential_0.vals_0[int(12)] };
-    DiffPair_float_0 _S683 = _d_max_1(_S586, _S682);
-    *(&(&_S590)->vals_1[int(12)]) = _S683.primal_1;
-    *(&(&_S591)->vals_0[int(12)]) = _S683.differential_0;
-    DiffPair_float_0 _S684 = { _S657.primal_1.vals_1[int(13)], _S657.differential_0.vals_0[int(13)] };
-    DiffPair_float_0 _S685 = _d_max_1(_S586, _S684);
-    *(&(&_S590)->vals_1[int(13)]) = _S685.primal_1;
-    *(&(&_S591)->vals_0[int(13)]) = _S685.differential_0;
-    DiffPair_float_0 _S686 = { _S657.primal_1.vals_1[int(14)], _S657.differential_0.vals_0[int(14)] };
-    DiffPair_float_0 _S687 = _d_max_1(_S586, _S686);
-    *(&(&_S590)->vals_1[int(14)]) = _S687.primal_1;
-    *(&(&_S591)->vals_0[int(14)]) = _S687.differential_0;
-    DiffPair_float_0 _S688 = { _S657.primal_1.vals_1[int(15)], _S657.differential_0.vals_0[int(15)] };
-    DiffPair_float_0 _S689 = _d_max_1(_S586, _S688);
-    *(&(&_S590)->vals_1[int(15)]) = _S689.primal_1;
-    *(&(&_S591)->vals_0[int(15)]) = _S689.differential_0;
-    DiffPair_Feature_0 _S690 = { _S590, _S591 };
-    return _S690;
+    DiffPair_Feature_0 _S595 = { dpin_feature_3.primal_1, dpin_feature_3.differential_0 };
+    DiffPair_float_0 _S596 = { 0.0f, 0.0f };
+    DiffPair_Feature_0 _S597 = s_fwd_Linear_eval_0(this_32.layers_0[int(0)], _S595);
+    DiffPair_float_0 _S598 = { _S597.primal_1.vals_1[int(0)], _S597.differential_0.vals_0[int(0)] };
+    DiffPair_float_0 _S599 = _d_max_1(_S596, _S598);
+    Feature_0 _S600 = _S597.primal_1;
+    *(&(&_S600)->vals_1[int(0)]) = _S599.primal_1;
+    s_diff_Feature_0 _S601 = _S597.differential_0;
+    *(&(&_S601)->vals_0[int(0)]) = _S599.differential_0;
+    DiffPair_float_0 _S602 = { _S597.primal_1.vals_1[int(1)], _S597.differential_0.vals_0[int(1)] };
+    DiffPair_float_0 _S603 = _d_max_1(_S596, _S602);
+    *(&(&_S600)->vals_1[int(1)]) = _S603.primal_1;
+    *(&(&_S601)->vals_0[int(1)]) = _S603.differential_0;
+    DiffPair_float_0 _S604 = { _S597.primal_1.vals_1[int(2)], _S597.differential_0.vals_0[int(2)] };
+    DiffPair_float_0 _S605 = _d_max_1(_S596, _S604);
+    *(&(&_S600)->vals_1[int(2)]) = _S605.primal_1;
+    *(&(&_S601)->vals_0[int(2)]) = _S605.differential_0;
+    DiffPair_float_0 _S606 = { _S597.primal_1.vals_1[int(3)], _S597.differential_0.vals_0[int(3)] };
+    DiffPair_float_0 _S607 = _d_max_1(_S596, _S606);
+    *(&(&_S600)->vals_1[int(3)]) = _S607.primal_1;
+    *(&(&_S601)->vals_0[int(3)]) = _S607.differential_0;
+    DiffPair_float_0 _S608 = { _S597.primal_1.vals_1[int(4)], _S597.differential_0.vals_0[int(4)] };
+    DiffPair_float_0 _S609 = _d_max_1(_S596, _S608);
+    *(&(&_S600)->vals_1[int(4)]) = _S609.primal_1;
+    *(&(&_S601)->vals_0[int(4)]) = _S609.differential_0;
+    DiffPair_float_0 _S610 = { _S597.primal_1.vals_1[int(5)], _S597.differential_0.vals_0[int(5)] };
+    DiffPair_float_0 _S611 = _d_max_1(_S596, _S610);
+    *(&(&_S600)->vals_1[int(5)]) = _S611.primal_1;
+    *(&(&_S601)->vals_0[int(5)]) = _S611.differential_0;
+    DiffPair_float_0 _S612 = { _S597.primal_1.vals_1[int(6)], _S597.differential_0.vals_0[int(6)] };
+    DiffPair_float_0 _S613 = _d_max_1(_S596, _S612);
+    *(&(&_S600)->vals_1[int(6)]) = _S613.primal_1;
+    *(&(&_S601)->vals_0[int(6)]) = _S613.differential_0;
+    DiffPair_float_0 _S614 = { _S597.primal_1.vals_1[int(7)], _S597.differential_0.vals_0[int(7)] };
+    DiffPair_float_0 _S615 = _d_max_1(_S596, _S614);
+    *(&(&_S600)->vals_1[int(7)]) = _S615.primal_1;
+    *(&(&_S601)->vals_0[int(7)]) = _S615.differential_0;
+    DiffPair_float_0 _S616 = { _S597.primal_1.vals_1[int(8)], _S597.differential_0.vals_0[int(8)] };
+    DiffPair_float_0 _S617 = _d_max_1(_S596, _S616);
+    *(&(&_S600)->vals_1[int(8)]) = _S617.primal_1;
+    *(&(&_S601)->vals_0[int(8)]) = _S617.differential_0;
+    DiffPair_float_0 _S618 = { _S597.primal_1.vals_1[int(9)], _S597.differential_0.vals_0[int(9)] };
+    DiffPair_float_0 _S619 = _d_max_1(_S596, _S618);
+    *(&(&_S600)->vals_1[int(9)]) = _S619.primal_1;
+    *(&(&_S601)->vals_0[int(9)]) = _S619.differential_0;
+    DiffPair_float_0 _S620 = { _S597.primal_1.vals_1[int(10)], _S597.differential_0.vals_0[int(10)] };
+    DiffPair_float_0 _S621 = _d_max_1(_S596, _S620);
+    *(&(&_S600)->vals_1[int(10)]) = _S621.primal_1;
+    *(&(&_S601)->vals_0[int(10)]) = _S621.differential_0;
+    DiffPair_float_0 _S622 = { _S597.primal_1.vals_1[int(11)], _S597.differential_0.vals_0[int(11)] };
+    DiffPair_float_0 _S623 = _d_max_1(_S596, _S622);
+    *(&(&_S600)->vals_1[int(11)]) = _S623.primal_1;
+    *(&(&_S601)->vals_0[int(11)]) = _S623.differential_0;
+    DiffPair_float_0 _S624 = { _S597.primal_1.vals_1[int(12)], _S597.differential_0.vals_0[int(12)] };
+    DiffPair_float_0 _S625 = _d_max_1(_S596, _S624);
+    *(&(&_S600)->vals_1[int(12)]) = _S625.primal_1;
+    *(&(&_S601)->vals_0[int(12)]) = _S625.differential_0;
+    DiffPair_float_0 _S626 = { _S597.primal_1.vals_1[int(13)], _S597.differential_0.vals_0[int(13)] };
+    DiffPair_float_0 _S627 = _d_max_1(_S596, _S626);
+    *(&(&_S600)->vals_1[int(13)]) = _S627.primal_1;
+    *(&(&_S601)->vals_0[int(13)]) = _S627.differential_0;
+    DiffPair_float_0 _S628 = { _S597.primal_1.vals_1[int(14)], _S597.differential_0.vals_0[int(14)] };
+    DiffPair_float_0 _S629 = _d_max_1(_S596, _S628);
+    *(&(&_S600)->vals_1[int(14)]) = _S629.primal_1;
+    *(&(&_S601)->vals_0[int(14)]) = _S629.differential_0;
+    DiffPair_float_0 _S630 = { _S597.primal_1.vals_1[int(15)], _S597.differential_0.vals_0[int(15)] };
+    DiffPair_float_0 _S631 = _d_max_1(_S596, _S630);
+    *(&(&_S600)->vals_1[int(15)]) = _S631.primal_1;
+    *(&(&_S601)->vals_0[int(15)]) = _S631.differential_0;
+    DiffPair_Feature_0 _S632 = { _S600, _S601 };
+    DiffPair_Feature_0 _S633 = s_fwd_Linear_eval_0(this_32.layers_0[int(1)], _S632);
+    DiffPair_float_0 _S634 = { _S633.primal_1.vals_1[int(0)], _S633.differential_0.vals_0[int(0)] };
+    DiffPair_float_0 _S635 = _d_max_1(_S596, _S634);
+    _S600 = _S633.primal_1;
+    *(&(&_S600)->vals_1[int(0)]) = _S635.primal_1;
+    _S601 = _S633.differential_0;
+    *(&(&_S601)->vals_0[int(0)]) = _S635.differential_0;
+    DiffPair_float_0 _S636 = { _S633.primal_1.vals_1[int(1)], _S633.differential_0.vals_0[int(1)] };
+    DiffPair_float_0 _S637 = _d_max_1(_S596, _S636);
+    *(&(&_S600)->vals_1[int(1)]) = _S637.primal_1;
+    *(&(&_S601)->vals_0[int(1)]) = _S637.differential_0;
+    DiffPair_float_0 _S638 = { _S633.primal_1.vals_1[int(2)], _S633.differential_0.vals_0[int(2)] };
+    DiffPair_float_0 _S639 = _d_max_1(_S596, _S638);
+    *(&(&_S600)->vals_1[int(2)]) = _S639.primal_1;
+    *(&(&_S601)->vals_0[int(2)]) = _S639.differential_0;
+    DiffPair_float_0 _S640 = { _S633.primal_1.vals_1[int(3)], _S633.differential_0.vals_0[int(3)] };
+    DiffPair_float_0 _S641 = _d_max_1(_S596, _S640);
+    *(&(&_S600)->vals_1[int(3)]) = _S641.primal_1;
+    *(&(&_S601)->vals_0[int(3)]) = _S641.differential_0;
+    DiffPair_float_0 _S642 = { _S633.primal_1.vals_1[int(4)], _S633.differential_0.vals_0[int(4)] };
+    DiffPair_float_0 _S643 = _d_max_1(_S596, _S642);
+    *(&(&_S600)->vals_1[int(4)]) = _S643.primal_1;
+    *(&(&_S601)->vals_0[int(4)]) = _S643.differential_0;
+    DiffPair_float_0 _S644 = { _S633.primal_1.vals_1[int(5)], _S633.differential_0.vals_0[int(5)] };
+    DiffPair_float_0 _S645 = _d_max_1(_S596, _S644);
+    *(&(&_S600)->vals_1[int(5)]) = _S645.primal_1;
+    *(&(&_S601)->vals_0[int(5)]) = _S645.differential_0;
+    DiffPair_float_0 _S646 = { _S633.primal_1.vals_1[int(6)], _S633.differential_0.vals_0[int(6)] };
+    DiffPair_float_0 _S647 = _d_max_1(_S596, _S646);
+    *(&(&_S600)->vals_1[int(6)]) = _S647.primal_1;
+    *(&(&_S601)->vals_0[int(6)]) = _S647.differential_0;
+    DiffPair_float_0 _S648 = { _S633.primal_1.vals_1[int(7)], _S633.differential_0.vals_0[int(7)] };
+    DiffPair_float_0 _S649 = _d_max_1(_S596, _S648);
+    *(&(&_S600)->vals_1[int(7)]) = _S649.primal_1;
+    *(&(&_S601)->vals_0[int(7)]) = _S649.differential_0;
+    DiffPair_float_0 _S650 = { _S633.primal_1.vals_1[int(8)], _S633.differential_0.vals_0[int(8)] };
+    DiffPair_float_0 _S651 = _d_max_1(_S596, _S650);
+    *(&(&_S600)->vals_1[int(8)]) = _S651.primal_1;
+    *(&(&_S601)->vals_0[int(8)]) = _S651.differential_0;
+    DiffPair_float_0 _S652 = { _S633.primal_1.vals_1[int(9)], _S633.differential_0.vals_0[int(9)] };
+    DiffPair_float_0 _S653 = _d_max_1(_S596, _S652);
+    *(&(&_S600)->vals_1[int(9)]) = _S653.primal_1;
+    *(&(&_S601)->vals_0[int(9)]) = _S653.differential_0;
+    DiffPair_float_0 _S654 = { _S633.primal_1.vals_1[int(10)], _S633.differential_0.vals_0[int(10)] };
+    DiffPair_float_0 _S655 = _d_max_1(_S596, _S654);
+    *(&(&_S600)->vals_1[int(10)]) = _S655.primal_1;
+    *(&(&_S601)->vals_0[int(10)]) = _S655.differential_0;
+    DiffPair_float_0 _S656 = { _S633.primal_1.vals_1[int(11)], _S633.differential_0.vals_0[int(11)] };
+    DiffPair_float_0 _S657 = _d_max_1(_S596, _S656);
+    *(&(&_S600)->vals_1[int(11)]) = _S657.primal_1;
+    *(&(&_S601)->vals_0[int(11)]) = _S657.differential_0;
+    DiffPair_float_0 _S658 = { _S633.primal_1.vals_1[int(12)], _S633.differential_0.vals_0[int(12)] };
+    DiffPair_float_0 _S659 = _d_max_1(_S596, _S658);
+    *(&(&_S600)->vals_1[int(12)]) = _S659.primal_1;
+    *(&(&_S601)->vals_0[int(12)]) = _S659.differential_0;
+    DiffPair_float_0 _S660 = { _S633.primal_1.vals_1[int(13)], _S633.differential_0.vals_0[int(13)] };
+    DiffPair_float_0 _S661 = _d_max_1(_S596, _S660);
+    *(&(&_S600)->vals_1[int(13)]) = _S661.primal_1;
+    *(&(&_S601)->vals_0[int(13)]) = _S661.differential_0;
+    DiffPair_float_0 _S662 = { _S633.primal_1.vals_1[int(14)], _S633.differential_0.vals_0[int(14)] };
+    DiffPair_float_0 _S663 = _d_max_1(_S596, _S662);
+    *(&(&_S600)->vals_1[int(14)]) = _S663.primal_1;
+    *(&(&_S601)->vals_0[int(14)]) = _S663.differential_0;
+    DiffPair_float_0 _S664 = { _S633.primal_1.vals_1[int(15)], _S633.differential_0.vals_0[int(15)] };
+    DiffPair_float_0 _S665 = _d_max_1(_S596, _S664);
+    *(&(&_S600)->vals_1[int(15)]) = _S665.primal_1;
+    *(&(&_S601)->vals_0[int(15)]) = _S665.differential_0;
+    DiffPair_Feature_0 _S666 = { _S600, _S601 };
+    DiffPair_Feature_0 _S667 = s_fwd_Linear_eval_0(this_32.layers_0[int(2)], _S666);
+    DiffPair_float_0 _S668 = { _S667.primal_1.vals_1[int(0)], _S667.differential_0.vals_0[int(0)] };
+    DiffPair_float_0 _S669 = _d_max_1(_S596, _S668);
+    _S600 = _S667.primal_1;
+    *(&(&_S600)->vals_1[int(0)]) = _S669.primal_1;
+    _S601 = _S667.differential_0;
+    *(&(&_S601)->vals_0[int(0)]) = _S669.differential_0;
+    DiffPair_float_0 _S670 = { _S667.primal_1.vals_1[int(1)], _S667.differential_0.vals_0[int(1)] };
+    DiffPair_float_0 _S671 = _d_max_1(_S596, _S670);
+    *(&(&_S600)->vals_1[int(1)]) = _S671.primal_1;
+    *(&(&_S601)->vals_0[int(1)]) = _S671.differential_0;
+    DiffPair_float_0 _S672 = { _S667.primal_1.vals_1[int(2)], _S667.differential_0.vals_0[int(2)] };
+    DiffPair_float_0 _S673 = _d_max_1(_S596, _S672);
+    *(&(&_S600)->vals_1[int(2)]) = _S673.primal_1;
+    *(&(&_S601)->vals_0[int(2)]) = _S673.differential_0;
+    DiffPair_float_0 _S674 = { _S667.primal_1.vals_1[int(3)], _S667.differential_0.vals_0[int(3)] };
+    DiffPair_float_0 _S675 = _d_max_1(_S596, _S674);
+    *(&(&_S600)->vals_1[int(3)]) = _S675.primal_1;
+    *(&(&_S601)->vals_0[int(3)]) = _S675.differential_0;
+    DiffPair_float_0 _S676 = { _S667.primal_1.vals_1[int(4)], _S667.differential_0.vals_0[int(4)] };
+    DiffPair_float_0 _S677 = _d_max_1(_S596, _S676);
+    *(&(&_S600)->vals_1[int(4)]) = _S677.primal_1;
+    *(&(&_S601)->vals_0[int(4)]) = _S677.differential_0;
+    DiffPair_float_0 _S678 = { _S667.primal_1.vals_1[int(5)], _S667.differential_0.vals_0[int(5)] };
+    DiffPair_float_0 _S679 = _d_max_1(_S596, _S678);
+    *(&(&_S600)->vals_1[int(5)]) = _S679.primal_1;
+    *(&(&_S601)->vals_0[int(5)]) = _S679.differential_0;
+    DiffPair_float_0 _S680 = { _S667.primal_1.vals_1[int(6)], _S667.differential_0.vals_0[int(6)] };
+    DiffPair_float_0 _S681 = _d_max_1(_S596, _S680);
+    *(&(&_S600)->vals_1[int(6)]) = _S681.primal_1;
+    *(&(&_S601)->vals_0[int(6)]) = _S681.differential_0;
+    DiffPair_float_0 _S682 = { _S667.primal_1.vals_1[int(7)], _S667.differential_0.vals_0[int(7)] };
+    DiffPair_float_0 _S683 = _d_max_1(_S596, _S682);
+    *(&(&_S600)->vals_1[int(7)]) = _S683.primal_1;
+    *(&(&_S601)->vals_0[int(7)]) = _S683.differential_0;
+    DiffPair_float_0 _S684 = { _S667.primal_1.vals_1[int(8)], _S667.differential_0.vals_0[int(8)] };
+    DiffPair_float_0 _S685 = _d_max_1(_S596, _S684);
+    *(&(&_S600)->vals_1[int(8)]) = _S685.primal_1;
+    *(&(&_S601)->vals_0[int(8)]) = _S685.differential_0;
+    DiffPair_float_0 _S686 = { _S667.primal_1.vals_1[int(9)], _S667.differential_0.vals_0[int(9)] };
+    DiffPair_float_0 _S687 = _d_max_1(_S596, _S686);
+    *(&(&_S600)->vals_1[int(9)]) = _S687.primal_1;
+    *(&(&_S601)->vals_0[int(9)]) = _S687.differential_0;
+    DiffPair_float_0 _S688 = { _S667.primal_1.vals_1[int(10)], _S667.differential_0.vals_0[int(10)] };
+    DiffPair_float_0 _S689 = _d_max_1(_S596, _S688);
+    *(&(&_S600)->vals_1[int(10)]) = _S689.primal_1;
+    *(&(&_S601)->vals_0[int(10)]) = _S689.differential_0;
+    DiffPair_float_0 _S690 = { _S667.primal_1.vals_1[int(11)], _S667.differential_0.vals_0[int(11)] };
+    DiffPair_float_0 _S691 = _d_max_1(_S596, _S690);
+    *(&(&_S600)->vals_1[int(11)]) = _S691.primal_1;
+    *(&(&_S601)->vals_0[int(11)]) = _S691.differential_0;
+    DiffPair_float_0 _S692 = { _S667.primal_1.vals_1[int(12)], _S667.differential_0.vals_0[int(12)] };
+    DiffPair_float_0 _S693 = _d_max_1(_S596, _S692);
+    *(&(&_S600)->vals_1[int(12)]) = _S693.primal_1;
+    *(&(&_S601)->vals_0[int(12)]) = _S693.differential_0;
+    DiffPair_float_0 _S694 = { _S667.primal_1.vals_1[int(13)], _S667.differential_0.vals_0[int(13)] };
+    DiffPair_float_0 _S695 = _d_max_1(_S596, _S694);
+    *(&(&_S600)->vals_1[int(13)]) = _S695.primal_1;
+    *(&(&_S601)->vals_0[int(13)]) = _S695.differential_0;
+    DiffPair_float_0 _S696 = { _S667.primal_1.vals_1[int(14)], _S667.differential_0.vals_0[int(14)] };
+    DiffPair_float_0 _S697 = _d_max_1(_S596, _S696);
+    *(&(&_S600)->vals_1[int(14)]) = _S697.primal_1;
+    *(&(&_S601)->vals_0[int(14)]) = _S697.differential_0;
+    DiffPair_float_0 _S698 = { _S667.primal_1.vals_1[int(15)], _S667.differential_0.vals_0[int(15)] };
+    DiffPair_float_0 _S699 = _d_max_1(_S596, _S698);
+    *(&(&_S600)->vals_1[int(15)]) = _S699.primal_1;
+    *(&(&_S601)->vals_0[int(15)]) = _S699.differential_0;
+    DiffPair_Feature_0 _S700 = { _S600, _S601 };
+    return _S700;
 }
 
 __device__ void s_fwd_renderImage_0(MLP_0 mlp_2, DiffTensorView_0 featureGrid_2, DiffTensorView_0 imageOutput_2)
 {
     uint3  dispatchIdx_2 = ((threadIdx)) + ((blockIdx)) * ((blockDim));
-    uint _S691 = dispatchIdx_2.x;
-    uint _S692 = dispatchIdx_2.y;
-    uint _S693 = dispatchIdx_2.z;
-    if(_S691 >= DiffTensorView_size_0(imageOutput_2, 0U) || _S692 >= DiffTensorView_size_0(imageOutput_2, 1U) || _S693 >= DiffTensorView_size_0(imageOutput_2, 2U))
+    uint _S701 = dispatchIdx_2.x;
+    uint _S702 = dispatchIdx_2.y;
+    uint _S703 = dispatchIdx_2.z;
+    if(_S701 >= DiffTensorView_size_0(imageOutput_2, 0U) || _S702 >= DiffTensorView_size_0(imageOutput_2, 1U) || _S703 >= DiffTensorView_size_0(imageOutput_2, 2U))
     {
         return;
     }
-    DiffPair_Feature_0 _S694 = s_fwd_getInFeature_0(featureGrid_2, make_uint3 (_S691, _S692, _S693));
-    DiffPair_Feature_0 _S695 = { _S694.primal_1, _S694.differential_0 };
-    DiffPair_Feature_0 _S696 = s_fwd_MLP_eval_0(mlp_2, _S695);
-    int i_17 = int(0);
+    DiffPair_Feature_0 _S704 = s_fwd_getInFeature_0(featureGrid_2, make_uint3 (_S701, _S702, _S703));
+    DiffPair_Feature_0 _S705 = { _S704.primal_1, _S704.differential_0 };
+    DiffPair_Feature_0 _S706 = s_fwd_MLP_eval_0(mlp_2, _S705);
+    int i_14 = int(0);
     for(;;)
     {
-        DiffPair_float_0 _S697 = { _S696.primal_1.vals_1[i_17], _S696.differential_0.vals_0[i_17] };
-        DiffTensorView_storeOnce_forward_0(imageOutput_2, make_uint4 (_S691, _S692, _S693, uint(i_17)), _S697);
-        int i_18 = i_17 + int(1);
-        if(i_18 < int(3))
+        DiffPair_float_0 _S707 = { _S706.primal_1.vals_1[i_14], _S706.differential_0.vals_0[i_14] };
+        DiffTensorView_storeOnce_forward_0(imageOutput_2, make_uint4 (_S701, _S702, _S703, uint(i_14)), _S707);
+        int i_15 = i_14 + int(1);
+        if(i_15 < int(4))
         {
         }
         else
         {
             break;
         }
-        i_17 = i_18;
+        i_14 = i_15;
     }
     return;
 }
 
 extern "C" {
-__global__ void __kernel__renderImage_fwd_diff(MLP_0 _S698, DiffTensorView_0 _S699, DiffTensorView_0 _S700)
+__global__ void __kernel__renderImage_fwd_diff(MLP_0 _S708, DiffTensorView_0 _S709, DiffTensorView_0 _S710)
 {
-    s_fwd_renderImage_0(_S698, _S699, _S700);
+    s_fwd_renderImage_0(_S708, _S709, _S710);
     return;
 }
 
@@ -5437,27 +5472,27 @@ extern "C" {
 __global__ void __kernel__renderImage(MLP_0 mlp_3, DiffTensorView_0 featureGrid_3, DiffTensorView_0 imageOutput_3)
 {
     uint3  dispatchIdx_3 = ((threadIdx)) + ((blockIdx)) * ((blockDim));
-    uint _S701 = dispatchIdx_3.x;
-    uint _S702 = dispatchIdx_3.y;
-    uint _S703 = dispatchIdx_3.z;
-    if(_S701 >= DiffTensorView_size_0(imageOutput_3, 0U) || _S702 >= DiffTensorView_size_0(imageOutput_3, 1U) || _S703 >= DiffTensorView_size_0(imageOutput_3, 2U))
+    uint _S711 = dispatchIdx_3.x;
+    uint _S712 = dispatchIdx_3.y;
+    uint _S713 = dispatchIdx_3.z;
+    if(_S711 >= DiffTensorView_size_0(imageOutput_3, 0U) || _S712 >= DiffTensorView_size_0(imageOutput_3, 1U) || _S713 >= DiffTensorView_size_0(imageOutput_3, 2U))
     {
         return;
     }
-    Feature_0 _S704 = MLP_eval_0(mlp_3, getInFeature_0(featureGrid_3, make_uint3 (_S701, _S702, _S703)));
-    int i_19 = int(0);
+    Feature_0 _S714 = MLP_eval_0(mlp_3, getInFeature_0(featureGrid_3, make_uint3 (_S711, _S712, _S713)));
+    int i_16 = int(0);
     for(;;)
     {
-        DiffTensorView_storeOnce_0(imageOutput_3, make_uint4 (_S701, _S702, _S703, uint(i_19)), _S704.vals_1[i_19]);
-        int i_20 = i_19 + int(1);
-        if(i_20 < int(3))
+        DiffTensorView_storeOnce_0(imageOutput_3, make_uint4 (_S711, _S712, _S713, uint(i_16)), _S714.vals_1[i_16]);
+        int i_17 = i_16 + int(1);
+        if(i_17 < int(4))
         {
         }
         else
         {
             break;
         }
-        i_19 = i_20;
+        i_16 = i_17;
     }
     return;
 }
