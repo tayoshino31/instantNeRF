@@ -20,18 +20,19 @@ m = slangpy.loadModule('image-model.slang',
                        defines={
                             'NUM_THREADS_PER_BLOCK': launchBlockSize[0] * launchBlockSize[1] * launchBlockSize[2],
                             'WARP_SIZE': 32})
-
+N_samples = 32
 class RenderImage(torch.autograd.Function):
     def forward(ctx, width, height, feature_grid, *args):
         weights = args[0: 3]
         biases = args[3: 6]
-        output = torch.zeros((width, height, 3), dtype=torch.float).cuda()
+        #output = torch.zeros((width, height, 3), dtype=torch.float).cuda()
+        output = torch.zeros((width, height, N_samples, 3), dtype=torch.float).cuda()
         
         linear_layers = [m.Linear(weights=weights[i], bias=biases[i]) for i in range(3)]
         mlp = m.MLP(layers=linear_layers)
 
         blockSize = launchBlockSize
-        gridSize = ((width + blockSize[0] - 1) // blockSize[0], (height + blockSize[1] - 1) // blockSize[1], 1)
+        gridSize = ((width + blockSize[0] - 1) // blockSize[0], (height + blockSize[1] - 1) // blockSize[1], (N_samples + blockSize[2] - 1) // blockSize[2])
 
         m.renderImage(mlp=mlp, featureGrid=feature_grid, imageOutput=output).launchRaw(blockSize=blockSize, gridSize=gridSize)
 
@@ -48,13 +49,13 @@ class RenderImage(torch.autograd.Function):
         biases_d = [torch.zeros_like(b) for b in biases]
         feature_grid_d = torch.zeros_like(feature_grid)
 
-        width, height, _ = output.shape
+        width, height, _, _ = output.shape
         
         linear_layers = [m.Linear(weights=(weights[i], weights_d[i]), bias=(biases[i], biases_d[i])) for i in range(3)]
         mlp = m.MLP(layers=linear_layers)
 
         blockSize = launchBlockSize
-        gridSize = ((width + blockSize[0] - 1) // blockSize[0], (height + blockSize[1] - 1) // blockSize[1], 1)
+        gridSize = ((width + blockSize[0] - 1) // blockSize[0], (height + blockSize[1] - 1) // blockSize[1], (N_samples + blockSize[2] - 1) // blockSize[2])
 
         m.renderImage.bwd(mlp=mlp, featureGrid=(feature_grid, feature_grid_d), imageOutput=(output, grad_output)).launchRaw(blockSize=blockSize, gridSize=gridSize)
 

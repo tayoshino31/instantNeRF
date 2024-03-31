@@ -27,9 +27,11 @@ b3 = torch.zeros(16, dtype=torch.float, requires_grad=True, device='cuda:0')
 # Create a feature grid at a lower resolution with random values .
 # note that the feature grid size is num_grid_cells + (1, 1), for the far corner features.
 #
-feature_grid_dims = (32, 32)
-feature_grid = torch.randn((feature_grid_dims[0] + 1, feature_grid_dims[1] + 1, 14), 
-                            dtype=torch.float, requires_grad=True, device='cuda:0')
+# feature_grid_dims = (32, 32)
+# feature_grid = torch.randn((feature_grid_dims[0] + 1, feature_grid_dims[1] + 1, 14), 
+#                             dtype=torch.float, requires_grad=True, device='cuda:0')
+feature_grid = torch.randn((512, 512, 16), 
+                             dtype=torch.float, requires_grad=True, device='cuda:0')
 
 # Setup optimization loop
 optimizer = torch.optim.Adam([w1, w2, w3, b1, b2, b3, feature_grid], lr=3e-2)
@@ -78,19 +80,3 @@ ax2.set_title(f'Optimized ({iterations} iterations in {end - start:.2f} seconds)
 ax3.set_title('Target')
 
 plt.show()
-
-# Save a video.
-import cv2
-height, width, layers = y_pred.shape
-fourcc = cv2.VideoWriter_fourcc(*'mp4v')
-video = cv2.VideoWriter('video.mp4', fourcc, 30, (width * 2, height))
-for image in intermediate_images:
-    image = np.clip(image, 0, 1)
-    image = np.concatenate([image, target_image.detach().cpu().numpy()], axis=1)
-
-    # Convert BGR to RGB
-    image = image[:, :, ::-1]
-    video.write((image * 255).astype(np.uint8))
-
-cv2.destroyAllWindows()
-video.release()
