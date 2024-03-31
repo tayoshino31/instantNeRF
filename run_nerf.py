@@ -43,7 +43,7 @@ loss_fn = torch.nn.MSELoss()
 
 
 intermediate_images = []
-iterations = 1000
+iterations = 2000
 
 import time
 start = time.time()
@@ -63,7 +63,8 @@ for i in range(iterations):
     y_pred = rendering(y_pred, z_vals)
     
     loss = loss_fn(y_pred, target_image)
-    print(f"Iteration {i}, Loss: {loss.item()}")
+    psnr = -10. * torch.log(loss) / torch.math.log(10.)
+    print(f"Iteration {i}, Loss: {loss.item()}, psnr: {psnr.item()}")
 
     optimizer.zero_grad()
     loss.backward()
