@@ -32,7 +32,9 @@ class RenderImage(torch.autograd.Function):
         mlp = m.MLP(layers=linear_layers)
 
         blockSize = launchBlockSize
-        gridSize = ((width + blockSize[0] - 1) // blockSize[0], (height + blockSize[1] - 1) // blockSize[1], (N_samples + blockSize[2] - 1) // blockSize[2])
+        gridSize = ((width + blockSize[0] - 1) // blockSize[0], 
+                    (height + blockSize[1] - 1) // blockSize[1], 
+                    (N_samples + blockSize[2] - 1) // blockSize[2])
 
         m.renderImage(mlp=mlp, featureGrid=feature_grid, imageOutput=output).launchRaw(blockSize=blockSize, gridSize=gridSize)
 
@@ -55,7 +57,9 @@ class RenderImage(torch.autograd.Function):
         mlp = m.MLP(layers=linear_layers)
 
         blockSize = launchBlockSize
-        gridSize = ((width + blockSize[0] - 1) // blockSize[0], (height + blockSize[1] - 1) // blockSize[1], (N_samples + blockSize[2] - 1) // blockSize[2])
+        gridSize = ((width + blockSize[0] - 1) // blockSize[0], 
+                    (height + blockSize[1] - 1) // blockSize[1], 
+                    (N_samples + blockSize[2] - 1) // blockSize[2])
 
         m.renderImage.bwd(mlp=mlp, featureGrid=(feature_grid, feature_grid_d), imageOutput=(output, grad_output)).launchRaw(blockSize=blockSize, gridSize=gridSize)
 

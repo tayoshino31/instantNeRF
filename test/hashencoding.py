@@ -1,17 +1,15 @@
 #https://docs.nerf.studio/nerfology/model_components/visualize_encoders.html
 import torch
 from nerfstudio.field_components import encodings as encoding
-
+torch.manual_seed(0)
 num_levels = 8
-min_res = 2
+min_res = 16
 max_res = 128
 log2_hashmap_size = 4  # Typically much larger tables are used
-
 resolution = 128
-slice = 0
 
 # Fixing features_per_level to 3 for easy RGB visualization. Typical value is 2 in networks
-features_per_level = 3
+features_per_level = 2
 
 encoder = encoding.HashEncoding(
     num_levels=num_levels,
@@ -26,7 +24,21 @@ encoder = encoding.HashEncoding(
 x_samples = torch.linspace(0, 1, resolution)
 grid = torch.stack(torch.meshgrid([x_samples, x_samples, x_samples], indexing="ij"), dim=-1)
 
+
 encoded_values = encoder(grid)
-print(grid.shape)
-print(encoded_values.shape)
-print(encoder.parameters())
+# print(grid[0,0,1,:])
+# print(encoded_values[0,0,1,:])
+
+# print(grid.shape)
+# print(encoded_values.shape)
+# print(encoder.hash_table.size())
+
+
+print(encoder.hash_table[0])
+
+optimizer = torch.optim.Adam([encoder.hash_table], lr=3e-2)
+loss = encoded_values.sum()
+loss.backward()
+optimizer.step()
+#print(encoder.hash_table.grad.cpu())
+print(encoder.hash_table[0])
