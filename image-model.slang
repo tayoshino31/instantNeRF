@@ -45,7 +45,7 @@ Feature<C> getInFeature(DiffTensorView input, uint3 idx) {
     for (int i = 0; i < C-1; i++) {
         output.vals[i] = input[idx.x , idx.y, idx.z,  i];
     }
-    output.vals[C-1] = input[idx.x , idx.y, idx.z,  C-1];
+    output.vals[C-1] = input[idx.x , idx.y, idx.z,  C-2];
     
     return output;
 }

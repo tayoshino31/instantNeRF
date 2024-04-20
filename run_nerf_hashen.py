@@ -17,8 +17,8 @@ log2_hashmap_size = 4
 features_per_level = 2
 
 #output image
-width = 128
-height = 128
+width = 512
+height = 512
 N_samples = 32
 
 os.environ["KMP_DUPLICATE_LIB_OK"] = "TRUE"
@@ -49,7 +49,7 @@ x, z_vals, target_image = dataset.get_data(img_i)
 feature_grid = hashencoder(x)
 feature_grid = torch.tensor(feature_grid, dtype=torch.float, device='cuda:0',requires_grad=True)
 
-optimizer = torch.optim.Adam([w1, w2, w3, b1, b2, b3, feature_grid], lr=2e-2)
+optimizer = torch.optim.Adam([w1, w2, w3, b1, b2, b3, feature_grid], lr=3e-2)
 loss_fn = torch.nn.MSELoss()
 
 intermediate_images = []

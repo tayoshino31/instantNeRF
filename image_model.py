@@ -2,7 +2,7 @@ import slangpy
 import torch
 import os
 
-launchBlockSize = (32, 8, 1)
+launchBlockSize = (32, 4, 1)
 
 # Before loading our module, we're going to pre-process the TORCH_CUDA_ARCH_LIST tag from the environment. 
 # This is to get around a bug with how torch constructs arch flags: explicitly providing arch flags seems to
