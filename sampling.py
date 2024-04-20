@@ -9,7 +9,7 @@ class Dataset():
         self.poses = self.data['poses']
         self.focal = self.data['focal']
         self.device = "cuda"
-        self.H, self.W = 512, 512 #64, 64 
+        self.H, self.W = 256, 256 #64, 64 
 
         self.testimg,  self.testpose = self.images[101], self.poses[101]
         self.images = self.images[:100,...,:3]

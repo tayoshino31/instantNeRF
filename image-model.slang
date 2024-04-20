@@ -54,7 +54,6 @@ void renderImage(MLP<C, 3> mlp, DiffTensorView featureGrid, DiffTensorView viewD
     uint3 didx = uint3(dispatchIdx.x, dispatchIdx.y,dispatchIdx.z );
     Feature<C> feature = embed_fn(featureGrid, didx);
     Feature<C> viewdir = embed_fn(viewDir, didx);
-
     mlp.Output output = mlp.eval(feature, viewdir); 
 
     for (int i = 0; i < 4; i++) {

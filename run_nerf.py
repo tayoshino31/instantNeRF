@@ -18,8 +18,8 @@ log2_hashmap_size = 4
 features_per_level = 3
 
 #output image
-width = 512
-height = 512
+width = 256
+height = 256
 N_samples = 32
 
 os.environ["KMP_DUPLICATE_LIB_OK"] = "TRUE"
@@ -35,17 +35,18 @@ b2 = torch.zeros(C, dtype=torch.float, requires_grad=True, device='cuda:0')
 b3 = torch.zeros(C, dtype=torch.float, requires_grad=True, device='cuda:0')
 
 dataset = Dataset()
-optimizer = torch.optim.Adam([w1, w2, w3, b1, b2, b3], lr=1e-2)
+optimizer = torch.optim.Adam([w1, w2, w3, b1, b2, b3], lr=5e-3) 
 loss_fn = torch.nn.MSELoss()
 
 intermediate_images = []
-iterations = 2000
+target_images = []
+iterations = 2500
 
 import time
 start = time.time()
 
 for i in range(iterations):
-    img_i = 0 #img_i = np.random.randint(100)
+    img_i = 0  #img_i = np.random.randint(100)
     x, z_vals, target_image, viewdirs = dataset.get_data(img_i)
     encoded_x = x                #encoded_x = embed_fn(x)
     encoded_viewdirs = viewdirs  #encoded_viewdirs = embed_fn(viewdirs)
@@ -65,22 +66,33 @@ for i in range(iterations):
     loss.backward()
     optimizer.step()
 
-    if i % 20 == 0:
+    if i  > (iterations - 5):
         intermediate_images.append(y_pred.detach().cpu().numpy())
+        target_images.append(target_image.detach().cpu().numpy())
 
 end = time.time()
 
-# Display images side-by-side
-import matplotlib.pyplot as plt
-fig, (ax1, ax2, ax3) = plt.subplots(1, 3)
-ax1.imshow(intermediate_images[0])
+
+#Multiple images
+# fig, axs = plt.subplots(2, 4, figsize=(10, 6))
+# for ax, img in zip(axs[0], target_images):
+#     ax.imshow(img)
+#     ax.set_title('Target')
+#     ax.axis('off')
+# for ax, img in zip(axs[1], intermediate_images):
+#     ax.imshow(img)
+#     ax.set_title('Pred')
+#     ax.axis('off')
+# plt.tight_layout() 
+# plt.show() 
+# plt.savefig('output_multiple.png')
+
+
+# #Interatively train a single image
+fig, (ax2, ax3) = plt.subplots(1, 2)
 ax2.imshow(y_pred.detach().cpu().numpy())
 ax3.imshow(target_image.detach().cpu().numpy())
-
-# Label images
-ax1.set_title('Initial')
-ax2.set_title('Pred')
+ax2.set_title(f"Pred (PSNR:{psnr.item():.2f})")
 ax3.set_title('Target')
-
 plt.show()
-plt.savefig('output.png')
+plt.savefig('output_single.png')

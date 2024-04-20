@@ -17,8 +17,8 @@ log2_hashmap_size = 4
 features_per_level = 2
 
 #output image
-width = 512
-height = 512
+width = 256
+height = 256
 N_samples = 32
 
 os.environ["KMP_DUPLICATE_LIB_OK"] = "TRUE"
@@ -53,7 +53,7 @@ optimizer = torch.optim.Adam([w1, w2, w3, b1, b2, b3, feature_grid], lr=3e-2)
 loss_fn = torch.nn.MSELoss()
 
 intermediate_images = []
-iterations = 2000
+iterations = 1000
 
 import time
 start = time.time()
