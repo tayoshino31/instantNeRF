@@ -47,8 +47,9 @@ start = time.time()
 for i in range(iterations):
     img_i = 0 #img_i = np.random.randint(100)
     x, z_vals, target_image, viewdirs = dataset.get_data(img_i)
-    encoded_x = embed_fn(x)
-    encoded_viewdirs = embed_fn(viewdirs)
+    encoded_x = x                #encoded_x = embed_fn(x)
+    encoded_viewdirs = viewdirs  #encoded_viewdirs = embed_fn(viewdirs)
+
     y_pred = RenderImage.apply(
         width, height,
         encoded_x, encoded_viewdirs,
