@@ -23,7 +23,7 @@ height = 512
 N_samples = 32
 
 os.environ["KMP_DUPLICATE_LIB_OK"] = "TRUE"
-C = 16
+C = 32
 torch.manual_seed(0)
 I = torch.diag(torch.ones(C, dtype=torch.float)).cuda().contiguous()
 w1 = torch.randn((C, C), dtype=torch.float, requires_grad=True, device='cuda:0')
@@ -35,31 +35,25 @@ b2 = torch.zeros(C, dtype=torch.float, requires_grad=True, device='cuda:0')
 b3 = torch.zeros(C, dtype=torch.float, requires_grad=True, device='cuda:0')
 
 dataset = Dataset()
-# img_i = 0 #img_i = np.random.randint(100)
-# x, z_vals, target_image = dataset.get_data(img_i)
-# feature_grid = torch.randn((width, height, N_samples, 16), 
-#                            dtype=torch.float, requires_grad=True, device='cuda:0')
-
 optimizer = torch.optim.Adam([w1, w2, w3, b1, b2, b3], lr=1e-2)
 loss_fn = torch.nn.MSELoss()
 
 intermediate_images = []
-iterations = 1000
+iterations = 2000
 
 import time
 start = time.time()
 
 for i in range(iterations):
-    img_i = 0 
-    #img_i = np.random.randint(100)
-    x, z_vals, target_image = dataset.get_data(img_i)
+    img_i = 0 #img_i = np.random.randint(100)
+    x, z_vals, target_image, viewdirs = dataset.get_data(img_i)
     encoded_x = embed_fn(x)
+    encoded_viewdirs = embed_fn(viewdirs)
     y_pred = RenderImage.apply(
         width, height,
-        encoded_x, 
+        encoded_x, encoded_viewdirs,
         w1, w2, w3,
         b1, b2, b3)
-
     y_pred = rendering(y_pred, z_vals)
     loss = loss_fn(y_pred, target_image)
     

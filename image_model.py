@@ -22,7 +22,7 @@ m = slangpy.loadModule('image-model.slang',
                             'WARP_SIZE': 32})
 N_samples = 32
 class RenderImage(torch.autograd.Function):
-    def forward(ctx, width, height, feature_grid, *args):
+    def forward(ctx, width, height, feature_grid, viewdirs, *args):
         weights = args[0: 3]
         biases = args[3: 6]
         #output = torch.zeros((width, height, 3), dtype=torch.float).cuda()
@@ -36,20 +36,21 @@ class RenderImage(torch.autograd.Function):
                     (height + blockSize[1] - 1) // blockSize[1], 
                     (N_samples + blockSize[2] - 1) // blockSize[2])
 
-        m.renderImage(mlp=mlp, featureGrid=feature_grid, imageOutput=output).launchRaw(blockSize=blockSize, gridSize=gridSize)
+        m.renderImage(mlp=mlp, featureGrid=feature_grid, viewDir = viewdirs, imageOutput=output).launchRaw(blockSize=blockSize, gridSize=gridSize)
 
-        ctx.save_for_backward(output, feature_grid, *args)
+        ctx.save_for_backward(output, feature_grid, viewdirs, *args)
 
         return output
     
     def backward(ctx, grad_output):
-        output, feature_grid, *args = ctx.saved_tensors
+        output, feature_grid, viewdir, *args = ctx.saved_tensors
         weights = args[0: 3]
         biases = args[3: 6]
 
         weights_d = [torch.zeros_like(w) for w in weights]
         biases_d = [torch.zeros_like(b) for b in biases]
         feature_grid_d = torch.zeros_like(feature_grid)
+        viewdir_d = torch.zeros_like(viewdir)
 
         width, height, _, _ = output.shape
         
@@ -61,6 +62,6 @@ class RenderImage(torch.autograd.Function):
                     (height + blockSize[1] - 1) // blockSize[1], 
                     (N_samples + blockSize[2] - 1) // blockSize[2])
 
-        m.renderImage.bwd(mlp=mlp, featureGrid=(feature_grid, feature_grid_d), imageOutput=(output, grad_output)).launchRaw(blockSize=blockSize, gridSize=gridSize)
+        m.renderImage.bwd(mlp=mlp, featureGrid=(feature_grid, feature_grid_d), viewDir=(viewdir, viewdir_d), imageOutput=(output, grad_output)).launchRaw(blockSize=blockSize, gridSize=gridSize)
 
-        return None, None, feature_grid_d, *weights_d, *biases_d
+        return None, None, feature_grid_d, None,  *weights_d, *biases_d
