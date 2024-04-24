@@ -40,13 +40,13 @@ loss_fn = torch.nn.MSELoss()
 
 intermediate_images = []
 target_images = []
-iterations = 2500
+iterations = 5000
 
 import time
 start = time.time()
-
 for i in range(iterations):
-    img_i = 0  #img_i = np.random.randint(100)
+    #img_i = 0  
+    img_i = np.random.randint(100)
     x, z_vals, target_image, viewdirs = dataset.get_data(img_i)
     encoded_x = x                #encoded_x = embed_fn(x)
     encoded_viewdirs = viewdirs  #encoded_viewdirs = embed_fn(viewdirs)
@@ -72,27 +72,28 @@ for i in range(iterations):
 
 end = time.time()
 
+print('time:', end - start)
 
 #Multiple images
-# fig, axs = plt.subplots(2, 4, figsize=(10, 6))
-# for ax, img in zip(axs[0], target_images):
-#     ax.imshow(img)
-#     ax.set_title('Target')
-#     ax.axis('off')
-# for ax, img in zip(axs[1], intermediate_images):
-#     ax.imshow(img)
-#     ax.set_title('Pred')
-#     ax.axis('off')
-# plt.tight_layout() 
-# plt.show() 
-# plt.savefig('output_multiple.png')
+fig, axs = plt.subplots(2, 4, figsize=(10, 6))
+for ax, img in zip(axs[0], target_images):
+    ax.imshow(img)
+    ax.set_title('Target')
+    ax.axis('off')
+for ax, img in zip(axs[1], intermediate_images):
+    ax.imshow(img)
+    ax.set_title('Pred')
+    ax.axis('off')
+plt.tight_layout() 
+plt.show() 
+plt.savefig('output_multiple.png')
 
 
 # #Interatively train a single image
-fig, (ax2, ax3) = plt.subplots(1, 2)
-ax2.imshow(y_pred.detach().cpu().numpy())
-ax3.imshow(target_image.detach().cpu().numpy())
-ax2.set_title(f"Pred (PSNR:{psnr.item():.2f})")
-ax3.set_title('Target')
-plt.show()
-plt.savefig('output_single.png')
+# fig, (ax2, ax3) = plt.subplots(1, 2)
+# ax2.imshow(y_pred.detach().cpu().numpy())
+# ax3.imshow(target_image.detach().cpu().numpy())
+# ax2.set_title(f"Pred (PSNR:{psnr.item():.2f})")
+# ax3.set_title('Target')
+# plt.show()
+# plt.savefig('output_single.png')

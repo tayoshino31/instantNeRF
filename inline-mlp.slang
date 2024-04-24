@@ -287,11 +287,11 @@ struct MLP<let C: int, let N : int>
 
         //layer 3
         out_feature = layers[2].eval(out_feature);
-        [ForceUnroll]
-        for (int j = 0; j < C; j++)
-        {
-            out_feature.vals[j] = max(0.0f, out_feature.vals[j]);
-        }
+        // [ForceUnroll]
+        // for (int j = 0; j < C; j++)
+        // {
+        //     out_feature.vals[j] = max(0.0f, out_feature.vals[j]);
+        // }
         return out_feature;
     }
 };
