@@ -53,7 +53,7 @@ optimizer = torch.optim.Adam([w1, w2, w3, b1, b2, b3, feature_grid], lr=3e-2)
 loss_fn = torch.nn.MSELoss()
 
 intermediate_images = []
-iterations = 1000
+iterations = 5000
 
 import time
 start = time.time()

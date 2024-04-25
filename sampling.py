@@ -43,4 +43,8 @@ class Dataset():
                             device=rays_o.device) * (self.far - self.near) / self.N_samples
         pts = rays_o[..., None, :] + rays_d[..., None, :] * z_vals[..., :, None]
         pts = pts.reshape(self.H,self.W, self.N_samples, 3)
-        return pts, z_vals, target_image, viewdirs
+        
+        dists = torch.cat([z_vals[..., 1:] - z_vals[..., :-1], 
+                        torch.broadcast_to(torch.tensor([1e10], 
+                        device=z_vals.device), z_vals[..., :1].shape)], -1)
+        return pts, z_vals, dists, target_image, viewdirs

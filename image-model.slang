@@ -5,6 +5,8 @@ import inline_mlp;
 static const uint C = 32;
 static const uint L = 5;
 
+static const uint N_samples = 32;
+
 [Differentiable]
 Feature<C> embed_fn(DiffTensorView input, uint3 didx) {
     Feature<C> output;
@@ -40,23 +42,93 @@ Feature<C> embed_fn(DiffTensorView input, uint3 didx) {
     return output;
 }
 
+
+[Differentiable]
+float relu(float x){
+    return max(x, 0.0);
+}
+
+[Differentiable]
+float sigmoid(float x){
+    return 1.0/(1.0 + exp(-x * 0.01));
+}
+
+[Differentiable]
+float[N_samples] computeAlpha(float[N_samples] sigma_a, float[N_samples] dist){
+    float[N_samples] alpha;
+    [ForceUnroll]
+    for(int n= 0; n < N_samples; n++){
+        alpha[n] = 1.0 - exp(-sigma_a[n] * dist[n]);
+    }
+    return alpha;
+}
+
+[Differentiable]
+float[N_samples] computeComprod(float[N_samples] alpha){
+    float[N_samples] comprod;
+    comprod[0] = 1.0;
+    [ForceUnroll]
+    for(int n = 1; n < N_samples; n++){
+        comprod[n] = comprod[n-1] * (1.0 - alpha[n-1] + 1e-10);
+    }
+    return comprod;
+}
+
+[Differentiable]
+float3 volumeRendering(float[N_samples] sigma_a, float[N_samples] sample_r, float[N_samples] sample_g, float[N_samples] sample_b, float[N_samples] dist){  
+    float[N_samples] alpha = computeAlpha(sigma_a, dist);
+    float[N_samples] comprod = computeComprod(alpha);
+    float3 pixel_rgb = float3(0.0,0.0,0.0);
+
+    [ForceUnroll]
+    for(int n = 0; n< N_samples; n++){
+        float weight_volume = alpha[n] * comprod[n];
+        pixel_rgb += weight_volume * float3(sample_r[n],sample_g[n],sample_b[n]);
+    }
+    return pixel_rgb;
+}
+
 [Differentiable]
 [CUDAKernel]
 [AutoPyBindCUDA]
-void renderImage(MLP<C, 3> mlp, DiffTensorView featureGrid, DiffTensorView viewDir, DiffTensorView imageOutput)
+void renderImage(MLP<C, 3> mlp, DiffTensorView featureGrid, DiffTensorView viewDir, DiffTensorView dists, DiffTensorView imageOutput)
 {
     uint3 dispatchIdx = cudaThreadIdx() + cudaBlockIdx() * cudaBlockDim();
 
-    if (dispatchIdx.x >= imageOutput.size(0) || dispatchIdx.y >= imageOutput.size(1)|| dispatchIdx.z >= imageOutput.size(2))
+    if (dispatchIdx.x >= imageOutput.size(0) || dispatchIdx.y >= imageOutput.size(1))
         return;
 
-    // Compute the input feature for our current pixel.
-    uint3 didx = uint3(dispatchIdx.x, dispatchIdx.y,dispatchIdx.z );
-    Feature<C> feature = embed_fn(featureGrid, didx);
-    Feature<C> viewdir = embed_fn(viewDir, didx);
-    mlp.Output output = mlp.eval(feature, viewdir); 
+    float[N_samples] sample_r;
+    float[N_samples] sample_g;
+    float[N_samples] sample_b;
+    float[N_samples] sigma_a; 
+    float[N_samples] dist;
 
-    for (int i = 0; i < 4; i++) {
-        imageOutput.storeOnce(uint4(dispatchIdx.x, dispatchIdx.y, dispatchIdx.z, i), output.vals[i]);
+    //store dist
+    [ForceUnroll]
+    for(int n = 0; n < N_samples; n++){
+        dist[n] = dists[dispatchIdx.x, dispatchIdx.y, n];
     }
+
+    for(int n = 0; n < N_samples; n++){
+        uint3 didx = uint3(dispatchIdx.x, dispatchIdx.y, n);
+        //get feature and view direction
+        Feature<C> feature = embed_fn(featureGrid, didx);
+        Feature<C> viewdir = embed_fn(viewDir, didx);
+        //MLP
+        mlp.Output output = mlp.eval(feature, viewdir); 
+        //store sigma_a and sample_rgb
+        sample_r[n] = sigmoid(output.vals[0]);
+        sample_g[n] = sigmoid(output.vals[1]);
+        sample_b[n] = sigmoid(output.vals[2]);
+        sigma_a[n] = relu(output.vals[3]);
+    }
+
+    //volume rendering
+    float3 rgb = volumeRendering(sigma_a, sample_r, sample_g, sample_b, dist);
+
+    //store pixel color
+    imageOutput.storeOnce(uint3(dispatchIdx.x, dispatchIdx.y, 0), rgb.x);
+    imageOutput.storeOnce(uint3(dispatchIdx.x, dispatchIdx.y, 1), rgb.y);
+    imageOutput.storeOnce(uint3(dispatchIdx.x, dispatchIdx.y, 2), rgb.z);
 }

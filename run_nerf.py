@@ -9,6 +9,7 @@ from encoding import embed_fn
 from image_model import RenderImage
 from nerfstudio.field_components import encodings
 import numpy as np
+torch.cuda.empty_cache()
 
 #hash encoding params
 num_levels = 8
@@ -47,16 +48,16 @@ start = time.time()
 for i in range(iterations):
     #img_i = 0  
     img_i = np.random.randint(100)
-    x, z_vals, target_image, viewdirs = dataset.get_data(img_i)
+    x, z_vals, dists, target_image, viewdirs = dataset.get_data(img_i)
     encoded_x = x                #encoded_x = embed_fn(x)
     encoded_viewdirs = viewdirs  #encoded_viewdirs = embed_fn(viewdirs)
 
     y_pred = RenderImage.apply(
         width, height,
-        encoded_x, encoded_viewdirs,
+        encoded_x, encoded_viewdirs, dists,
         w1, w2, w3,
         b1, b2, b3)
-    y_pred = rendering(y_pred, z_vals)
+    #y_pred = rendering(y_pred, z_vals)
     loss = loss_fn(y_pred, target_image)
     
     psnr = -10. * torch.log(loss) / torch.math.log(10.)
