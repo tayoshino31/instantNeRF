@@ -1,4 +1,7 @@
+
+# Heavily drew from
 # NeRF Studio: https://github.com/nerfstudio-project/nerfstudio/blob/bc9328c7ff70045fce21838122f48ab5201c4ae3/nerfstudio/field_components/encodings.py#L310
+# hashNeRF: https://github.com/yashbhalgat/HashNeRF-pytorch/blob/780f4bb8dedb1d5a9af23fae226973e79cbcc48e/run_nerf_helpers.py#L66
 
 import torch
 import math
@@ -8,7 +11,7 @@ class FeatureField():
         self.features_per_level = features_per_level
         self.res = res
         # Init the hash table
-        self.hashtable = torch.rand(size = (self.table_size * 1 * features_per_level)) * 2 - 1 # table_size * levels * features_per_level
+        self.hashtable = torch.rand(size = (self.hashtable_size * 1 * features_per_level,)) * 2 - 1 # table_size * levels * features_per_level
         self.hashtable *= hashmap_scale
 
 
@@ -28,28 +31,18 @@ class FeatureField():
         h7 = self.hash(torch.stack((x_ceil[0], x_ceil[1], x_ceil[2]))) #111
         
         # hash all points
-        v0 = hashtable[h0]
-        v1 = hashtable[h1]
-        v2 = hashtable[h2]
-        v3 = hashtable[h3]
-        v4 = hashtable[h4]
-        v5 = hashtable[h5]
-        v6 = hashtable[h6]
-        v7 = hashtable[h7]
+        v0 = self.hashtable[h0]
+        v1 = self.hashtable[h1]
+        v2 = self.hashtable[h2]
+        v3 = self.hashtable[h3]
+        v4 = self.hashtable[h4]
+        v5 = self.hashtable[h5]
+        v6 = self.hashtable[h6]
+        v7 = self.hashtable[h7]
 
         x_difference = x_scaled - x_floor
-        trilinear_interpolation(x_difference, v0, v1, v2, v3, v4, v5, v6, v7)
-        
-        #for each level
-            #x_scaled =  x * gridResolution[level]
-            #x_floor
-            #x_ceil
-
-
-            #if course level where (N_l +1^d <= T) the mapping is 1:1
-            #else 
-                #hash(x_floor)
-                #hash(x_ceil)
+        encoded = self.trilinear_interpolation(x_difference, v0, v1, v2, v3, v4, v5, v6, v7)
+        return encoded
                 
     #assume 1 point
     def hash(self, x):
@@ -63,10 +56,10 @@ class FeatureField():
     # https://en.wikipedia.org/wiki/Trilinear_interpolation
     def trilinear_interpolation(self, p_d, c_000, c_100, c_010, c_001, c_110, c_101, c_011, c_111):
         #interpolate along x
-        c_00 = c000 * (1-p_d[0]) + c_100 * p_d[0]
-        c_01 = c001 * (1-p_d[0]) + c_101 * p_d[0]
-        c_10 = c010 * (1-p_d[0]) + c_110 * p_d[0]
-        c_11 = c010 * (1-p_d[0]) + c_111 * p_d[0]
+        c_00 = c_000 * (1-p_d[0]) + c_100 * p_d[0]
+        c_01 = c_001 * (1-p_d[0]) + c_101 * p_d[0]
+        c_10 = c_010 * (1-p_d[0]) + c_110 * p_d[0]
+        c_11 = c_010 * (1-p_d[0]) + c_111 * p_d[0]
 
         #interpolate along y
         c_0 = c_00 * (1-p_d[1]) + c_10 * p_d[1]
