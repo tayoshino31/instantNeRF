@@ -7,8 +7,7 @@ import time
 from volume_rendering import rendering
 from encoding import embed_fn
 from image_model import RenderImage
-from nerfstudio.field_components import encodings
-from hashencoder import HashEncoder
+from feature_field import FeatureField
 
 #hash encoding params
 num_levels = 8
@@ -24,7 +23,7 @@ N_samples = 32
 
 os.environ["KMP_DUPLICATE_LIB_OK"] = "TRUE"
 
-HashEncoder().encode(torch.tensor([0, 1, 2]))
+FeatureField().encode(torch.tensor([.3, 1.3, 2.3], dtype=torch.float, device='cuda:0'))
 
 torch.manual_seed(0)
 I = torch.diag(torch.ones(16, dtype=torch.float)).cuda().contiguous()
