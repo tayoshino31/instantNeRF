@@ -258,30 +258,39 @@ struct MLP<let C: int, let N : int>
 
     Linear<C> layers[N];
 
-    __init(DiffTensorView weights[N], DiffTensorView bias[N])
-    {
-        [ForceUnroll]
-        for (int i = 0; i < N; i++)
-        {
-            layers[i] = { weights[i], bias[i] };
-        }
-    }
-
     [Differentiable]
-    Output eval(Input in_feature)
+    Output eval(Input in_feature, Input viewdir)
     {
+        //layer 1
         Output out_feature = in_feature;
+        out_feature = layers[0].eval(out_feature);
         [ForceUnroll]
-        for (int i = 0; i < N; i++)
+        for (int j = 0; j < C; j++)
         {
-            out_feature = layers[i].eval(out_feature);
+            out_feature.vals[j] = max(0.0f, out_feature.vals[j]);
+        }
 
-            // ReLU
-            [ForceUnroll]
-            for (int j = 0; j < C; j++)
-            {
-                out_feature.vals[j] = max(0.0f, out_feature.vals[j]);
-            }
+
+        //layer 2
+        out_feature = layers[1].eval(out_feature);
+        [ForceUnroll]
+        for (int j = 0; j < 16; j++)
+        {
+            out_feature.vals[j] = max(0.0f, out_feature.vals[j]);
+        }
+        [ForceUnroll]
+        for (int j = 16; j < 32; j++)
+        {
+            out_feature.vals[j] = viewdir.vals[j];
+        }
+        
+
+        //layer 3
+        out_feature = layers[2].eval(out_feature);
+        [ForceUnroll]
+        for (int j = 0; j < C; j++)
+        {
+            out_feature.vals[j] = max(0.0f, out_feature.vals[j]);
         }
         return out_feature;
     }

@@ -9,7 +9,7 @@ class Dataset():
         self.poses = self.data['poses']
         self.focal = self.data['focal']
         self.device = "cuda"
-        self.H, self.W = 128, 128 #64, 64 
+        self.H, self.W = 256, 256 #64, 64 
 
         self.testimg,  self.testpose = self.images[101], self.poses[101]
         self.images = self.images[:100,...,:3]
@@ -35,7 +35,7 @@ class Dataset():
         pose = torch.tensor(self.poses[img_i], dtype=torch.float32, device=self.device)
         focal = torch.tensor(self.focal, dtype=torch.float32, device=self.device).clone().detach()
         rays_o, rays_d = self.get_rays(self.H, self.W, focal, pose, self.device)
-        
+        viewdirs = rays_d / torch.norm(rays_d, p=2, dim=-1, keepdim=True)
         z_vals = torch.linspace(self.near, self.far, self.N_samples, 
                                 device=rays_o.device).expand(rays_o.shape[:-1] + (self.N_samples,))
         z_vals = z_vals.clone()
@@ -43,4 +43,4 @@ class Dataset():
                             device=rays_o.device) * (self.far - self.near) / self.N_samples
         pts = rays_o[..., None, :] + rays_d[..., None, :] * z_vals[..., :, None]
         pts = pts.reshape(self.H,self.W, self.N_samples, 3)
-        return pts, z_vals, target_image
+        return pts, z_vals, target_image, viewdirs

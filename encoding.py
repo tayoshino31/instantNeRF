@@ -1,6 +1,6 @@
 import torch
 
-def embed_fn(x, L_embed = 2):
+def embed_fn(x, L_embed = 5):
     rets = [x]
     for i in range(L_embed):
         for fn in [torch.sin, torch.cos]:
