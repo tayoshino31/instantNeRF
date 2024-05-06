@@ -51,8 +51,12 @@ void renderImage(MLP<C, 3> mlp, DiffTensorView featureGrid, DiffTensorView viewD
         return;
 
     // Compute the input feature for our current pixel.
-    uint3 didx = uint3(dispatchIdx.x, dispatchIdx.y,dispatchIdx.z );
-    Feature<C> feature = embed_fn(featureGrid, didx);
+    uint3 didx = uint3(dispatchIdx.x, dispatchIdx.y, dispatchIdx.z );
+    Feature<C> feature;
+    feature.vals = 
+        {featureGrid[didx.x, didx.y, didx.z, 0], 
+        featureGrid[didx.x, didx.y, didx.z, 1],
+        featureGrid[didx.x, didx.y, didx.z, 2]};//embed_fn(featureGrid, didx);
     Feature<C> viewdir = embed_fn(viewDir, didx);
     mlp.Output output = mlp.eval(feature, viewdir); 
 
