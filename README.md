@@ -22,6 +22,11 @@ InstantNeRF/
 └── run.py                      # main function
 ```
 
+```bash
+python run.py torch             # pytorch MLP
+python run.py slang             # slang MLP
+```
+
 # TODO
 ## David
 [ ] implement hash encoding
