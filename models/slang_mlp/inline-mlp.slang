@@ -270,7 +270,6 @@ struct MLP<let C: int, let N : int>
             out_feature.vals[j] = max(0.0f, out_feature.vals[j]);
         }
 
-
         //layer 2
         out_feature = layers[1].eval(out_feature);
         [ForceUnroll]
@@ -283,15 +282,9 @@ struct MLP<let C: int, let N : int>
         {
             out_feature.vals[j] = viewdir.vals[j];
         }
-        
 
         //layer 3
         out_feature = layers[2].eval(out_feature);
-        // [ForceUnroll]
-        // for (int j = 0; j < C; j++)
-        // {
-        //     out_feature.vals[j] = max(0.0f, out_feature.vals[j]);
-        // }
         return out_feature;
     }
 };

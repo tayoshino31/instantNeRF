@@ -1,3 +1,4 @@
 **/__pycache__
 **/.slangpy_cache
 .DS_Store
+*.lock
