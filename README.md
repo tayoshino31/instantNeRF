@@ -22,9 +22,11 @@ InstantNeRF/
 └── run.py                      # main function
 ```
 
+# How to run
+
 ```bash
-python run.py torch             # pytorch MLP
-python run.py slang             # slang MLP
+python run.py torch             # use PyTorch MLP
+python run.py slang             # use Slang MLP
 ```
 
 # TODO
