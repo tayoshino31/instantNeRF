@@ -22,7 +22,7 @@ InstantNeRF/
 │   ├── encoder.py             
 │   ├── rendering_utils.py    
 │   └── save_image.py
-└── run.py                      # main calls either slang_trainer or torch_trainer
+└── run.py                      # main calls one of the trainer
 ```
 
 # How to run
