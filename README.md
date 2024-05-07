@@ -10,11 +10,14 @@ InstantNeRF/
 │   │   └── ...                # slang inline-MLP files
 │   └── troch_mlp
 │       └──mlp.py              # Pytorch MLP
-├── result/                    # Directory to store rendered images
+├── result/                    
 ├── trainers/                  
 │   ├── slang_trainer.py       # train with slang_mlp
-│   └── torch_trainer.py       # train with torch_mlp
-├── utils/                     # some helper functions
+│   ├── torch_trainer.py       # train with torch_mlp
+│   ├── slanghash_trainer.py   # train with slang_mlp with hash encoding 
+│   └── torchhash_trainer.py   # train with torch_mlp with hash encoding 
+├── utils/                     
+│   ├── hashencoder            
 │   ├── data_loader.py         # load & pre-process data
 │   ├── encoder.py             
 │   ├── rendering_utils.py    
@@ -27,6 +30,8 @@ InstantNeRF/
 ```bash
 python run.py torch             # use PyTorch MLP
 python run.py slang             # use Slang MLP
+python run.py torchhash         # use PyTorch MLP with hash encoding 
+python run.py slanghash         # use Slang MLP with hash encoding 
 ```
 
 # TODO
