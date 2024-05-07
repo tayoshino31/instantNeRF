@@ -5,6 +5,7 @@ import inline_mlp;
 static const uint C = 32;
 static const uint L = 5;
 static const uint N_samples = 32;
+static const bool embeded = true;
 
 //position encoding
 [Differentiable]
@@ -41,6 +42,14 @@ Feature<C> embed_fn(DiffTensorView input, uint3 didx) {
     return output;
 }
 
+[Differentiable]
+Feature<C> getFeature(DiffTensorView input, uint3 didx) {
+    Feature<C> output;
+    for (int i = 0; i < C; i++) {
+        output.vals[i] = input.loadOnce(uint4(didx.x, didx.y, didx.z, i));
+    }
+    return output;
+}
 
 [Differentiable]
 float relu(float x){
@@ -93,8 +102,8 @@ float3 volumeRendering(float[N_samples] sigma_a,
 [Differentiable]
 [CUDAKernel]
 [AutoPyBindCUDA]
-void renderImage(MLP<C, 3> mlp, DiffTensorView featureGrid, DiffTensorView viewDir, 
-    DiffTensorView dists, DiffTensorView imageOutput)
+void renderImage(MLP<C, 3> mlp, DiffTensorView featureGrid, DiffTensorView viewDir,
+                 DiffTensorView dists, DiffTensorView imageOutput)
 {
     uint3 dispatchIdx = cudaThreadIdx() + cudaBlockIdx() * cudaBlockDim();
     uint row = dispatchIdx.x;
@@ -119,8 +128,10 @@ void renderImage(MLP<C, 3> mlp, DiffTensorView featureGrid, DiffTensorView viewD
     //store sigma_a and sample_rgb
     for(int n = 0; n < N_samples; n++){
         uint3 didx = uint3(row, col, n);
-        //get feature and view direction
-        Feature<C> feature = embed_fn(featureGrid, didx);
+        // get feature and view direction
+        Feature<C> feature;
+        if(embeded) feature = getFeature(featureGrid, didx);
+        else feature = embed_fn(featureGrid, didx);
         Feature<C> viewdir = embed_fn(viewDir, didx);
         //MLP
         mlp.Output output = mlp.eval(feature, viewdir); 

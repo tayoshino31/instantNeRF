@@ -21,7 +21,8 @@ m = slangpy.loadModule('image-model.slang',
                        defines={
                             'NUM_THREADS_PER_BLOCK': launchBlockSize[0] * launchBlockSize[1] * launchBlockSize[2],
                             'WARP_SIZE': 32})
-class RenderImage(torch.autograd.Function):
+class RenderImage(torch.autograd.Function):    
+    @staticmethod
     def forward(ctx, width, height, feature_grid, viewdirs, dists, *args):
         weights = args[0: 3]
         biases = args[3: 6]
@@ -31,12 +32,13 @@ class RenderImage(torch.autograd.Function):
         blockSize = launchBlockSize
         gridSize = ((width + blockSize[0] - 1) // blockSize[0], 
                     (height + blockSize[1] - 1) // blockSize[1], 1)
-        m.renderImage(mlp=mlp, featureGrid=feature_grid, 
-                      viewDir = viewdirs, dists = dists, 
+        m.renderImage(mlp=mlp, featureGrid=feature_grid,
+                      viewDir = viewdirs, dists = dists,
                       imageOutput=output).launchRaw(blockSize=blockSize, gridSize=gridSize)
         ctx.save_for_backward(output, feature_grid, viewdirs, dists, *args)
         return output
     
+    @staticmethod
     def backward(ctx, grad_output):
         output, feature_grid, viewdir, dists, *args = ctx.saved_tensors
         weights = args[0: 3]
@@ -56,4 +58,4 @@ class RenderImage(torch.autograd.Function):
         m.renderImage.bwd(mlp=mlp, featureGrid=(feature_grid, feature_grid_d), 
                         viewDir=(viewdir, viewdir_d), dists = (dists, dists_d),
                         imageOutput=(output, grad_output)).launchRaw(blockSize=blockSize, gridSize=gridSize)
-        return None, None, feature_grid_d, None, None, *weights_d, *biases_d
+        return None, None, feature_grid_d, None, None,  *weights_d, *biases_d

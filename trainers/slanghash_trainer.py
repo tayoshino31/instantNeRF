@@ -1,4 +1,3 @@
-
 import torch
 import os
 import matplotlib.pyplot as plt
@@ -6,21 +5,23 @@ import time
 from utils.data_loader import DataLoader
 from utils.save_image import save_images
 import numpy as np
+from utils.hashencoder.feature_field import FeatureField
 torch.cuda.empty_cache()
 os.chdir("models/slang_mlp")
 from models.slang_mlp.image_model import RenderImage
 os.chdir("../..")
 
-class SlangTrainer:
+class SlangHashTrainer:
     def __init__(self):
         self.width, self.height = 256, 256
         self.N_samples = 32
         self.C = 32
-        self.embeded = False
+        self.embeded = True
         self.device = 'cuda'
         self.dataset = DataLoader()
         self.model = RenderImage()
         self.loss_fn = torch.nn.MSELoss()
+        self.feature_field = FeatureField(features_per_level = 32).cuda()
         self.params = self.init_params()
         
     def init_params(self):
@@ -33,22 +34,25 @@ class SlangTrainer:
         return [w1, w2, w3, b1, b2, b3]
     
     def train(self, iters, lr=5e-3):
-        optimizer = torch.optim.Adam(self.params, lr=lr) 
+        optimizer = torch.optim.Adam([*self.params, self.feature_field.hashtable], lr=lr)
         start = time.time()
         for i in range(iters):
             img_i = np.random.randint(100)
+            #img_i = 0
+            #get train_data
             x, dists, target_image, viewdirs = self.dataset.get_data(img_i)
-            encoded_x = x    
-            encoded_viewdirs = viewdirs  
-            
+            #hashencoding
+            x = self.feature_field.encode(x)
+            #MLP and volume rendering
             y_pred = self.model.apply(
             self.width, self.height,
-            encoded_x, encoded_viewdirs, dists,
+            x, viewdirs, dists, 
             *self.params)
-            
+            #Compute loss and psnr
             loss = self.loss_fn(y_pred, target_image)
             psnr = -10. * torch.log(loss) / torch.math.log(10.)
-            print(f"Iteration {i}, Loss: {loss.item()}, psnr: {psnr.item()}")            
+            print(f"Iteration {i}, Loss: {loss.item()}, psnr: {psnr.item()}")      
+            #optimize MLP params and hashtable      
             optimizer.zero_grad()
             loss.backward()
             optimizer.step()
@@ -60,15 +64,14 @@ class SlangTrainer:
         target_images = []
         start = time.time()
         test_images = [100,101,102,103,104,105]
+        #test_images = [0,0,0,0,0,0]
         for img_i in  test_images :
             x, dists, target_image, viewdirs = self.dataset.get_data(img_i)
-            encoded_x = x                #encoded_x = embed_fn(x)
-            encoded_viewdirs = viewdirs  #encoded_viewdirs = embed_fn(viewdirs)
+            x = self.feature_field.encode(x)
             y_pred = self.model.apply(
                 self.width, self.height,
-                encoded_x, encoded_viewdirs, dists,
+                x, viewdirs, dists,
                 *self.params)
-            
             loss = self.loss_fn(y_pred, target_image)
             psnr = -10. * torch.log(loss) / torch.math.log(10.)
             print(f"Iteration {img_i}, Loss: {loss.item()}, psnr: {psnr.item()}") 
@@ -78,4 +81,4 @@ class SlangTrainer:
         end = time.time()
         print('avg rendering time:', (end - start)/len(test_images))
         if(saveimg):
-            save_images(target_images, intermediate_images,'slang.png')
+            save_images(target_images, intermediate_images,'slanghash.png')
