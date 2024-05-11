@@ -33,6 +33,7 @@ class SlangTrainer:
         return [w1, w2, w3, b1, b2, b3]
     
     def train(self, iters, lr=5e-3):
+        self.iters = iters
         optimizer = torch.optim.Adam(self.params, lr=lr) 
         start = time.time()
         for i in range(iters):
@@ -58,6 +59,7 @@ class SlangTrainer:
     def render(self,saveimg):
         intermediate_images = []
         target_images = []
+        psnrs = []
         start = time.time()
         test_images = [100,101,102,103,104,105] #test cases
         for img_i in  test_images :
@@ -73,7 +75,8 @@ class SlangTrainer:
             if(saveimg):      
                 intermediate_images.append(y_pred.detach().cpu().numpy())
                 target_images.append(target_image.detach().cpu().numpy())
+                psnrs.append(psnr.detach().cpu())
         end = time.time()
         print('avg rendering time:', (end - start)/len(test_images))
         if(saveimg):
-            save_images(target_images, intermediate_images,'slang.png')
+            save_images(target_images, intermediate_images,'slang.png', "Slang MLP" , self.iters, psnrs)

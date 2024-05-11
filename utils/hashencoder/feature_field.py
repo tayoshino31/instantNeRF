@@ -67,7 +67,7 @@ class FeatureField(nn.Module): #hashmap_scale=.0001, res=1024
         c_00 = c_000 * (1-p_d[:, 0][:, None]) + c_100 * p_d[:, 0][:, None]
         c_01 = c_001 * (1-p_d[:, 0][:, None]) + c_101 * p_d[:, 0][:, None]
         c_10 = c_010 * (1-p_d[:, 0][:, None]) + c_110 * p_d[:, 0][:, None]
-        c_11 = c_010 * (1-p_d[:, 0][:, None]) + c_111 * p_d[:, 0][:, None]
+        c_11 = c_011 * (1-p_d[:, 0][:, None]) + c_111 * p_d[:, 0][:, None] # c_11 = c_010 * (1-p_d[:, 0][:, None]) + c_111 * p_d[:, 0][:, None]
 
         #interpolate along y
         c_0 = c_00 * (1-p_d[:, 1][:, None]) + c_10 * p_d[:, 1][:, None]

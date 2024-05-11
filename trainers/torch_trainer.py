@@ -20,6 +20,7 @@ class TorchTrainer:
         self.loss_fn = torch.nn.MSELoss()
         
     def train(self, iters, lr = 5e-3):
+        self.iters = iters
         optimizer = torch.optim.Adam(self.model.parameters(), lr=lr) 
         start = time.time()
         for i in range(iters):
@@ -41,6 +42,7 @@ class TorchTrainer:
     def render(self, saveimg):
         intermediate_images = []
         target_images = []
+        psnrs = []
         start = time.time()
         test_images = [100,101,102,103,104,105]
         for img_i in test_images:
@@ -55,7 +57,8 @@ class TorchTrainer:
             if(saveimg):
                 intermediate_images.append(y_pred.detach().cpu().numpy())
                 target_images.append(target_image.detach().cpu().numpy())
+                psnrs.append(psnr.detach().cpu())
         end = time.time()
         print('avg rendering time:', (end - start)/len(test_images))
         if(saveimg):
-            save_images(target_images, intermediate_images,'torch.png')
+            save_images(target_images, intermediate_images,'torch.png', "PyTorch MLP" , self.iters,psnrs)

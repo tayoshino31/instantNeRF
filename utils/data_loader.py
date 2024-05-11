@@ -18,6 +18,7 @@ class DataLoader():
         poses = torch.tensor(data['poses'], dtype=torch.float32, device=self.device)
         focal = torch.tensor(data['focal'], dtype=torch.float32, device=self.device).clone().detach()
         self.preprocess_data(images, poses, focal)
+        self.bbx = self.get_bbx()
         
     def preprocess_data(self, images, poses, focal):
         num_images = images.shape[0]
@@ -47,7 +48,14 @@ class DataLoader():
             viewdirs =  directions / torch.norm(directions, p=2, dim=-1, keepdim=True)
             self.viewrDirections[i] = viewdirs
         self.target_images = torch.from_numpy(self.target_images).cuda()
-
+        
+    def get_bbx(self):
+        pts = self.samplePoints.reshape(-1,3)
+        x_min, y_min, z_min = pts.min(dim=0)[0]
+        x_max, y_max, z_max = pts.max(dim=0)[0]
+        return (torch.tensor([x_min, y_min, z_min])-torch.tensor([0.1,0.1,0.0001]), 
+                torch.tensor([x_max, y_max, z_max])+torch.tensor([0.1,0.1,0.0001]))
+    
     def get_rays(self, H, W, focal, c2w):
         i, j = torch.meshgrid(torch.arange(W, dtype=torch.float32, device=self.device),
                             torch.arange(H, dtype=torch.float32, device=self.device), indexing='xy')
