@@ -23,7 +23,7 @@ m = slangpy.loadModule('image-model.slang',
                             'WARP_SIZE': 32})
 class RenderImage(torch.autograd.Function):    
     @staticmethod
-    def forward(ctx, width, height, feature_grid, viewdirs, dists, *args):
+    def forward(ctx, width, height, feature_grid, viewdirs, dists, embedded, *args):
         weights = args[0: 3]
         biases = args[3: 6]
         output = torch.zeros((width, height, 3), dtype=torch.float).cuda()
@@ -34,13 +34,13 @@ class RenderImage(torch.autograd.Function):
                     (height + blockSize[1] - 1) // blockSize[1], 1)
         m.renderImage(mlp=mlp, featureGrid=feature_grid,
                       viewDir = viewdirs, dists = dists,
-                      imageOutput=output).launchRaw(blockSize=blockSize, gridSize=gridSize)
-        ctx.save_for_backward(output, feature_grid, viewdirs, dists, *args)
+                      imageOutput=output, embedded = embedded).launchRaw(blockSize=blockSize, gridSize=gridSize)
+        ctx.save_for_backward(output, feature_grid, viewdirs, dists, embedded, *args)
         return output
     
     @staticmethod
     def backward(ctx, grad_output):
-        output, feature_grid, viewdir, dists, *args = ctx.saved_tensors
+        output, feature_grid, viewdir, dists, embedded, *args = ctx.saved_tensors
         weights = args[0: 3]
         biases = args[3: 6]
         weights_d = [torch.zeros_like(w) for w in weights]
@@ -57,5 +57,5 @@ class RenderImage(torch.autograd.Function):
                     (height + blockSize[1] - 1) // blockSize[1], 1)
         m.renderImage.bwd(mlp=mlp, featureGrid=(feature_grid, feature_grid_d), 
                         viewDir=(viewdir, viewdir_d), dists = (dists, dists_d),
-                        imageOutput=(output, grad_output)).launchRaw(blockSize=blockSize, gridSize=gridSize)
-        return None, None, feature_grid_d, None, None,  *weights_d, *biases_d
+                        imageOutput=(output, grad_output), embedded = embedded).launchRaw(blockSize=blockSize, gridSize=gridSize)
+        return None, None, feature_grid_d, None, None, None, *weights_d, *biases_d

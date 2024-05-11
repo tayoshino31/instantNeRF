@@ -16,7 +16,7 @@ class SlangTrainer:
         self.width, self.height = 256, 256
         self.N_samples = 32
         self.C = 32
-        self.embeded = False
+        self.embeded = torch.tensor([False], dtype=torch.bool).cuda()
         self.device = 'cuda'
         self.dataset = DataLoader()
         self.model = RenderImage()
@@ -43,7 +43,7 @@ class SlangTrainer:
             
             y_pred = self.model.apply(
             self.width, self.height,
-            encoded_x, encoded_viewdirs, dists,
+            encoded_x, encoded_viewdirs, dists, self.embeded,
             *self.params)
             
             loss = self.loss_fn(y_pred, target_image)
@@ -59,14 +59,12 @@ class SlangTrainer:
         intermediate_images = []
         target_images = []
         start = time.time()
-        test_images = [100,101,102,103,104,105]
+        test_images = [100,101,102,103,104,105] #test cases
         for img_i in  test_images :
             x, dists, target_image, viewdirs = self.dataset.get_data(img_i)
-            encoded_x = x                #encoded_x = embed_fn(x)
-            encoded_viewdirs = viewdirs  #encoded_viewdirs = embed_fn(viewdirs)
             y_pred = self.model.apply(
                 self.width, self.height,
-                encoded_x, encoded_viewdirs, dists,
+                x, viewdirs, dists, self.embeded,
                 *self.params)
             
             loss = self.loss_fn(y_pred, target_image)

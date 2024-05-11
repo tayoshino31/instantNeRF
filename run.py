@@ -5,6 +5,7 @@ from trainers.torch_trainer import TorchTrainer
 from trainers.slang_trainer import SlangTrainer
 from trainers.torchhash_trainer import TorchHashTrainer
 from trainers.slanghash_trainer import SlangHashTrainer
+import torch.cuda.profiler as profiler
 
 def main(trainer_type):
     torch.cuda.empty_cache()
@@ -18,7 +19,7 @@ def main(trainer_type):
         model = TorchHashTrainer()
     else:
         raise ValueError("Invalid trainer type. Please provide 'slang' or 'torch'.")
-    model.train(iters=300)
+    model.train(iters=50)
     model.render(saveimg=True)
 
 if __name__ == '__main__':

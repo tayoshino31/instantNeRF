@@ -2,7 +2,7 @@
 import torch
 import math
 class HashEncoder():
-    def __init__(self, num_levels=16, log2_hashmap_size=19, features_per_level=2, min_res=16, max_res=1024):
+    def __init__(self, num_levels=16, log2_hashmap_size=19, features_per_level=2, min_res=16, max_res=256):
         self.num_levels = num_levels
         self.hashtable_size = 2**log2_hashmap_size
         self.features_per_level = features_per_level

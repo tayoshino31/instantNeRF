@@ -16,7 +16,7 @@ class SlangHashTrainer:
         self.width, self.height = 256, 256
         self.N_samples = 32
         self.C = 32
-        self.embeded = True
+        self.embeded = torch.tensor([True], dtype=torch.bool).cuda()
         self.device = 'cuda'
         self.dataset = DataLoader()
         self.model = RenderImage()
@@ -34,25 +34,21 @@ class SlangHashTrainer:
         return [w1, w2, w3, b1, b2, b3]
     
     def train(self, iters, lr=5e-3):
-        optimizer = torch.optim.Adam([*self.params, self.feature_field.hashtable], lr=lr)
+        optimizer = torch.optim.Adam(self.params, lr=lr) 
         start = time.time()
         for i in range(iters):
-            img_i = np.random.randint(100)
-            #img_i = 0
-            #get train_data
+            img_i = np.random.randint(10)
             x, dists, target_image, viewdirs = self.dataset.get_data(img_i)
-            #hashencoding
-            x = self.feature_field.encode(x)
-            #MLP and volume rendering
+            encoded_x = self.feature_field.encode(x)
+            encoded_viewdirs = viewdirs  
             y_pred = self.model.apply(
             self.width, self.height,
-            x, viewdirs, dists, 
+            encoded_x, encoded_viewdirs, dists, self.embeded,
             *self.params)
-            #Compute loss and psnr
+            
             loss = self.loss_fn(y_pred, target_image)
             psnr = -10. * torch.log(loss) / torch.math.log(10.)
-            print(f"Iteration {i}, Loss: {loss.item()}, psnr: {psnr.item()}")      
-            #optimize MLP params and hashtable      
+            print(f"Iteration {i}, Loss: {loss.item()}, psnr: {psnr.item()}")            
             optimizer.zero_grad()
             loss.backward()
             optimizer.step()
@@ -63,14 +59,14 @@ class SlangHashTrainer:
         intermediate_images = []
         target_images = []
         start = time.time()
-        test_images = [100,101,102,103,104,105]
-        #test_images = [0,0,0,0,0,0]
+        test_images = [100,101,102,103,104,105] #test cases
         for img_i in  test_images :
             x, dists, target_image, viewdirs = self.dataset.get_data(img_i)
-            x = self.feature_field.encode(x)
+            encoded_x = self.feature_field.encode(x)                
+            encoded_viewdirs = viewdirs  
             y_pred = self.model.apply(
                 self.width, self.height,
-                x, viewdirs, dists,
+                encoded_x, encoded_viewdirs, dists, self.embeded,
                 *self.params)
             loss = self.loss_fn(y_pred, target_image)
             psnr = -10. * torch.log(loss) / torch.math.log(10.)
@@ -81,4 +77,4 @@ class SlangHashTrainer:
         end = time.time()
         print('avg rendering time:', (end - start)/len(test_images))
         if(saveimg):
-            save_images(target_images, intermediate_images,'slanghash.png')
+            save_images(target_images, intermediate_images,'slang.png')

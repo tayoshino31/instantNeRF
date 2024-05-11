@@ -5,7 +5,7 @@ import inline_mlp;
 static const uint C = 32;
 static const uint L = 5;
 static const uint N_samples = 32;
-static const bool embeded = true;
+//static const bool embedded = false;
 
 //position encoding
 [Differentiable]
@@ -43,12 +43,17 @@ Feature<C> embed_fn(DiffTensorView input, uint3 didx) {
 }
 
 [Differentiable]
-Feature<C> getFeature(DiffTensorView input, uint3 didx) {
-    Feature<C> output;
-    for (int i = 0; i < C; i++) {
-        output.vals[i] = input.loadOnce(uint4(didx.x, didx.y, didx.z, i));
+Feature<C> getFeature(DiffTensorView input, uint3 didx, bool embedded) {
+    if (embedded) {
+        Feature<C> output;
+        for (int i = 0; i < C; i++) {
+            output.vals[i] = input.loadOnce(uint4(didx.x, didx.y, didx.z, i));
+        }
+        return output;
     }
-    return output;
+    else {
+        return embed_fn(input, didx);
+    }
 }
 
 [Differentiable]
@@ -103,7 +108,7 @@ float3 volumeRendering(float[N_samples] sigma_a,
 [CUDAKernel]
 [AutoPyBindCUDA]
 void renderImage(MLP<C, 3> mlp, DiffTensorView featureGrid, DiffTensorView viewDir,
-                 DiffTensorView dists, DiffTensorView imageOutput)
+                 DiffTensorView dists, DiffTensorView imageOutput, TensorView<bool> embedded)
 {
     uint3 dispatchIdx = cudaThreadIdx() + cudaBlockIdx() * cudaBlockDim();
     uint row = dispatchIdx.x;
@@ -125,13 +130,12 @@ void renderImage(MLP<C, 3> mlp, DiffTensorView featureGrid, DiffTensorView viewD
         dist[n] = dists.loadOnce(uint3(row, col, n));
     }
 
+    bool hash_embedded = embedded[uint(0)];
     //store sigma_a and sample_rgb
     for(int n = 0; n < N_samples; n++){
         uint3 didx = uint3(row, col, n);
         // get feature and view direction
-        Feature<C> feature;
-        if(embeded) feature = getFeature(featureGrid, didx);
-        else feature = embed_fn(featureGrid, didx);
+        Feature<C> feature = getFeature(featureGrid, didx, hash_embedded);
         Feature<C> viewdir = embed_fn(viewDir, didx);
         //MLP
         mlp.Output output = mlp.eval(feature, viewdir); 
