@@ -13,12 +13,12 @@ os.chdir("../..")
 
 class SlangTrainer:
     def __init__(self):
-        self.width, self.height = 256, 256
+        self.width, self.height = 128, 128
         self.N_samples = 32
         self.C = 32
         self.embeded = torch.tensor([False], dtype=torch.bool).cuda()
         self.device = 'cuda'
-        self.dataset = DataLoader()
+        self.dataset = DataLoader(H= self.height, W = self.width, N_samples = self.N_samples)
         self.model = RenderImage()
         self.loss_fn = torch.nn.MSELoss()
         self.params = self.init_params()

@@ -19,7 +19,7 @@ def main(trainer_type):
         model = TorchHashTrainer()
     else:
         raise ValueError("Invalid trainer type. Please provide 'slang' or 'torch'.")
-    model.train(iters=10)
+    model.train(iters=1000)
     model.render(saveimg=True)
 
 if __name__ == '__main__':

@@ -12,14 +12,14 @@ torch.cuda.empty_cache()
 
 class TorchHashTrainer:
     def __init__(self):
-        self.width, self.height = 256, 256
+        self.width, self.height = 128, 128
         self.N_samples = 32
         self.C = 32
         self.device = 'cuda'
         self.model = MLP(self.C, self.C, self.C).to(self.device)
-        self.dataset = DataLoader()
+        self.dataset = DataLoader(H= self.height, W = self.width, N_samples = self.N_samples)
         self.bounding_box = self.dataset.get_bbx()
-        self.feature_field = FeatureField(features_per_level = 32).cuda()
+        self.feature_field = FeatureField(features_per_level = 32, res=self.height).cuda()
         self.loss_fn = torch.nn.MSELoss()
         
     def train(self, iters, lr = 5e-3): #5e-3
@@ -34,7 +34,7 @@ class TorchHashTrainer:
             #hashencoding
             x = self.normalize_coordinates(x)
             embedded_x = self.feature_field.encode(x)
-            #embedded_x = pos_embed(x)[...,:-1]
+            
             viewdirs = (pos_embed(viewdirs)[...,:16]).unsqueeze(2).expand(-1, -1, self.N_samples, -1)
             #MLP and volume rendering
             y_pred = self.model(embedded_x, viewdirs)
@@ -76,8 +76,8 @@ class TorchHashTrainer:
             save_images(target_images, intermediate_images,'torchhash.png', "PyTorch MLP with hashencoding" , self.iters, psnrs)
             
     def normalize_coordinates(self,x):
-        min_xyz = torch.tensor(self.bounding_box[0], dtype=x.dtype, device=x.device)
-        max_xyz = torch.tensor(self.bounding_box[1], dtype=x.dtype, device=x.device)
+        min_xyz = self.bounding_box[0].to(self.device) 
+        max_xyz = self.bounding_box[1].to(self.device) 
         range_xyz = max_xyz - min_xyz
         x_shape = x.shape
         x = x.reshape(-1,3)

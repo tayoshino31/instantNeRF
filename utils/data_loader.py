@@ -4,12 +4,12 @@ import cv2
 import time
 
 class DataLoader():
-    def __init__(self):
+    def __init__(self, H, W, N_samples = 32):
         self.device = "cuda"
-        self.H, self.W = 256, 256
+        self.H, self.W = H, W
         self.near= 2
         self.far = 6
-        self.N_samples = 32
+        self.N_samples = N_samples
         self.load_data()
         
     def load_data(self):   

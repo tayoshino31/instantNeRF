@@ -11,12 +11,12 @@ torch.cuda.empty_cache()
 
 class TorchTrainer:
     def __init__(self):
-        self.width, self.height = 256, 256
+        self.width, self.height = 128, 128
         self.N_samples = 32
         self.C = 32
         self.device = 'cuda'
         self.model = MLP(self.C, self.C, self.C).to(self.device)
-        self.dataset = DataLoader()
+        self.dataset = DataLoader(H= self.height, W = self.width, N_samples = self.N_samples)
         self.loss_fn = torch.nn.MSELoss()
         
     def train(self, iters, lr = 5e-3):

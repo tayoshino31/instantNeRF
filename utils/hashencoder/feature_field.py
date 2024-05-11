@@ -7,7 +7,7 @@ import torch
 import torch.nn as nn
 import math
 class FeatureField(nn.Module): #hashmap_scale=.0001, res=1024
-    def __init__(self, hashmap_scale=1, log2_hashmap_size=19, features_per_level=2, res=256):
+    def __init__(self, hashmap_scale=1, log2_hashmap_size=19, features_per_level=2, res=128):
         super().__init__()
         self.hashtable_size = 2**log2_hashmap_size
         self.features_per_level = features_per_level
