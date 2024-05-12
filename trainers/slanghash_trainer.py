@@ -3,9 +3,9 @@ import os
 import matplotlib.pyplot as plt
 import time
 from utils.data_loader import DataLoader
-from utils.save_image import save_images
+from utils.save_results import save_images
 import numpy as np
-from utils.hashencoder.feature_field import FeatureField
+from utils.feature_field import FeatureField, normalize_coordinates
 torch.cuda.empty_cache()
 os.chdir("models/slang_mlp")
 from models.slang_mlp.image_model import RenderImage
@@ -43,7 +43,7 @@ class SlangHashTrainer:
         for i in range(iters):
             img_i = np.random.randint(100)
             x, dists, target_image, viewdirs = self.dataset.get_data(img_i)
-            x = self.normalize_coordinates(x)
+            x = normalize_coordinates(x, self.bounding_box)
             embedded_x = self.feature_field.encode(x)
             
             encoded_viewdirs = viewdirs  
@@ -67,9 +67,9 @@ class SlangHashTrainer:
         psnrs = []
         start = time.time()
         test_images = [100,101,102,103,104,105] #test cases
-        for img_i in  test_images :
+        for img_i in test_images:
             x, dists, target_image, viewdirs = self.dataset.get_data(img_i)
-            x = self.normalize_coordinates(x)
+            x = normalize_coordinates(x, self.bounding_box)
             embedded_x = self.feature_field.encode(x)   
 
             encoded_viewdirs = viewdirs  
@@ -78,7 +78,6 @@ class SlangHashTrainer:
                 self.width, self.height,
                 embedded_x, encoded_viewdirs, dists, self.embeded,
                 *self.params)
-            
             
             loss = self.loss_fn(y_pred, target_image)
             psnr = -10. * torch.log(loss) / torch.math.log(10.)
@@ -91,14 +90,4 @@ class SlangHashTrainer:
         print('avg rendering time:', (end - start)/len(test_images))
         if(saveimg):
             save_images(target_images, intermediate_images,'slanghash.png', "Slang MLP with hashencoding" , self.iters, psnrs)
-            
-    def normalize_coordinates(self,x):
-        min_xyz = self.bounding_box[0].to(self.device) 
-        max_xyz = self.bounding_box[1].to(self.device) 
-        range_xyz = max_xyz - min_xyz
-        x_shape = x.shape
-        x = x.reshape(-1,3)
-        range_xyz[range_xyz == 0] = 1.0
-        x = (x - min_xyz)/range_xyz
-        x = x.reshape(x_shape)
-        return x
+        

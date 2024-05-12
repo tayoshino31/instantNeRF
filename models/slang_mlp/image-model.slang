@@ -5,7 +5,6 @@ import inline_mlp;
 static const uint C = 32;
 static const uint L = 5;
 static const uint N_samples = 32;
-//static const bool embedded = false;
 
 //position encoding
 [Differentiable]
@@ -62,7 +61,7 @@ float relu(float x){
 }
 
 [Differentiable]
-float sigmoid(float x){
+float sigmoid(float x) {
     return 1.0/(1.0 + exp(-x * 0.1));
 }
 
@@ -126,7 +125,6 @@ void renderImage(MLP<C, 3> mlp, DiffTensorView featureGrid, DiffTensorView viewD
     //store dist
     [ForceUnroll]
     for(int n = 0; n < N_samples; n++){
-        //dist[n] = dists[row, col, n];
         dist[n] = dists.loadOnce(uint3(row, col, n));
     }
 

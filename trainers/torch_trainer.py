@@ -4,7 +4,7 @@ import time
 from utils.rendering_utils import volume_rendering
 from utils.data_loader import DataLoader
 from utils.encoder import pos_embed
-from utils.save_image import save_images
+from utils.save_results import save_images, save_video
 import numpy as np
 from models.torch_mlp.mlp import MLP
 torch.cuda.empty_cache()
@@ -62,3 +62,15 @@ class TorchTrainer:
         print('avg rendering time:', (end - start)/len(test_images))
         if(saveimg):
             save_images(target_images, intermediate_images,'torch.png', "PyTorch MLP" , self.iters,psnrs)
+            
+    def render_path(self, saveimg):
+        intermediate_images = []
+        for img_i in range(40):
+            x, dists, viewdirs = self.dataset.get_render_data(img_i)
+            x = pos_embed(x)[...,:-1]
+            viewdirs = (pos_embed(viewdirs)[...,:16]).unsqueeze(2).expand(-1, -1, self.N_samples, -1)
+            y_pred = self.model(x, viewdirs)
+            y_pred = volume_rendering(y_pred, dists)     
+            intermediate_images.append(y_pred.detach().cpu().numpy())
+            print(f"Iteration {img_i}") 
+        save_video(intermediate_images,'torch')

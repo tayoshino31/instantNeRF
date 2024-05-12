@@ -6,6 +6,18 @@
 import torch
 import torch.nn as nn
 import math
+
+def normalize_coordinates(x, bounding_box):
+    min_xyz = bounding_box[0].to('cuda') 
+    max_xyz = bounding_box[1].to('cuda') 
+    range_xyz = max_xyz - min_xyz
+    x_shape = x.shape
+    x = x.reshape(-1,3)
+    range_xyz[range_xyz == 0] = 1.0
+    x = (x - min_xyz)/range_xyz
+    x = x.reshape(x_shape)
+    return x
+
 class FeatureField(nn.Module): #hashmap_scale=.0001, res=1024
     def __init__(self, hashmap_scale=1, log2_hashmap_size=19, features_per_level=2, res=128):
         super().__init__()
@@ -77,4 +89,4 @@ class FeatureField(nn.Module): #hashmap_scale=.0001, res=1024
         c = c_0 * (1-p_d[:, 2][:, None]) + c_1 * p_d[:, 2][:, None]
 
         return c
-        
+   

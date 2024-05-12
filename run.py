@@ -19,8 +19,9 @@ def main(trainer_type):
         model = TorchHashTrainer()
     else:
         raise ValueError("Invalid trainer type. Please provide 'slang' or 'torch'.")
-    model.train(iters=1000)
+    model.train(iters=2000)
     model.render(saveimg=True)
+    model.render_path(saveimg=True)
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Train and render a model.')

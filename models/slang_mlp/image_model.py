@@ -1,7 +1,7 @@
 import slangpy
 import torch
 import os
-from torch.profiler import profile, record_function, ProfilerActivity
+#from torch.profiler import profile, record_function, ProfilerActivity
 
 launchBlockSize = (32, 4, 1)
 

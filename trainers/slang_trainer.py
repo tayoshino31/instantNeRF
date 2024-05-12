@@ -4,7 +4,7 @@ import os
 import matplotlib.pyplot as plt
 import time
 from utils.data_loader import DataLoader
-from utils.save_image import save_images
+from utils.save_results import save_images
 import numpy as np
 torch.cuda.empty_cache()
 os.chdir("models/slang_mlp")

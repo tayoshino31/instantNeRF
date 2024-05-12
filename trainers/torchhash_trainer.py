@@ -4,10 +4,10 @@ import time
 from utils.rendering_utils import volume_rendering
 from utils.data_loader import DataLoader
 from utils.encoder import pos_embed
-from utils.save_image import save_images
+from utils.save_results import save_images, save_video
 import numpy as np
 from models.torch_mlp.mlp import MLP
-from utils.hashencoder.feature_field import FeatureField
+from utils.feature_field import FeatureField, normalize_coordinates
 torch.cuda.empty_cache()
 
 class TorchHashTrainer:
@@ -32,7 +32,7 @@ class TorchHashTrainer:
             #get train_data
             x, dists, target_image, viewdirs = self.dataset.get_data(img_i)
             #hashencoding
-            x = self.normalize_coordinates(x)
+            x = normalize_coordinates(x, self.bounding_box)
             embedded_x = self.feature_field.encode(x)
             
             viewdirs = (pos_embed(viewdirs)[...,:16]).unsqueeze(2).expand(-1, -1, self.N_samples, -1)
@@ -58,7 +58,7 @@ class TorchHashTrainer:
         psnrs = []
         for img_i in test_images:
             x, dists, target_image, viewdirs = self.dataset.get_data(img_i)
-            x = self.normalize_coordinates(x)
+            x = normalize_coordinates(x, self.bounding_box)
             embedded_x = self.feature_field.encode(x)
             viewdirs = (pos_embed(viewdirs)[...,:16]).unsqueeze(2).expand(-1, -1, self.N_samples, -1)
             y_pred = self.model(embedded_x, viewdirs)
@@ -75,13 +75,15 @@ class TorchHashTrainer:
         if(saveimg):
             save_images(target_images, intermediate_images,'torchhash.png', "PyTorch MLP with hashencoding" , self.iters, psnrs)
             
-    def normalize_coordinates(self,x):
-        min_xyz = self.bounding_box[0].to(self.device) 
-        max_xyz = self.bounding_box[1].to(self.device) 
-        range_xyz = max_xyz - min_xyz
-        x_shape = x.shape
-        x = x.reshape(-1,3)
-        range_xyz[range_xyz == 0] = 1.0
-        x = (x - min_xyz)/range_xyz
-        x = x.reshape(x_shape)
-        return x
+    def render_path(self, saveimg):
+        intermediate_images = []
+        for img_i in range(40):
+            x, dists, viewdirs = self.dataset.get_render_data(img_i)
+            x = normalize_coordinates(x, self.bounding_box)
+            embedded_x = self.feature_field.encode(x)
+            viewdirs = (pos_embed(viewdirs)[...,:16]).unsqueeze(2).expand(-1, -1, self.N_samples, -1)
+            y_pred = self.model(embedded_x, viewdirs)
+            y_pred = volume_rendering(y_pred, dists)
+            intermediate_images.append(y_pred.detach().cpu().numpy())
+            print(f"Iteration {img_i}") 
+        save_video(intermediate_images,'torchhash')

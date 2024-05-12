@@ -19,6 +19,8 @@ class DataLoader():
         focal = torch.tensor(data['focal'], dtype=torch.float32, device=self.device).clone().detach()
         self.preprocess_data(images, poses, focal)
         self.bbx = self.get_bbx()
+        render_poses = torch.stack([self.pose_spherical(angle, -30.0, 4.0) for angle in np.linspace(-180,180,40+1)[:-1]], 0).to(self.device)  #torch.from_numpy(self.spherify_poses(poses.cpu().numpy())).to(self.device)
+        self.preprocess_render_data(render_poses, focal)
         
     def preprocess_data(self, images, poses, focal):
         num_images = images.shape[0]
@@ -70,3 +72,56 @@ class DataLoader():
         dists = self.distances[img_i]
         pts = self.samplePoints[img_i]
         return pts, dists, target_image, viewdirs
+
+    def preprocess_render_data(self, render_poses, focal):
+        self.render_distances = torch.zeros((40, self.H, self.W, self.N_samples)).to(self.device)
+        self.render_samplePoints = torch.zeros((40, self.H, self.W, self.N_samples, 3)).to(self.device)
+        self.render_viewrDirections = torch.zeros((40, self.H, self.W, 3)).to(self.device)
+        for i in range(40):
+            #ray direction
+            origins, directions = self.get_rays(self.H, self.W, focal, render_poses[i])
+            #dists
+            z_vals = torch.linspace(self.near, self.far, self.N_samples).expand(origins.shape[:-1] + (self.N_samples,))
+            z_vals = z_vals.clone()
+            z_vals += torch.rand(list(origins.shape[:-1]) + [self.N_samples]) * (self.far - self.near) / self.N_samples
+            dists = torch.cat([z_vals[..., 1:] - z_vals[..., :-1], 
+                        torch.broadcast_to(torch.tensor([1e10], 
+                        device=z_vals.device), z_vals[..., :1].shape)], -1)
+            self.render_distances[i] = dists
+            #pts
+            pts = origins[..., None, :] + directions[..., None, :] * z_vals.to(self.device)[..., :, None]
+            pts = pts.reshape(self.H,self.W, self.N_samples, 3)
+            self.render_samplePoints[i] = pts
+            #viewer directions 
+            viewdirs =  directions / torch.norm(directions, p=2, dim=-1, keepdim=True)
+            self.render_viewrDirections[i] = viewdirs
+    
+    def pose_spherical(self, theta, phi, radius):
+        
+        trans_t = lambda t : torch.Tensor([
+        [1,0,0,0],
+        [0,1,0,0],
+        [0,0,1,t],
+        [0,0,0,1]]).float()
+        rot_phi = lambda phi : torch.Tensor([
+            [1,0,0,0],
+            [0,np.cos(phi),-np.sin(phi),0],
+            [0,np.sin(phi), np.cos(phi),0],
+            [0,0,0,1]]).float()
+        rot_theta = lambda th : torch.Tensor([
+            [np.cos(th),0,-np.sin(th),0],
+            [0,1,0,0],
+            [np.sin(th),0, np.cos(th),0],
+            [0,0,0,1]]).float()
+        
+        c2w = trans_t(radius)
+        c2w = rot_phi(phi/180.*np.pi) @ c2w
+        c2w = rot_theta(theta/180.*np.pi) @ c2w
+        c2w = torch.Tensor(np.array([[-1,0,0,0],[0,0,1,0],[0,1,0,0],[0,0,0,1]])) @ c2w
+        return c2w
+       
+    def get_render_data(self, img_i):
+        viewdirs = self.render_viewrDirections[img_i]
+        dists = self.render_distances[img_i]
+        pts = self.render_samplePoints[img_i]
+        return pts, dists, viewdirs
