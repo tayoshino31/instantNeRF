@@ -4,7 +4,7 @@ import os
 import matplotlib.pyplot as plt
 import time
 from utils.data_loader import DataLoader
-from utils.save_results import save_images
+from utils.save_results import save_images, save_video
 import numpy as np
 torch.cuda.empty_cache()
 os.chdir("models/slang_mlp")
@@ -80,3 +80,15 @@ class SlangTrainer:
         print('avg rendering time:', (end - start)/len(test_images))
         if(saveimg):
             save_images(target_images, intermediate_images,'slang.png', "Slang MLP" , self.iters, psnrs)
+            
+    def render_path(self, saveimg):
+        intermediate_images = []
+        for img_i in range(100):
+            x, dists, viewdirs = self.dataset.get_render_data(img_i)
+            y_pred = self.model.apply(
+                self.width, self.height,
+                x, viewdirs, dists, self.embeded,
+                *self.params)
+            intermediate_images.append(y_pred.detach().cpu().numpy())
+            print(f"Iteration {img_i}") 
+        save_video(intermediate_images,'slang')

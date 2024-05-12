@@ -19,7 +19,7 @@ class TorchHashTrainer:
         self.model = MLP(self.C, self.C, self.C).to(self.device)
         self.dataset = DataLoader(H= self.height, W = self.width, N_samples = self.N_samples)
         self.bounding_box = self.dataset.get_bbx()
-        self.feature_field = FeatureField(features_per_level = 32, res=self.height).cuda()
+        self.feature_field = FeatureField(features_per_level = 2, res=self.height).cuda()
         self.loss_fn = torch.nn.MSELoss()
         
     def train(self, iters, lr = 5e-3): #5e-3
@@ -33,7 +33,8 @@ class TorchHashTrainer:
             x, dists, target_image, viewdirs = self.dataset.get_data(img_i)
             #hashencoding
             x = normalize_coordinates(x, self.bounding_box)
-            embedded_x = self.feature_field.encode(x)
+            embedded_x = self.feature_field.forward(x)
+            #print(embedded_x.shape)
             
             viewdirs = (pos_embed(viewdirs)[...,:16]).unsqueeze(2).expand(-1, -1, self.N_samples, -1)
             #MLP and volume rendering
@@ -59,7 +60,8 @@ class TorchHashTrainer:
         for img_i in test_images:
             x, dists, target_image, viewdirs = self.dataset.get_data(img_i)
             x = normalize_coordinates(x, self.bounding_box)
-            embedded_x = self.feature_field.encode(x)
+            #embedded_x = self.feature_field.encode(x)
+            embedded_x = self.feature_field.forward(x)
             viewdirs = (pos_embed(viewdirs)[...,:16]).unsqueeze(2).expand(-1, -1, self.N_samples, -1)
             y_pred = self.model(embedded_x, viewdirs)
             y_pred = volume_rendering(y_pred, dists)
@@ -77,10 +79,11 @@ class TorchHashTrainer:
             
     def render_path(self, saveimg):
         intermediate_images = []
-        for img_i in range(40):
+        for img_i in range(100):
             x, dists, viewdirs = self.dataset.get_render_data(img_i)
             x = normalize_coordinates(x, self.bounding_box)
-            embedded_x = self.feature_field.encode(x)
+            #embedded_x = self.feature_field.encode(x)
+            embedded_x = self.feature_field.forward(x)
             viewdirs = (pos_embed(viewdirs)[...,:16]).unsqueeze(2).expand(-1, -1, self.N_samples, -1)
             y_pred = self.model(embedded_x, viewdirs)
             y_pred = volume_rendering(y_pred, dists)

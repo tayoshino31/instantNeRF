@@ -22,7 +22,7 @@ def save_images(target_images, intermediate_images, result_name, model_name, ite
 
 def save_video(intermediate_images, result_name, target_size=(512, 512)):
     def to8b(x):
-        return (255 * np.clip(x, 0, 1)).astype(np.uint8)
+        return (255 * np.clip(x, 0, 3)).astype(np.uint8)
     resized_images = [resize(image, target_size, anti_aliasing=True) for image in intermediate_images]
     testsavedir = os.path.join('results', 'videos')
     os.makedirs(testsavedir, exist_ok=True)

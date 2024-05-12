@@ -19,7 +19,7 @@ class DataLoader():
         focal = torch.tensor(data['focal'], dtype=torch.float32, device=self.device).clone().detach()
         self.preprocess_data(images, poses, focal)
         self.bbx = self.get_bbx()
-        render_poses = torch.stack([self.pose_spherical(angle, -30.0, 4.0) for angle in np.linspace(-180,180,40+1)[:-1]], 0).to(self.device)  #torch.from_numpy(self.spherify_poses(poses.cpu().numpy())).to(self.device)
+        render_poses = torch.stack([self.pose_spherical(angle, -30.0, 4.0) for angle in np.linspace(-180,180,100+1)[:-1]], 0).to(self.device)
         self.preprocess_render_data(render_poses, focal)
         
     def preprocess_data(self, images, poses, focal):
@@ -74,10 +74,10 @@ class DataLoader():
         return pts, dists, target_image, viewdirs
 
     def preprocess_render_data(self, render_poses, focal):
-        self.render_distances = torch.zeros((40, self.H, self.W, self.N_samples)).to(self.device)
-        self.render_samplePoints = torch.zeros((40, self.H, self.W, self.N_samples, 3)).to(self.device)
-        self.render_viewrDirections = torch.zeros((40, self.H, self.W, 3)).to(self.device)
-        for i in range(40):
+        self.render_distances = torch.zeros((100, self.H, self.W, self.N_samples)).to(self.device)
+        self.render_samplePoints = torch.zeros((100, self.H, self.W, self.N_samples, 3)).to(self.device)
+        self.render_viewrDirections = torch.zeros((100, self.H, self.W, 3)).to(self.device)
+        for i in range(100):
             #ray direction
             origins, directions = self.get_rays(self.H, self.W, focal, render_poses[i])
             #dists
@@ -103,11 +103,13 @@ class DataLoader():
         [0,1,0,0],
         [0,0,1,t],
         [0,0,0,1]]).float()
+        
         rot_phi = lambda phi : torch.Tensor([
             [1,0,0,0],
             [0,np.cos(phi),-np.sin(phi),0],
             [0,np.sin(phi), np.cos(phi),0],
             [0,0,0,1]]).float()
+        
         rot_theta = lambda th : torch.Tensor([
             [np.cos(th),0,-np.sin(th),0],
             [0,1,0,0],

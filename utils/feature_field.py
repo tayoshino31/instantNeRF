@@ -19,21 +19,31 @@ def normalize_coordinates(x, bounding_box):
     return x
 
 class FeatureField(nn.Module): #hashmap_scale=.0001, res=1024
-    def __init__(self, hashmap_scale=1, log2_hashmap_size=19, features_per_level=2, res=128):
+    def __init__(self, hashmap_scale=1, log2_hashmap_size=19, n_levels = 16, features_per_level=2, base_resolution=16, res=128):
         super().__init__()
         self.hashtable_size = 2**log2_hashmap_size
         self.features_per_level = features_per_level
-        self.res = res
+        self.n_levels = n_levels
+        self.max_resolution = torch.tensor(res)
+        self.base_resolution = torch.tensor(base_resolution)
+        self.growth_factor = torch.exp((torch.log(self.max_resolution)-torch.log(self.base_resolution))/(n_levels-1))
         # Init the hash table (also i think that it should specify device automatically?????)
         self.hashtable = torch.rand(size = (self.hashtable_size * 1, features_per_level), device='cuda:0') * 2 - 1 # table_size * levels * features_per_level
         self.hashtable *= hashmap_scale
         self.hashtable = nn.Parameter(self.hashtable)
 
+    def forward(self, x):
+        x_embedded_all = []
+        for i in range(self.n_levels):
+            resolution = torch.floor(self.base_resolution * self.growth_factor**i)
+            x_embedded = self.encode(x, resolution)
+            x_embedded_all.append(x_embedded)
+        return torch.cat(x_embedded_all, dim=-1)
 
     #FOR NOW im assuming x.shape = (3)
-    def encode(self, x):
+    def encode(self, x, res):
         x_reshaped = x.reshape(-1, 3)
-        x_scaled = x_reshaped * self.res
+        x_scaled = x_reshaped * res
 
         x_floor = torch.floor(x_scaled).int()
         x_ceil = torch.ceil(x_scaled).int()

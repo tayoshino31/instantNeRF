@@ -65,7 +65,7 @@ class TorchTrainer:
             
     def render_path(self, saveimg):
         intermediate_images = []
-        for img_i in range(40):
+        for img_i in range(100):
             x, dists, viewdirs = self.dataset.get_render_data(img_i)
             x = pos_embed(x)[...,:-1]
             viewdirs = (pos_embed(viewdirs)[...,:16]).unsqueeze(2).expand(-1, -1, self.N_samples, -1)

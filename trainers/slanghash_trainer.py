@@ -3,7 +3,7 @@ import os
 import matplotlib.pyplot as plt
 import time
 from utils.data_loader import DataLoader
-from utils.save_results import save_images
+from utils.save_results import save_images, save_video
 import numpy as np
 from utils.feature_field import FeatureField, normalize_coordinates
 torch.cuda.empty_cache()
@@ -22,7 +22,7 @@ class SlangHashTrainer:
         self.bounding_box = self.dataset.get_bbx()
         self.model = RenderImage()
         self.loss_fn = torch.nn.MSELoss()
-        self.feature_field = FeatureField(features_per_level = 32,res=self.height).cuda()
+        self.feature_field = FeatureField(features_per_level = 2,res=self.height).cuda()
         self.params = self.init_params()
         
     def init_params(self):
@@ -44,7 +44,8 @@ class SlangHashTrainer:
             img_i = np.random.randint(100)
             x, dists, target_image, viewdirs = self.dataset.get_data(img_i)
             x = normalize_coordinates(x, self.bounding_box)
-            embedded_x = self.feature_field.encode(x)
+            #embedded_x = self.feature_field.encode(x)
+            embedded_x = self.feature_field(x)
             
             encoded_viewdirs = viewdirs  
             y_pred = self.model.apply(
@@ -70,7 +71,8 @@ class SlangHashTrainer:
         for img_i in test_images:
             x, dists, target_image, viewdirs = self.dataset.get_data(img_i)
             x = normalize_coordinates(x, self.bounding_box)
-            embedded_x = self.feature_field.encode(x)   
+            #embedded_x = self.feature_field.encode(x)   
+            embedded_x = self.feature_field(x)
 
             encoded_viewdirs = viewdirs  
             
@@ -91,3 +93,18 @@ class SlangHashTrainer:
         if(saveimg):
             save_images(target_images, intermediate_images,'slanghash.png', "Slang MLP with hashencoding" , self.iters, psnrs)
         
+    def render_path(self, saveimg):
+        intermediate_images = []
+        for img_i in range(100):
+            x, dists, viewdirs = self.dataset.get_render_data(img_i)
+            x = normalize_coordinates(x, self.bounding_box)
+            #embedded_x = self.feature_field.encode(x)   
+            embedded_x = self.feature_field(x)
+            encoded_viewdirs = viewdirs  
+            y_pred = self.model.apply(
+                self.width, self.height,
+                embedded_x, encoded_viewdirs, dists, self.embeded,
+                *self.params)
+            intermediate_images.append(y_pred.detach().cpu().numpy())
+            print(f"Iteration {img_i}") 
+        save_video(intermediate_images,'slanghash')
