@@ -43,7 +43,6 @@ class TorchTrainer:
         intermediate_images = []
         target_images = []
         psnrs = []
-        start = time.time()
         test_images = [100,101,102,103,104,105]
         for img_i in test_images:
             x, dists, target_image, viewdirs = self.dataset.get_data(img_i)
@@ -58,13 +57,12 @@ class TorchTrainer:
                 intermediate_images.append(y_pred.detach().cpu().numpy())
                 target_images.append(target_image.detach().cpu().numpy())
                 psnrs.append(psnr.detach().cpu())
-        end = time.time()
-        print('avg rendering time:', (end - start)/len(test_images))
         if(saveimg):
             save_images(target_images, intermediate_images,'torch.png', "PyTorch MLP" , self.iters,psnrs)
             
     def render_path(self, saveimg):
         intermediate_images = []
+        start = time.time()
         for img_i in range(100):
             x, dists, viewdirs = self.dataset.get_render_data(img_i)
             x = pos_embed(x)[...,:-1]
@@ -73,4 +71,6 @@ class TorchTrainer:
             y_pred = volume_rendering(y_pred, dists)     
             intermediate_images.append(y_pred.detach().cpu().numpy())
             print(f"Iteration {img_i}") 
+        end = time.time()
+        print('avg rendering time:', (end - start)/100)
         save_video(intermediate_images,'torch')

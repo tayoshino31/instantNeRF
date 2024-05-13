@@ -19,7 +19,7 @@ class TorchHashTrainer:
         self.model = MLP(self.C, self.C, self.C).to(self.device)
         self.dataset = DataLoader(H= self.height, W = self.width, N_samples = self.N_samples)
         self.bounding_box = self.dataset.get_bbx()
-        self.feature_field = FeatureField(features_per_level = 2, res=self.height).cuda()
+        self.feature_field = FeatureField(features_per_level = 2, n_levels = 16).cuda()
         self.loss_fn = torch.nn.MSELoss()
         
     def train(self, iters, lr = 5e-3): #5e-3
@@ -54,7 +54,6 @@ class TorchHashTrainer:
     def render(self, saveimg):
         intermediate_images = []
         target_images = []
-        start = time.time()
         test_images = [100,101,102,103,104,105]
         psnrs = []
         for img_i in test_images:
@@ -72,13 +71,12 @@ class TorchHashTrainer:
                 intermediate_images.append(y_pred.detach().cpu().numpy())
                 target_images.append(target_image.detach().cpu().numpy())
                 psnrs.append(psnr.detach().cpu())
-        end = time.time()
-        print('avg rendering time:', (end - start)/len(test_images))
         if(saveimg):
             save_images(target_images, intermediate_images,'torchhash.png', "PyTorch MLP with hashencoding" , self.iters, psnrs)
             
     def render_path(self, saveimg):
         intermediate_images = []
+        start = time.time()
         for img_i in range(100):
             x, dists, viewdirs = self.dataset.get_render_data(img_i)
             x = normalize_coordinates(x, self.bounding_box)
@@ -89,4 +87,6 @@ class TorchHashTrainer:
             y_pred = volume_rendering(y_pred, dists)
             intermediate_images.append(y_pred.detach().cpu().numpy())
             print(f"Iteration {img_i}") 
+        end = time.time()
+        print('avg rendering time:', (end - start)/100)
         save_video(intermediate_images,'torchhash')
