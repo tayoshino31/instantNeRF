@@ -30,19 +30,19 @@ python run.py <model>
   <tr>
     <td style="text-align: center;">
       <img src="results/gifs/torch.gif" alt="Slang NeRF" style="width: 100px;">
-      <p>NeRF (PyTorch)</p>
+      <p>NeRF <br>(PyTorch)</p>
     </td>
     <td style="text-align: center;">
       <img src="results/gifs/slang.gif" alt="PyTorch NeRF" style="width: 100px;">
-      <p>NeRF (SLANG)</p>
+      <p>NeRF <br>(SLANG)</p>
     </td>
     <td style="text-align: center;">
       <img src="results/gifs/torchhash.gif" alt="InstantNGP PyTorch" style="width: 100px;">
-      <p>InstantNGP (PyTorch)</p>
+      <p>InstantNGP <br>(PyTorch)</p>
     </td>
     <td style="text-align: center;">
       <img src="results/gifs/slanghash.gif" alt="InstantNGP SLANG" style="width: 100px;">
-      <p>InstantNGP (SLANG)</p>
+      <p>InstantNGP <br>(SLANG)</p>
     </td>
   </tr>
 </table>
