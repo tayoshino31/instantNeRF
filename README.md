@@ -26,14 +26,27 @@ python run.py <model>
 
 ## Rendered Scenes
 
-<div style="display: inline-block; width: 30%;">
-    <img src="results/gifs/slanghash.gif" alt="slang" width="100%" />
-    <p style="text-align: center;">Slang NeRF</p>
-</div>
-<div style="display: inline-block; width: 30%;">
-    <img src="results/gifs/torchhash.gif" alt="torch" width="100%" />
-    <p style="text-align: center;">PyTorch NeRF</p>
-</div>
+<table>
+  <tr>
+    <td style="text-align: center;">
+      <img src="results/gifs/torch.gif" alt="Slang NeRF" style="width: 100px;">
+      <p>NeRF (PyTorch)</p>
+    </td>
+    <td style="text-align: center;">
+      <img src="results/gifs/slang.gif" alt="PyTorch NeRF" style="width: 100px;">
+      <p>NeRF (SLANG)</p>
+    </td>
+    <td style="text-align: center;">
+      <img src="results/gifs/torchhash.gif" alt="InstantNGP PyTorch" style="width: 100px;">
+      <p>InstantNGP (PyTorch)</p>
+    </td>
+    <td style="text-align: center;">
+      <img src="results/gifs/slanghash.gif" alt="InstantNGP SLANG" style="width: 100px;">
+      <p>InstantNGP (SLANG)</p>
+    </td>
+  </tr>
+</table>
+
 
 ## Performance
 |            |      NeRF （PyTorch）    |      NeRF   （SLAN）       | InstantNGP　（PyTorch） | InstantNGP　（SLANG）  |
@@ -70,9 +83,9 @@ InstantNeRF/
 ```
 
 ## Reference
-1. NeRF: Representing Scenes as Neural Radiance Fields for View Synthesis
+1. NeRF: Representing Scenes as Neural Radiance Fields for View Synthesis  
 https://arxiv.org/abs/2003.08934
-2. Instant Neural Graphics Primitives with a Multiresolution Hash Encoding  
+2. Instant Neural Graphics Primitives with a Multiresolution Hash Encoding    
 https://nvlabs.github.io/instant-ngp/
-3. Inline-MLP in Slang  
+3. Inline-MLP in Slang    
 https://github.com/shader-slang/slang-python/tree/main/examples/inline-mlp-example
