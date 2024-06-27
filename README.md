@@ -1,5 +1,5 @@
 
-# NeRF and InstantNGP implementation using inline-MLP in Slang.
+# NeRF/InstantNGP using inline-MLP in Slang.
 UC San Diego CSE Early Research Scholars Program in 2023-24  
 Team: Taiki Yoshino, David Choi, Rick Rodness, Hayden Kwok  
 Advised By: Ravi Ramamoorthi, Tzu Mao Li
