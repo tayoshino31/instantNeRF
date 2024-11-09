@@ -28,14 +28,14 @@ python run.py <model>
 
 <table>
   <tr>
-    <td style="text-align: center;">
+<!--     <td style="text-align: center;">
       <img src="results/gifs/torch.gif" alt="Slang NeRF" style="width: 150px;">
       <p>NeRF <br>(PyTorch)</p>
     </td>
     <td style="text-align: center;">
       <img src="results/gifs/slang.gif" alt="PyTorch NeRF" style="width: 150px;">
       <p>NeRF <br>(SLANG)</p>
-    </td>
+    </td> -->
     <td style="text-align: center;">
       <img src="results/gifs/torchhash.gif" alt="InstantNGP PyTorch" style="width: 150px;">
       <p>InstantNGP <br>(PyTorch)</p>
